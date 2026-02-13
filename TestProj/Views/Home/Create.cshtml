@@ -1,0 +1,44 @@
+﻿@model TestProj.Models.MuseumModel
+
+@{
+    ViewData["Title"] = "Create Page";
+}
+
+<h2>Add New Museum</h2>
+<div asp-validation-summary="All"></div>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" required />
+    </div>
+
+    <div>
+        <label asp-for="City"></label>
+        <input asp-for="City" class="form-control" required />
+    </div>
+
+    <div>
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+
+    <div>
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div>
+        <label asp-for="WorkingHours"></label>
+        <input asp-for="WorkingHours" class="form-control" />
+    </div>
+
+    <div>
+        <label asp-for="Type"></label>
+        <input asp-for="Type" class="form-control" />
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Add Museum</button>
+</form>
+

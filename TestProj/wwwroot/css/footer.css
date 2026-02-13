@@ -1,0 +1,15 @@
+footer {
+    position: fixed;
+}
+
+    footer * {
+        color: #4a3e26;
+    }
+
+    footer a {
+        color: #b08435;
+    }
+
+        footer a:hover {
+            color: #4a3e26;
+        }

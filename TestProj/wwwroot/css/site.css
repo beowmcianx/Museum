@@ -1,0 +1,115 @@
+@font-face {
+    font-family: 'Aileron';
+    src: url('/fonts/Aileron/Aileron-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Alfran';
+    src: url('/fonts/Alfran/Alfarn-W05-Regular.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+* {
+    font-family: Aileron;
+}
+html {
+  position: relative;
+  min-height: 100%;
+  font-size: 14px;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: #e4e2dd;
+    height: 1000px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Alfran;
+}
+
+.layout-logo {
+    height: 50px; 
+    width: auto; 
+    display: block;
+    object-fit: contain;
+    margin-left: 1rem; 
+    transition: transform 150ms ease-in-out, opacity 150ms;
+    opacity: 0.98;
+    background-color: #e4e2dd;
+    border-radius: 100px;
+    margin-left: 10px;
+    padding: 1px;
+    padding-left: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .navbar-brand:hover .layout-logo {
+        opacity: 0.7;
+    }
+}
+
+.navbar-brand > div {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+header {
+    margin-bottom: 60px;
+}
+
+/* This is for the login partial view */
+
+.login-partial-pfp {
+    height: 40px;
+    width: 40px;
+    border-radius: 100px;
+    border: 2px solid darkgray;
+}
+    .login-partial-pfp:hover {
+        opacity: 0.6;
+    }
+
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .form-inline {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.container-back {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: -50px;
+    margin-right: -110px;
+    border-radius: 10px;
+}
+
+.btn-back {
+    border: none;
+    background-color: #db4a2b;
+}
+
+    .btn-back:hover {
+        background-color: #c93e20;
+    }
+
+.btn-red {
+    background-color: #db4a2b;
+    border-radius: 10px;
+}
+    .btn-red:hover {
+        background-color: #c93e20;
+    }

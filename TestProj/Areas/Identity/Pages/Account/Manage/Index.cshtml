@@ -1,0 +1,43 @@
+﻿@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div class="form-floating mb-3">
+                <input value="@Model.Username" class="form-control" disabled />
+                <label>Username</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input value="@Model.FullName" class="form-control" disabled />
+                <label>Full Name</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input value="@Model.Email" class="form-control" disabled />
+                <label>Email</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input value="@Model.Role" class="form-control" disabled />
+                <label>Role</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <label asp-for="Input.PhoneNumber"></label>
+            </div>
+
+            <button type="submit" class="w-100 btn btn-primary">
+                Save
+            </button>
+        </form>
+    </div>
+</div>

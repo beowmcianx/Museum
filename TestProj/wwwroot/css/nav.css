@@ -1,0 +1,29 @@
+
+
+.nav-link {
+    position: relative;
+}
+
+    .nav-link::after {
+        content: "";
+        position: absolute;
+        left: 15%;
+        bottom: 0;
+        width: 70%;
+        height: 3px;
+        background-color: #4a3e26;
+        border-radius: 100px;
+        transform: scaleX(0);
+        opacity: 0;
+        transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    }
+
+    .nav-link:not(.active):hover::after {
+        transform: scaleX(1);
+        opacity: 0.5;
+    }
+
+    .nav-link.active::after {
+        transform: scaleX(1);
+        opacity: 1;
+    }

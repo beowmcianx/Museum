@@ -1,0 +1,43 @@
+﻿@model TestProj.Models.MuseumModel
+
+@{
+    ViewData["Title"] = $"{Model.Name}";
+}
+<div class="position-relative" style="margin: 0;">
+
+    <form asp-controller="Home"
+          asp-action="Catalogue"
+          method="post"
+          class="text-end mb-3 container-back">
+        <button type="submit" class="btn btn-back">
+            Back
+        </button>
+    </form>
+
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="container">
+                <h1 class="display-4">@Model.Name</h1>
+
+                <p><strong>City:</strong> @Model.City | <strong>Address:</strong> @Model.Address</p>
+                <p><strong>Working Hours:</strong> @Model.WorkingHours</p>
+                <p><strong>Museum Type:</strong> @Model.Type</p>
+            </div>
+        </div>
+
+        <div class="col-md-6 offset-md-2">
+            @if (!string.IsNullOrWhiteSpace(Model.Address))
+            {
+                <h4>Location</h4>
+                <iframe width="500"
+                        height="450"
+                        frameborder="0"
+                        style="border: 2px solid #ccc; border-radius: 8px;"
+                        src="https://www.google.com/maps?q=@Uri.EscapeDataString($"{Model.Address}, {Model.City}")&output=embed"
+                        allowfullscreen>
+                </iframe>
+            }
+        </div>
+    </div>
+</div>

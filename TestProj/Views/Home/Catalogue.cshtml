@@ -1,0 +1,38 @@
+﻿@model List<TestProj.Models.MuseumModel>
+
+@{
+    ViewData["Title"] = "Catalogue Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">This is a list of our museums</h1>
+
+    <div class="card mx-auto shadow-sm p-3 mb-5 bg-white rounded" style="width:50rem; padding-top:1.5rem; border-radius: 2rem;">
+            <div class="card-body">
+                <div class="text-center">
+
+                    @foreach (var museum in Model)
+                    {
+                    <div class="card mx-auto mb-4 shadow" style="width: 18rem;">
+                            <h5 class="card-header">@museum.Name</h5>
+
+                            <div class="card-body">
+                                <p class="card-text">@museum.City | @museum.Address</p>
+                                <p class="card-text">@museum.WorkingHours</p>
+                                <img />
+
+                                <a class="btn btn-red"
+                                   asp-controller="Home"
+                                   asp-action="Details"
+                                   asp-route-id="@museum.MuseumId">
+                                    Museum Details
+                                </a>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+    </div>
+</div>
+
