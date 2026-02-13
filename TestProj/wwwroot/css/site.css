@@ -27,7 +27,7 @@ html {
 body {
     margin-bottom: 60px;
     background-color: #e4e2dd;
-    height: 1000px;
+    height: 1600px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -65,6 +65,16 @@ header {
     margin-bottom: 60px;
 }
 
+/* Links */
+
+a {
+    color: #b08435;
+}
+
+    a:hover {
+        color: #db4a2b;
+    }
+
 /* This is for the login partial view */
 
 .login-partial-pfp {
@@ -100,16 +110,39 @@ header {
 .btn-back {
     border: none;
     background-color: #db4a2b;
+    color: white;
+    font-size: 1rem;
+    padding: 10px 15px;
 }
 
     .btn-back:hover {
         background-color: #c93e20;
+        color: white;
     }
 
 .btn-red {
     background-color: #db4a2b;
     border-radius: 10px;
+    color: white;
 }
     .btn-red:hover {
         background-color: #c93e20;
     }
+
+/* Accent colours */
+
+.form-check-input:checked {
+    background-color: #db4a2b;
+    border: #db4a2b;
+}
+
+    .form-control:focus,
+    .form-check-input:focus,
+    .form-check-input:checked:focus,
+    .btn:focus,
+    .btn:focus-visible {
+        border-color: #db4a2b !important;
+        box-shadow: 0 0 0 0.25rem rgba(219, 74, 43, 0.4) !important;
+    }
+
+

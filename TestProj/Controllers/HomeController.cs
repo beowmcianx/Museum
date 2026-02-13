@@ -84,9 +84,21 @@ namespace TestProj.Controllers
         }
 
 
-        public async Task<IActionResult> Catalogue()
+        public async Task<IActionResult> Catalogue(int page = 1)
         {
-            var museums = await _context.Museums.ToListAsync();
+            int pageSize = 6; 
+
+            var totalMuseums = await _context.Museums.CountAsync();
+
+            var museums = await _context.Museums
+                .OrderBy(m => m.MuseumId)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling(totalMuseums / (double)pageSize);
+
             return View(museums);
         }
 
