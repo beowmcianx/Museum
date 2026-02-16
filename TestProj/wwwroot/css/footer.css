@@ -1,5 +1,10 @@
 footer {
-    position: fixed;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    background-color: #c4bfb6;
 }
 
     footer * {

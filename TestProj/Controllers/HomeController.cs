@@ -86,7 +86,7 @@ namespace TestProj.Controllers
 
         public async Task<IActionResult> Catalogue(int page = 1)
         {
-            int pageSize = 6; 
+            int pageSize = 8; 
 
             var totalMuseums = await _context.Museums.CountAsync();
 

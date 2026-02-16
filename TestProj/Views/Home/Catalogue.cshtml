@@ -4,76 +4,78 @@
     ViewData["Title"] = "Catalogue Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">This is a list of our museums</h1>
+<body class="page-catalogue">
+    <div class="text-center">
+        <h1 class="display-4">This is a list of our museums</h1>
 
-    <div class="card mx-auto shadow-sm p-3 mb-5 bg-white rounded" style="width:50rem; padding-top:1.5rem; border-radius: 2rem;">
+        <div class="card mx-auto shadow-sm p-3 mb-5 rounded-5 page-catalogue-card">
             <div class="card-body">
-                <div class="row">
-                    @foreach (var museum in Model)
-                    {
-                        <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-                            <div class="card h-100 shadow">
-                                <h5 class="card-header">@museum.Name</h5>
-                                <div class="card-body">
-                                    <p>@museum.City | @museum.Address</p>
-                                    <p>@museum.WorkingHours</p>
+                    <div class="row">
+                        @foreach (var museum in Model)
+                        {
+                            <div class="col-sm-12 col-md-6 col-lg-6 mb-5">
+                                <div class="card h-100 shadow-lg p-4 rounded-4 museum-card">
+                                    <h5 class="card-header fs-4">@museum.Name</h5>
+                                    <div class="card-body p-4">
+                                        <p class="fs-5">@museum.City | @museum.Address</p>
+                                        <p class="fs-5">@museum.WorkingHours</p>
 
-                                    <a class="btn btn-danger"
-                                       asp-controller="Home"
-                                       asp-action="Details"
-                                       asp-route-id="@museum.MuseumId">
-                                        Museum Details
-                                    </a>
+                                        <a class="btn btn-lg btn-red"
+                                           asp-controller="Home"
+                                           asp-action="Details"
+                                           asp-route-id="@museum.MuseumId">
+                                            Museum Details
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
+
+                    <hr />
+
+                    <nav>
+                        <ul class="pagination justify-content-center">
+
+                            @if (ViewBag.CurrentPage > 1)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       asp-action="Catalogue"
+                                       asp-route-page="@(ViewBag.CurrentPage - 1)">
+                                        Previous
+                                    </a>
+                                </li>
+                            }
+
+                            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                    <a class="page-link"
+                                       asp-action="Catalogue"
+                                       asp-route-page="@i">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+
+                            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       asp-action="Catalogue"
+                                       asp-route-page="@(ViewBag.CurrentPage + 1)"> 
+                                        Next
+                                    </a>
+                                </li>
+                            }
+
+                        </ul>
+                    </nav>
+
+                    </div>
                 </div>
-
-                <hr />
-
-                <nav>
-                    <ul class="pagination justify-content-center">
-
-                        @if (ViewBag.CurrentPage > 1)
-                        {
-                            <li class="page-item">
-                                <a class="page-link"
-                                   asp-action="Catalogue"
-                                   asp-route-page="@(ViewBag.CurrentPage - 1)">
-                                    Previous
-                                </a>
-                            </li>
-                        }
-
-                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                        {
-                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                                <a class="page-link"
-                                   asp-action="Catalogue"
-                                   asp-route-page="@i">
-                                    @i
-                                </a>
-                            </li>
-                        }
-
-                        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                        {
-                            <li class="page-item">
-                                <a class="page-link"
-                                   asp-action="Catalogue"
-                                   asp-route-page="@(ViewBag.CurrentPage + 1)">
-                                    Next
-                                </a>
-                            </li>
-                        }
-
-                    </ul>
-                </nav>
-
-                </div>
-            </div>
+        </div>
     </div>
-</div>
 
+</body>

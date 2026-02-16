@@ -3,26 +3,33 @@
 @{
     ViewData["Title"] = $"{Model.Name}";
 }
+
 <div class="position-relative" style="margin: 0;">
 
     <form asp-controller="Home"
-          asp-action="Catalogue"
-          method="post"
-          class="text-end mb-3 container-back">
+           asp-action="Catalogue"
+           method="post"
+           class="text-end mb-3 container-back">
         <button type="submit" class="btn btn-back">
             Back
         </button>
     </form>
 
-
     <div class="row">
         <div class="col-md-4">
             <div class="container">
-                <h1 class="display-4">@Model.Name</h1>
+                <h1 class="display-4 text-red">@Model.Name</h1>
+
+                <hr class="hr-dark"/>
+
+                <p>@Model.Description</p>
+
+                <hr class="hr-dark" />
 
                 <p><strong>City:</strong> @Model.City | <strong>Address:</strong> @Model.Address</p>
                 <p><strong>Working Hours:</strong> @Model.WorkingHours</p>
                 <p><strong>Museum Type:</strong> @Model.Type</p>
+                
             </div>
         </div>
 
@@ -39,5 +46,8 @@
                 </iframe>
             }
         </div>
+
+        <p style="color: #e4e2dd;">adada</p>
+        <hr class="hr-dark" />
     </div>
 </div>

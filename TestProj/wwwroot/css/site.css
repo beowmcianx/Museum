@@ -15,19 +15,20 @@
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
+
 * {
     font-family: Aileron;
 }
+
 html {
-  position: relative;
-  min-height: 100%;
-  font-size: 14px;
+    position: relative;
+    font-size: 14px;
+    overflow-x: hidden;
 }
 
 body {
-    margin-bottom: 60px;
+    margin-bottom: 80px;
     background-color: #e4e2dd;
-    height: 1600px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -35,11 +36,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .layout-logo {
-    height: 50px; 
-    width: auto; 
+    height: 50px;
+    width: 50px;
     display: block;
     object-fit: contain;
-    margin-left: 1rem; 
+    margin-left: 1rem;
     transition: transform 150ms ease-in-out, opacity 150ms;
     opacity: 0.98;
     background-color: #e4e2dd;
@@ -61,12 +62,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 
-header {
-    margin-bottom: 60px;
-}
-
 /* Links */
-
 a {
     color: #b08435;
 }
@@ -76,7 +72,6 @@ a {
     }
 
 /* This is for the login partial view */
-
 .login-partial-pfp {
     height: 40px;
     width: 40px;
@@ -98,13 +93,11 @@ a {
     margin: 0;
 }
 
+/*Red Components*/
 .container-back {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin-top: -50px;
-    margin-right: -110px;
-    border-radius: 10px;
+    position: relative; 
+    text-align: right; 
+    margin: 10px 0; 
 }
 
 .btn-back {
@@ -113,6 +106,9 @@ a {
     color: white;
     font-size: 1rem;
     padding: 10px 15px;
+    margin-right: -100px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out;
 }
 
     .btn-back:hover {
@@ -120,17 +116,23 @@ a {
         color: white;
     }
 
+
 .btn-red {
     background-color: #db4a2b;
     border-radius: 10px;
     color: white;
+    transition: background-color 0.2s ease-in-out;
 }
     .btn-red:hover {
         background-color: #c93e20;
+        color: white;
     }
 
-/* Accent colours */
+.text-red {
+    color: #db4a2b;
+}
 
+/* Accent colours */
 .form-check-input:checked {
     background-color: #db4a2b;
     border: #db4a2b;
@@ -144,5 +146,130 @@ a {
         border-color: #db4a2b !important;
         box-shadow: 0 0 0 0.25rem rgba(219, 74, 43, 0.4) !important;
     }
+
+
+/* Museums Cards */
+.museum-card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* smooth transitions */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff; /* optional for better hover visibility */
+}
+
+    .museum-card:hover {
+        transform: translateY(-10px) scale(1.01); /* lifts and slightly enlarges the card */
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+    }
+
+
+
+
+/*Catalogue Page*/
+.page-catalogue {
+}
+
+.page-catalogue-card {
+    width: 50rem;
+    padding: 10rem;
+    padding-top: 1.5rem;
+    border-radius: 2rem;
+}
+
+
+
+/*Title*/
+.page-index {
+    margin-bottom: 0px;
+}
+
+.page-index-card-title {
+    margin-top: 0px;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background: #4a3e26;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/*First Card*/
+.page-index-card-first {
+    margin-top: 0px;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background: #e4e2dd;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+    .page-index-card-first p {
+        padding: 6px 25px;
+        font-size: 24px;
+        line-height: 2.5rem;
+        letter-spacing: 0.1rem;
+    }
+
+    .page-index-card-first img {
+        margin-left: 30px;
+        max-height: 550px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+/*Second Card*/
+.page-index-card-second {
+    margin-top: 0px;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background: #4a3e26;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+    .page-index-card-second h1 {
+        margin-bottom: 40px;
+    }
+
+    .page-index-card-second p {
+        padding: 6px 25px;
+        font-size: 24px;
+        line-height: 2.5rem;
+        letter-spacing: 0.1rem;
+        color: white;
+    }
+
+    .page-index-card-second img {
+        margin-right: 40px; 
+        max-height: 550px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .page-index-card-second .hr-light {
+        height: 3px;
+        opacity: 1;
+        margin: 25px 0;
+    }
+
+/*Image*/
+.page-index-card-image {
+    margin-top: 0px;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background: #e4e2dd;
+    color: #e4e2dd;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/*Horizontal Lines*/
+.hr-light {
+    background-color: #e4e2dd;
+}
+
+.hr-dark {
+    background-color: #4a3e26;
+}
+
 
 

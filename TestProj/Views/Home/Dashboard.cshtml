@@ -11,23 +11,34 @@
 
     <hr />
     <h2>Museums</h2>
+    <br />
+
+    <a class="btn btn-success"
+       asp-controller="Home"
+       asp-action="Create">
+        Create Museum
+    </a>
+
+    <hr />
 
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>Id</th>
                 <th>Name</th>
-                <th>City</th>
+                <th>City/Address</th>
                 <th>Type</th>
                 <th>Active</th>
-                <th>-</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var museum in ViewBag.Museums as List<TestProj.Models.MuseumModel>)
             {
                 <tr>
+                    <td>@museum.MuseumId</td>
                     <td>@museum.Name</td>
-                    <td>@museum.City</td>
+                    <td>@museum.City, @museum.Address</td>
                     <td>@museum.Type</td>
                     <td>@museum.IsActive</td>
 
@@ -59,9 +70,4 @@
         </tbody>
     </table>
 
-    <a class="btn btn-success"
-       asp-controller="Home"
-       asp-action="Create">
-        Create Museum
-    </a>
 </div>
