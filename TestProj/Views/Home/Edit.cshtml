@@ -4,44 +4,64 @@
     ViewData["Title"] = $"Edit: {Model.Name}";
 }
 
-<h1>Edit</h1>
-<h1>@Model.Name</h1>
+<div class="position-relative" style="margin: 0;">
+    <form asp-controller="Home"
+          asp-action="Dashboard"
+          method="post"
+          class="text-end mb-3 container-back">
+        <button type="submit" class="btn btn-back">
+            Back
+        </button>
+    </form>
+    <h1>Edit</h1>
+    <h1>@Model.Name</h1>
 
-<div asp-validation-summary="All"></div>
+    <div asp-validation-summary="All"></div>
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="MuseumId" />
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="MuseumId" />
 
-    <div>
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" required />
-    </div>
+        <div>
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" required />
+        </div>
 
-    <div>
-        <label asp-for="City"></label>
-        <input asp-for="City" class="form-control" required />
-    </div>
+        <div>
+            <label asp-for="City"></label>
+            <input asp-for="City" class="form-control" required />
+        </div>
 
-    <div>
-        <label asp-for="Address"></label>
-        <input asp-for="Address" class="form-control" />
-    </div>
+        <div>
+            <label asp-for="Address"></label>
+            <input asp-for="Address" class="form-control" />
+        </div>
 
-    <div>
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-    </div>
+        <div>
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
 
-    <div>
-        <label asp-for="WorkingHours"></label>
-        <input asp-for="WorkingHours" class="form-control" />
-    </div>
+        <div class="d-flex gap-3 align-items-end">
 
-    <div>
-        <label asp-for="Type"></label>
-        <input asp-for="Type" class="form-control" />
-    </div>
+            <div>
+                <label asp-for="OpeningTime" class="form-label"></label>
+                <input asp-for="OpeningTime" class="form-control" step="60" type="time" />
+            </div>
 
-    <br />
-    <button type="submit" class="btn btn-red">Save Changes</button>
-</form>
+            <div>
+                <label asp-for="ClosingTime" class="form-label"></label>
+                <input asp-for="ClosingTime" class="form-control" step="60" type="time" />
+            </div>
+
+        </div>
+
+
+        <div>
+            <label asp-for="Type"></label>
+            <input asp-for="Type" class="form-control" />
+        </div>
+
+        <br />
+        <button type="submit" class="btn btn-red">Save Changes</button>
+    </form>
+</div>

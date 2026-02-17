@@ -4,41 +4,71 @@
     ViewData["Title"] = "Create Page";
 }
 
-<h2>Add New Museum</h2>
-<div asp-validation-summary="All"></div>
+<div class="position-relative" style="margin: 0;">
+    <form asp-controller="Home"
+          asp-action="Dashboard"
+          method="post"
+          class="text-end mb-3 container-back">
+        <button type="submit" class="btn btn-back">
+            Back
+        </button>
+    </form>
 
-<form asp-action="Create" method="post">
-    <div>
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" required />
-    </div>
+    <h2>Add New Museum</h2>
+    <div asp-validation-summary="All"></div>
 
-    <div>
-        <label asp-for="City"></label>
-        <input asp-for="City" class="form-control" required />
-    </div>
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
 
-    <div>
-        <label asp-for="Address"></label>
-        <input asp-for="Address" class="form-control" />
-    </div>
+        <div>
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" required />
+        </div>
 
-    <div>
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-    </div>
+        <div>
+            <label asp-for="City"></label>
+            <input asp-for="City" class="form-control" required />
+        </div>
 
-    <div>
-        <label asp-for="WorkingHours"></label>
-        <input asp-for="WorkingHours" class="form-control" />
-    </div>
+        <div>
+            <label asp-for="Address"></label>
+            <input asp-for="Address" class="form-control" />
+        </div>
 
-    <div>
-        <label asp-for="Type"></label>
-        <input asp-for="Type" class="form-control" />
-    </div>
+        <div>
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
 
-    <br />
-    <button type="submit" class="btn btn-red">Add Museum</button>
-</form>
+        <div class="d-flex gap-3 align-items-end">
 
+            <div>
+                <label asp-for="OpeningTime" class="form-label"></label>
+                <input asp-for="OpeningTime" class="form-control" step="60" type="time" />
+            </div>
+
+            <div>
+                <label asp-for="ClosingTime" class="form-label"></label>
+                <input asp-for="ClosingTime" class="form-control" step="60" type="time" />
+            </div>
+
+        </div>
+
+
+        <div>
+            <label asp-for="Type"></label>
+            <input asp-for="Type" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="imageFile" class="form-label">Museum image</label>
+            <input type="file" name="imageFile" id="imageFile" accept="image/*" class="form-control" />
+            <div class="form-text">Optional. JPG/PNG/GIF. Will be stored under /images/museums/</div>
+            <span asp-validation-for="Images" class="text-danger"></span>
+        </div>
+
+        <br />
+        <button type="submit" class="btn btn-red">Add Museum</button>
+    </form>
+
+</div>

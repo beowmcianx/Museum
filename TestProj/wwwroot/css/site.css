@@ -271,5 +271,8 @@ a {
     background-color: #4a3e26;
 }
 
-
-
+.page-catalogue-museum-image {
+    max-height: 400px;
+    height: 200px;
+    object-fit: fill;
+}

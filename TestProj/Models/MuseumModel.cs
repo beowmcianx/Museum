@@ -20,7 +20,15 @@ namespace TestProj.Models
 
         public string Description { get; set; }
 
-        public string WorkingHours { get; set; }
+
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = @"{0:hh\:mm}", ApplyFormatInEditMode = true)]
+        public TimeSpan OpeningTime { get; set; }
+
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = @"{0:hh\:mm}", ApplyFormatInEditMode = true)]
+        public TimeSpan ClosingTime { get; set; }
+
 
         public string Type { get; set; }
 

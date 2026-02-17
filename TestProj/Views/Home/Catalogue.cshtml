@@ -13,12 +13,19 @@
                     <div class="row">
                         @foreach (var museum in Model)
                         {
+                            var firstImageUrl = museum.Images?.FirstOrDefault()?.ImageUrl;
                             <div class="col-sm-12 col-md-6 col-lg-6 mb-5">
                                 <div class="card h-100 shadow-lg p-4 rounded-4 museum-card">
                                     <h5 class="card-header fs-4">@museum.Name</h5>
                                     <div class="card-body p-4">
+                                        <img src="@(firstImageUrl ?? "/images/Image-not-found.png")"
+                                             alt="@museum.Name"
+                                             class="img-fluid rounded mb-3 page-catalogue-museum-image"/>
                                         <p class="fs-5">@museum.City | @museum.Address</p>
-                                        <p class="fs-5">@museum.WorkingHours</p>
+                                        <p class="fs-5">
+                                            @(DateTime.Today.Add(museum.OpeningTime).ToString("h:mm tt").ToLowerInvariant()) -
+                                            @(DateTime.Today.Add(museum.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
+                                        </p>
 
                                         <a class="btn btn-lg btn-red"
                                            asp-controller="Home"

@@ -27,7 +27,10 @@
                 <hr class="hr-dark" />
 
                 <p><strong>City:</strong> @Model.City | <strong>Address:</strong> @Model.Address</p>
-                <p><strong>Working Hours:</strong> @Model.WorkingHours</p>
+                <p>
+                    @(DateTime.Today.Add(Model.OpeningTime).ToString("h:mm tt").ToLowerInvariant()) -
+                    @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
+                </p>
                 <p><strong>Museum Type:</strong> @Model.Type</p>
                 
             </div>
