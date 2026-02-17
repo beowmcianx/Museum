@@ -6,20 +6,32 @@
 
 
 <div class="text-center">
-    <h1 class="display-4">The Museum Central</h1>
+    <h1 class="display-4">Dashboard</h1>
+    <h4 class="text-secondary text-muted">view, create, and edit museums and accounts</h4>
+
+    <br />
+    <hr />
+
+    <div class="align-content-between">
+
+        <a class="btn btn-success page-dashboard-button"
+           asp-controller="Home"    
+           asp-action="Create">
+            Create Museum
+        </a>
+
+        <a class="btn btn-warning page-dashboard-button"
+           asp-controller="Home"
+           asp-action="Create">
+            Accounts
+        </a>
+    </div>
+
+    <hr />  
     <br />
 
-    <hr />
-    <h2>Museums</h2>
+    <h3 class="text-center">Museums</h3>
     <br />
-
-    <a class="btn btn-success"
-       asp-controller="Home"
-       asp-action="Create">
-        Create Museum
-    </a>
-
-    <hr />
 
     <table class="table table-striped">
         <thead>
@@ -28,10 +40,12 @@
                 <th>Name</th>
                 <th>City/Address</th>
                 <th>Type</th>
+                <th>Working Hours</th>
                 <th>Active</th>
                 <th></th>
             </tr>
         </thead>
+
         <tbody>
             @foreach (var museum in ViewBag.Museums as List<TestProj.Models.MuseumModel>)
             {
@@ -40,9 +54,17 @@
                     <td>@museum.Name</td>
                     <td>@museum.City, @museum.Address</td>
                     <td>@museum.Type</td>
+                    <td>@museum.OpeningTime - @museum.ClosingTime</td>
                     <td>@museum.IsActive</td>
 
                     <td>
+                        <a class="btn btn-info"
+                           asp-controller="Home"
+                           asp-action="Edit"
+                           asp-route-id="@museum.MuseumId">
+                            Edit
+                        </a>
+
                         <form asp-controller="Home"
                               asp-action="Delete"
                               asp-route-id="@museum.MuseumId"
@@ -57,13 +79,6 @@
                                 Delete
                             </button>
                         </form>
-
-                        <a class="btn btn-info"
-                           asp-controller="Home"
-                           asp-action="Edit"
-                           asp-route-id="@museum.MuseumId">
-                            Edit
-                        </a>
                     </td>
                 </tr>
             }

@@ -176,11 +176,38 @@ a {
     border-radius: 2rem;
 }
 
+.page-catalogue-search-bar {
+    border-radius: 20px;
+}
 
+.input-group {
+    padding: 24px 28px 32px;
+    width: 600px;
+}
+
+.input-group input, .input-group button {
+    border-color: darkgray;
+    border-width: 3px;
+    border-radius: 10px;
+    border-right: none;
+    transition: border-color 0.2s ease-in-out;
+}
+    
+    .input-group button {
+        border-color: #db4a2b;
+        transition: border-color 0.2s ease-in-out;
+    }
+
+        .input-group button:hover {
+            border-color: #c93e20;
+        }
+
+    
 
 /*Title*/
 .page-index {
     margin-bottom: 0px;
+    background-color: #4a3e26;
 }
 
 .page-index-card-title {
@@ -275,4 +302,12 @@ a {
     max-height: 400px;
     height: 200px;
     object-fit: fill;
+}
+
+/*Dashboard Page*/
+
+.page-dashboard-button {
+    font-size: 20px;
+    padding: 15px 10px;
+    border-radius: 12px
 }
