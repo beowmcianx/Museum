@@ -1,3 +1,4 @@
-header {
+body:not(.page-index) header {
     border: none;
+    margin-bottom: 50px;
 }

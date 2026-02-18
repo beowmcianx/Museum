@@ -1,4 +1,4 @@
-﻿@model TestProj.Models.MuseumModel
+﻿@model List<TestProj.Models.MuseumModel>
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -33,6 +33,53 @@
     <h3 class="text-center">Museums</h3>
     <br />
 
+    @* Search Card *@
+        <form asp-action="Dashboard" method="get" class="row g-2">
+
+            <div class="col-md-4">
+                <input class="form-control"
+                       type="search"
+                       name="searchString"
+                       value="@ViewBag.SearchString"
+                       placeholder="Search anything..." />
+            </div>
+
+            <div class="col-md-3">
+                <select class="form-select" name="cityFilter">
+                    <option value="">All Cities</option>
+                    @foreach (var city in ViewBag.Cities)
+                    {
+                        <option value="@city"
+                                selected="@(city == ViewBag.CityFilter)">
+                            @city
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <select class="form-select" name="typeFilter">
+                    <option value="">All Types</option>
+                    @foreach (var type in ViewBag.Types)
+                    {
+                        <option value="@type"
+                                selected="@(type == ViewBag.TypeFilter)">
+                            @type
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-red w-100" type="submit">
+                    Filter
+                </button>
+            </div>
+
+        </form>
+
+    <br />
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -47,14 +94,18 @@
         </thead>
 
         <tbody>
-            @foreach (var museum in ViewBag.Museums as List<TestProj.Models.MuseumModel>)
+            @foreach (var museum in Model)
             {
                 <tr>
                     <td>@museum.MuseumId</td>
                     <td>@museum.Name</td>
                     <td>@museum.City, @museum.Address</td>
                     <td>@museum.Type</td>
-                    <td>@museum.OpeningTime - @museum.ClosingTime</td>
+                    <td>
+                        @(DateTime.Today.Add(museum.OpeningTime).ToString("h:mm tt").ToLowerInvariant())
+                        -
+                        @(DateTime.Today.Add(museum.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
+                    </td>
                     <td>@museum.IsActive</td>
 
                     <td>
@@ -84,5 +135,57 @@
             }
         </tbody>
     </table>
+
+    <hr />
+
+    <h5>Showing page @ViewBag.CurrentPage of @ViewBag.TotalPages pages</h5>
+
+    <nav>
+        <ul class="pagination justify-content-center">
+
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="Dashboard"
+                       asp-route-page="@(ViewBag.CurrentPage - 1)"
+                       asp-route-searchString="@ViewBag.SearchString"
+                       asp-route-cityFilter="@ViewBag.CityFilter"
+                       asp-route-typeFilter="@ViewBag.TypeFilter">
+                        Previous
+                    </a>
+                </li>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Dashboard"
+                       asp-route-page="@i"
+                       asp-route-searchString="@ViewBag.SearchString"
+                       asp-route-cityFilter="@ViewBag.CityFilter"
+                       asp-route-typeFilter="@ViewBag.TypeFilter">
+                        @i
+                    </a>
+                </li>
+            }
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="Dashboard"
+                       asp-route-page="@(ViewBag.CurrentPage + 1)"
+                       asp-route-searchString="@ViewBag.SearchString"
+                       asp-route-cityFilter="@ViewBag.CityFilter"
+                       asp-route-typeFilter="@ViewBag.TypeFilter">
+                        Next
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </nav>
 
 </div>

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -105,16 +105,112 @@ namespace TestProj.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Catalogue with pagination and images included
-        // URL example: /Home/Catalogue?page=1
-        public async Task<IActionResult> Catalogue(int page = 1, int pageSize = 6)
+        public async Task<IActionResult> Catalogue(
+            string searchString,
+            string cityFilter,
+            string typeFilter,
+            int page = 1,
+            int pageSize = 6)
         {
             if (pageSize <= 0) pageSize = 6;
 
             var query = _context.Museums
                 .Include(m => m.Images)
                 .AsNoTracking()
-                .OrderBy(m => m.MuseumId);
+                .AsQueryable();
+
+            // 🔎 GLOBAL SEARCH
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                query = query.Where(m =>
+                    m.Name.Contains(searchString) ||
+                    m.City.Contains(searchString) ||
+                    m.Type.Contains(searchString) ||
+                    m.Description.Contains(searchString) ||
+                    m.Address.Contains(searchString));
+            }
+
+            // 🏙 CITY FILTER
+            if (!string.IsNullOrWhiteSpace(cityFilter))
+            {
+                query = query.Where(m => m.City == cityFilter);
+            }
+
+            // 🏛 TYPE FILTER
+            if (!string.IsNullOrWhiteSpace(typeFilter))
+            {
+                query = query.Where(m => m.Type == typeFilter);
+            }
+
+            query = query.OrderBy(m => m.MuseumId);
+
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            if (totalPages == 0) totalPages = 1;
+
+            page = Math.Clamp(page, 1, totalPages);
+
+            var museums = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // Send filter values back to View
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.SearchString = searchString;
+            ViewBag.CityFilter = cityFilter;
+            ViewBag.TypeFilter = typeFilter;
+
+            // For dropdown lists
+            ViewBag.Cities = await _context.Museums
+                .Select(m => m.City)
+                .Distinct()
+                .ToListAsync();
+
+            ViewBag.Types = await _context.Museums
+                .Select(m => m.Type)
+                .Distinct()
+                .ToListAsync();
+
+            return View(museums);
+        }
+
+
+        public async Task<IActionResult> Dashboard(
+            string searchString,
+            string cityFilter,
+            string typeFilter,
+            int page = 1,
+            int pageSize = 6)
+        {
+            if (pageSize <= 0) pageSize = 6;
+
+            var query = _context.Museums
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                query = query.Where(m =>
+                    m.Name.Contains(searchString) ||
+                    m.City.Contains(searchString) ||
+                    m.Type.Contains(searchString) ||
+                    m.Description.Contains(searchString) ||
+                    m.Address.Contains(searchString));
+            }
+
+            if (!string.IsNullOrWhiteSpace(cityFilter))
+            {
+                query = query.Where(m => m.City == cityFilter);
+            }
+
+            if (!string.IsNullOrWhiteSpace(typeFilter))
+            {
+                query = query.Where(m => m.Type == typeFilter);
+            }
+
+            query = query.OrderBy(m => m.MuseumId);
 
             var totalCount = await query.CountAsync();
             var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
@@ -129,15 +225,21 @@ namespace TestProj.Controllers
 
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
-            ViewBag.PageSize = pageSize;
+            ViewBag.SearchString = searchString;
+            ViewBag.CityFilter = cityFilter;
+            ViewBag.TypeFilter = typeFilter;
+
+            ViewBag.Cities = await _context.Museums
+                .Select(m => m.City)
+                .Distinct()
+                .ToListAsync();
+
+            ViewBag.Types = await _context.Museums
+                .Select(m => m.Type)
+                .Distinct()
+                .ToListAsync();
 
             return View(museums);
-        }
-
-        public async Task<IActionResult> Dashboard()
-        {
-            ViewBag.Museums = await _context.Museums.ToListAsync();
-            return View();
         }
 
         public async Task<IActionResult> Details(int id)
