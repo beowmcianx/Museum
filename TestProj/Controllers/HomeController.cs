@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TestProj.Data;
 using TestProj.Models;
+using System.Collections.Generic;
 
 namespace TestProj.Controllers
 {
@@ -33,6 +34,11 @@ namespace TestProj.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Cart()
         {
             return View();
         }
@@ -65,6 +71,7 @@ namespace TestProj.Controllers
             }
 
             museum.Images ??= new System.Collections.Generic.List<MuseumImageModel>();
+            museum.TicketTypes ??= new List<TicketTypeModel>();
 
             if (imageFile != null && imageFile.Length > 0)
             {
@@ -97,6 +104,22 @@ namespace TestProj.Controllers
                 {
                     ImageUrl = imageUrl
                 });
+            }
+
+            // Clean up ticket types submitted from the form: remove empty rows
+            if (museum.TicketTypes != null)
+            {
+                var cleaned = museum.TicketTypes
+                    .Where(tt => !string.IsNullOrWhiteSpace(tt.Name) && tt.Price > 0)
+                    .Select(tt => new TicketTypeModel
+                    {
+                        Name = tt.Name,
+                        Price = tt.Price,
+                        IsActive = tt.IsActive
+                    })
+                    .ToList();
+
+                museum.TicketTypes = cleaned;
             }
 
             _context.Museums.Add(museum);
@@ -246,6 +269,7 @@ namespace TestProj.Controllers
         {
             var museum = await _context.Museums
                 .Include(m => m.Images)
+                .Include(m => m.TicketTypes)
                 .FirstOrDefaultAsync(m => m.MuseumId == id);
 
             if (museum == null)
@@ -298,6 +322,75 @@ namespace TestProj.Controllers
 
             var text = $"Name: {name}\nAuthenticated: {isAuthenticated}\nRoles: {rolesText}\nClaims: {claimsText}";
             return Content(text, "text/plain");
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BuyTickets([FromForm] OrderCreateDto dto)
+        {
+            if (dto == null)
+            {
+                return BadRequest();
+            }
+
+            // Basic validation
+            if (dto.Items == null || !dto.Items.Any(i => i.Quantity > 0))
+            {
+                TempData["Error"] = "Select at least one ticket.";
+                return RedirectToAction(nameof(Details), new { id = dto.MuseumId });
+            }
+
+            var museum = await _context.Museums.FindAsync(dto.MuseumId);
+            if (museum == null)
+            {
+                return NotFound();
+            }
+
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out var userId))
+            {
+                return Challenge(); // not authenticated or invalid id
+            }
+
+            var order = new OrderModel
+            {
+                OrderCode = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper(),
+                VisitDate = dto.VisitDate.Date,
+                CreatedAt = DateTime.Now,
+                MuseumId = dto.MuseumId,
+                UserId = userId,
+                OrderItems = new List<OrderItemModel>()
+            };
+
+            foreach (var item in dto.Items.Where(i => i.Quantity > 0))
+            {
+                var tt = await _context.TicketTypes.FindAsync(item.TicketTypeId);
+                if (tt == null)
+                {
+                    // skip invalid ticket types
+                    continue;
+                }
+
+                order.OrderItems.Add(new OrderItemModel
+                {
+                    TicketTypeId = item.TicketTypeId,
+                    Quantity = item.Quantity,
+                    PriceAtPurchase = tt.Price
+                });
+            }
+
+            if (!order.OrderItems.Any())
+            {
+                TempData["Error"] = "No valid tickets selected.";
+                return RedirectToAction(nameof(Details), new { id = dto.MuseumId });
+            }
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = $"Order {order.OrderCode} created. Visit date: {order.VisitDate:yyyy-MM-dd}.";
+            return RedirectToAction(nameof(Details), new { id = dto.MuseumId });
         }
     }
 }

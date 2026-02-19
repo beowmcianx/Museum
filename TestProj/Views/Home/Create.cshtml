@@ -67,8 +67,113 @@
             <span asp-validation-for="Images" class="text-danger"></span>
         </div>
 
+        <hr />
+
+        <h4>Ticket types</h4>
+        <p class="text-muted">Add ticket types (name and price). Leave rows empty to ignore.</p>
+
+        <div id="ticketTypesContainer">
+            <!-- existing server-side entries (if any) will be rendered here by server-side when editing; for Create, no initial types -->
+            <div class="ticket-row d-flex gap-2 mb-2 align-items-center">
+                <input type="text" name="TicketTypes[0].Name" class="form-control" placeholder="Name (Adult, Child...)" style="max-width:250px;" />
+                <input type="number" name="TicketTypes[0].Price" class="form-control" placeholder="Price" step="0.01" min="0" style="max-width:140px;" />
+                <label class="form-check form-check-inline mb-0">
+                    <input type="checkbox" name="TicketTypes[0].IsActive" class="form-check-input" checked /> Active
+                </label>
+                <button type="button" class="btn btn-outline-danger btn-sm remove-ticket" style="margin-left:6px;">Remove</button>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button type="button" id="addTicketBtn" class="btn btn-secondary btn-sm">Add ticket type</button>
+        </div>
+
         <br />
         <button type="submit" class="btn btn-red">Add Museum</button>
     </form>
 
 </div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var container = document.getElementById('ticketTypesContainer');
+            var addBtn = document.getElementById('addTicketBtn');
+
+            function nextIndex() {
+                var existing = container.querySelectorAll('[name^="TicketTypes["]');
+                if (!existing.length) return 0;
+                var max = -1;
+                existing.forEach(function (el) {
+                    var name = el.name;
+                    var m = name.match(/^TicketTypes\[(\d+)\]/);
+                    if (m) {
+                        var i = parseInt(m[1], 10);
+                        if (i > max) max = i;
+                    }
+                });
+                return max + 1;
+            }
+
+            function createRow(index) {
+                var row = document.createElement('div');
+                row.className = 'ticket-row d-flex gap-2 mb-2 align-items-center';
+
+                var nameInput = document.createElement('input');
+                nameInput.type = 'text';
+                nameInput.name = 'TicketTypes[' + index + '].Name';
+                nameInput.className = 'form-control';
+                nameInput.placeholder = 'Name (Adult, Child...)';
+                nameInput.style.maxWidth = '250px';
+
+                var priceInput = document.createElement('input');
+                priceInput.type = 'number';
+                priceInput.step = '0.01';
+                priceInput.min = '0';
+                priceInput.name = 'TicketTypes[' + index + '].Price';
+                priceInput.className = 'form-control';
+                priceInput.placeholder = 'Price';
+                priceInput.style.maxWidth = '140px';
+
+                var label = document.createElement('label');
+                label.className = 'form-check form-check-inline mb-0';
+                var chk = document.createElement('input');
+                chk.type = 'checkbox';
+                chk.name = 'TicketTypes[' + index + '].IsActive';
+                chk.className = 'form-check-input';
+                chk.checked = true;
+                label.appendChild(chk);
+                label.appendChild(document.createTextNode(' Active'));
+
+                var removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'btn btn-outline-danger btn-sm remove-ticket';
+                removeBtn.style.marginLeft = '6px';
+                removeBtn.textContent = 'Remove';
+                removeBtn.addEventListener('click', function () {
+                    row.remove();
+                });
+
+                row.appendChild(nameInput);
+                row.appendChild(priceInput);
+                row.appendChild(label);
+                row.appendChild(removeBtn);
+
+                return row;
+            }
+
+            addBtn.addEventListener('click', function () {
+                var idx = nextIndex();
+                var r = createRow(idx);
+                container.appendChild(r);
+            });
+
+            container.addEventListener('click', function (e) {
+                if (e.target && e.target.matches('.remove-ticket')) {
+                    var row = e.target.closest('.ticket-row');
+                    if (row) row.remove();
+                }
+            });
+        })();
+    </script>
+}

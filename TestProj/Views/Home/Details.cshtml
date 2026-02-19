@@ -2,9 +2,19 @@
 
 @{
     ViewData["Title"] = $"{Model.Name}";
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
 }
 
 <div class="position-relative" style="margin: 0;">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    else if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
 
     <form asp-controller="Home"
            asp-action="Catalogue"
@@ -32,7 +42,7 @@
                     @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
                 </p>
                 <p><strong>Museum Type:</strong> @Model.Type</p>
-                
+
             </div>
         </div>
 
@@ -52,5 +62,115 @@
 
         <p style="color: #e4e2dd;">adada</p>
         <hr class="hr-dark" />
+        <br />
+
+        <div class="row">
+            <div class="col-md-4">
+                <button type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#buyTicketsModal">
+                    Buy Tickets
+                </button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="buyTicketsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="buyTicketsLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <form asp-controller="Home" asp-action="BuyTickets" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="buyTicketsLabel">Buy Tickets - @Model.Name</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <input type="hidden" name="MuseumId" value="@Model.MuseumId" />
+
+                            @if (!isAuthenticated)
+                            {
+                                <div class="alert alert-info">
+                                    You are not signed in. You can view ticket types here but must
+                                    <a class="link-primary" asp-area="Identity" asp-page="/Account/Login">log in</a>
+                                    or
+                                    <a class="link-primary" asp-area="Identity" asp-page="/Account/Register">register</a>
+                                    to purchase.
+                                </div>
+                            }
+
+                            <div class="mb-3">
+                                <label for="visitDate" class="form-label"><strong>Visit date</strong></label>
+                                <input id="visitDate" name="VisitDate" type="date" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" min="@DateTime.Today.ToString("yyyy-MM-dd")" @(isAuthenticated ? "" : "disabled") />
+                            </div>
+
+                            <hr />
+
+                            <div>
+                                <h5>Ticket types</h5>
+                                @if (Model.TicketTypes != null && Model.TicketTypes.Any())
+                                {
+                                    for (var i = 0; i < Model.TicketTypes.Count; i++)
+                                    {
+                                        var tt = Model.TicketTypes.ElementAt(i);
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="flex-grow-1">
+                                                <strong>@tt.Name</strong> — @tt.Price.ToString("F2") $
+                                            </div>
+                                            <input type="hidden" name="Items[@i].TicketTypeId" value="@tt.TicketTypeId" />
+                                            <input type="number" name="Items[@i].Quantity" class="form-control qty" style="width:100px;" min="0" max="20" value="0" data-price="@tt.Price" @(isAuthenticated ? "" : "disabled") />
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-muted">No ticket types available for this museum.</p>
+                                }
+                            </div>
+
+                            <hr />
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Total:</strong>
+                                </div>
+                                <div>
+                                    <span id="totalAmount">0.00</span> $
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary rounded-2" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-red" @(isAuthenticated ? "" : "disabled")>Buy</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        (function () {
+            function updateTotal() {
+                var total = 0.0;
+                document.querySelectorAll('.qty').forEach(function (el) {
+                    var qty = parseInt(el.value || '0', 10);
+                    var price = parseFloat(el.getAttribute('data-price') || '0');
+                    if (!isNaN(qty) && !isNaN(price)) {
+                        total += qty * price;
+                    }
+                });
+                document.getElementById('totalAmount').textContent = total.toFixed(2);
+            }
+
+            document.addEventListener('input', function (e) {
+                if (e.target && e.target.classList && e.target.classList.contains('qty')) {
+                    updateTotal();
+                }
+            });
+
+            updateTotal();
+        })();
+    </script>
+}

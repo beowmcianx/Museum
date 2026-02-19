@@ -6,7 +6,7 @@ namespace TestProj.Models
 {
     public static class Roles
     {
-        public const string Visitor = "Visitor";
+        public const string Client = "Client";
         public const string Worker = "Worker";
         public const string Admin = "Admin";
     }

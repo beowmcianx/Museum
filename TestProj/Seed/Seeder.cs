@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using TestProj.Models;
+using TestProj.Data;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace TestProj.Models
 {
@@ -17,7 +22,7 @@ namespace TestProj.Models
 
             logger ??= NullLogger.Instance;
 
-            string[] roles = { Roles.Visitor, Roles.Worker, Roles.Admin };
+            string[] roles = { Roles.Client, Roles.Worker, Roles.Admin };
 
             foreach (var role in roles)
             {
@@ -81,6 +86,50 @@ namespace TestProj.Models
             else
             {
                 logger.LogInformation("Admin user {Email} already in role {Role}", adminEmail, Roles.Admin);
+            }
+
+            // --- Seed ticket types for seeded museums ---
+            try
+            {
+                var db = services.GetRequiredService<ApplicationDbContext>();
+
+                // Ensure DB is available
+                if (await db.Museums.AnyAsync())
+                {
+                    // Predefined ticket types to seed for each museum (if museum has none)
+                    var defaultTicketTypes = new List<(string Name, decimal Price)>
+                    {
+                        ("Adult", 15.00m),
+                        ("Child", 8.00m),
+                        ("Senior", 12.00m)
+                    };
+
+                    var museumIds = await db.Museums.Select(m => m.MuseumId).ToListAsync();
+
+                    foreach (var mid in museumIds)
+                    {
+                        var exists = await db.TicketTypes.AnyAsync(tt => tt.MuseumId == mid);
+                        if (!exists)
+                        {
+                            var toAdd = defaultTicketTypes.Select(t => new TicketTypeModel
+                            {
+                                Name = t.Name,
+                                Price = t.Price,
+                                IsActive = true,
+                                MuseumId = mid
+                            }).ToList();
+
+                            await db.TicketTypes.AddRangeAsync(toAdd);
+                        }
+                    }
+
+                    await db.SaveChangesAsync();
+                    logger.LogInformation("Seeded default ticket types for museums.");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed seeding ticket types.");
             }
         }
 

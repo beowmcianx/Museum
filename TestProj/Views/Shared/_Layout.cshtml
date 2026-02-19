@@ -41,6 +41,15 @@
                                 Catalogue
                             </a>
                         </li>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Client"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : "")"
+                                   asp-area="" asp-controller="Home" asp-action="Cart">
+                                    My Cart
+                                </a>
+                            </li>
+                        }
                         @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
