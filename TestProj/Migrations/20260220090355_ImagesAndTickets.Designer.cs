@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestProj.Data;
 
@@ -11,9 +12,11 @@ using TestProj.Data;
 namespace TestProj.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260220090355_ImagesAndTickets")]
+    partial class ImagesAndTickets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -204,31 +207,31 @@ namespace TestProj.Migrations
                         new
                         {
                             MuseumImageId = 1,
-                            ImageUrl = "https://api-www.louvre.fr/sites/default/files/2021-01/cour-napoleon-et-pyramide_1.jpg",
+                            ImageUrl = "/images/museums/louvre.jpg",
                             MuseumId = 1
                         },
                         new
                         {
                             MuseumImageId = 2,
-                            ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/a/a3/British_Museum_from_NE_2.JPG",
+                            ImageUrl = "/images/museums/british.jpg",
                             MuseumId = 2
                         },
                         new
                         {
                             MuseumImageId = 3,
-                            ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/7/7c/The_Metropolitan_Museum_of_Art_%28The_Met%29_Logo.svg",
+                            ImageUrl = "/images/museums/met.jpg",
                             MuseumId = 3
                         },
                         new
                         {
                             MuseumImageId = 4,
-                            ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/6/6f/Vatican_Museums_Entrance.jpg",
+                            ImageUrl = "/images/museums/vatican.jpg",
                             MuseumId = 4
                         },
                         new
                         {
                             MuseumImageId = 5,
-                            ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/4/4f/Museo_del_Prado_2016_%28cropped%29.jpg",
+                            ImageUrl = "/images/museums/prado.jpg",
                             MuseumId = 5
                         });
                 });

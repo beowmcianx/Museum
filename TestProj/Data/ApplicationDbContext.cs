@@ -62,6 +62,12 @@ namespace TestProj.Data
                 .Property(tt => tt.Price)
                 .HasPrecision(18, 2);
 
+            builder.Entity<MuseumImageModel>()
+            .HasOne(mi => mi.Museum)
+            .WithMany(m => m.Images)
+            .HasForeignKey(mi => mi.MuseumId)
+            .OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<MuseumModel>().HasData(
 
                new MuseumModel { MuseumId = 1, Name = "Louvre Museum", City = "Paris", Address = "Rue de Rivoli", Description = "World's largest art museum.", OpeningTime = new TimeSpan(9, 0, 0), ClosingTime = new TimeSpan(18, 0, 0), Type = "Art", IsActive = true },
@@ -100,6 +106,100 @@ namespace TestProj.Data
                new MuseumModel { MuseumId = 30, Name = "Museum of Islamic Art", City = "Doha", Address = "Corniche", Description = "Islamic art collection.", OpeningTime = new TimeSpan(9, 0, 0), ClosingTime = new TimeSpan(19, 0, 0), Type = "Art", IsActive = true }
             );
 
+            builder.Entity<TicketTypeModel>().HasData(
+                new TicketTypeModel { TicketTypeId = 1, MuseumId = 1, Name = "Adult", Price = 25, IsActive = true },
+                new TicketTypeModel { TicketTypeId = 2, MuseumId = 1, Name = "Student", Price = 15, IsActive = true },
+                new TicketTypeModel { TicketTypeId = 3, MuseumId = 1, Name = "Child", Price = 10, IsActive = true },
+
+                new TicketTypeModel { TicketTypeId = 4, MuseumId = 2, Name = "Adult", Price = 20, IsActive = true },
+                new TicketTypeModel { TicketTypeId = 5, MuseumId = 2, Name = "Student", Price = 12, IsActive = true },
+                new TicketTypeModel { TicketTypeId = 6, MuseumId = 2, Name = "Child", Price = 8, IsActive = true },
+
+                new TicketTypeModel { TicketTypeId = 7, MuseumId = 3, Name = "Adult", Price = 28, IsActive = true },
+                new TicketTypeModel { TicketTypeId = 8, MuseumId = 3, Name = "Student", Price = 18, IsActive = true },
+                new TicketTypeModel { TicketTypeId = 9, MuseumId = 3, Name = "Child", Price = 12, IsActive = true },
+
+                new TicketTypeModel { TicketTypeId = 10, MuseumId = 4, Name = "Adult", Price = 30, IsActive = true },
+                new TicketTypeModel { TicketTypeId = 11, MuseumId = 4, Name = "Student", Price = 20, IsActive = true },
+                new TicketTypeModel { TicketTypeId = 12, MuseumId = 4, Name = "Child", Price = 15, IsActive = true },
+
+                new TicketTypeModel { TicketTypeId = 13, MuseumId = 5, Name = "Adult", Price = 22, IsActive = true },
+                new TicketTypeModel { TicketTypeId = 14, MuseumId = 5, Name = "Student", Price = 14, IsActive = true },
+                new TicketTypeModel { TicketTypeId = 15, MuseumId = 5, Name = "Child", Price = 9, IsActive = true }
+            );
+
+            builder.Entity<MuseumImageModel>().HasData(
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 1,
+                    MuseumId = 1,
+                    ImageUrl = "https://api-www.louvre.fr/sites/default/files/2021-01/cour-napoleon-et-pyramide_1.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 2,
+                    MuseumId = 2,
+                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/a/a3/British_Museum_from_NE_2.JPG"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 3,
+                    MuseumId = 3,
+                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/7/7c/The_Metropolitan_Museum_of_Art_%28The_Met%29_Logo.svg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 4,
+                    MuseumId = 4,
+                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/6/6f/Vatican_Museums_Entrance.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 5,
+                    MuseumId = 5,
+                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/4/4f/Museo_del_Prado_2016_%28cropped%29.jpg"
+                }
+            );
+
+            var ticketId = 16; 
+            var ticketTypes = new List<TicketTypeModel>();
+
+            for (int museumId = 6; museumId <= 30; museumId++)
+            {
+                ticketTypes.Add(new TicketTypeModel
+                {
+                    TicketTypeId = ticketId++,
+                    MuseumId = museumId,
+                    Name = "Adult",
+                    Price = 20,
+                    IsActive = true
+                });
+
+                ticketTypes.Add(new TicketTypeModel
+                {
+                    TicketTypeId = ticketId++,
+                    MuseumId = museumId,
+                    Name = "Student",
+                    Price = 12,
+                    IsActive = true
+                });
+
+                ticketTypes.Add(new TicketTypeModel
+                {
+                    TicketTypeId = ticketId++,
+                    MuseumId = museumId,
+                    Name = "Child",
+                    Price = 8,
+                    IsActive = true
+                });
+            }
+
+            builder.Entity<TicketTypeModel>().HasData(ticketTypes);
         }
 
     }
