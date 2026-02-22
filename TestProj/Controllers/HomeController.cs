@@ -1,28 +1,31 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TestProj.Data;
 using TestProj.Models;
-using System.Collections.Generic;
 
 namespace TestProj.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _env;
+        private readonly UserManager<UserModel> _userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
 
-        public HomeController(ApplicationDbContext context, IWebHostEnvironment env)
+        public HomeController(
+            ApplicationDbContext context,
+            UserManager<UserModel> userManager,
+            RoleManager<IdentityRole<int>> roleManager)
         {
             _context = context;
-            _env = env;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         [Authorize(Roles = Roles.Admin)]
@@ -38,14 +41,8 @@ namespace TestProj.Controllers
             return View();
         }
 
-        public IActionResult Cart()
-        {
-            return View();
-        }
-
         public async Task<IActionResult> Index(MuseumModel museum)
         {
-
             if (!ModelState.IsValid)
             {
                 ViewBag.Museums = await _context.Museums.ToListAsync();
@@ -56,121 +53,174 @@ namespace TestProj.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MuseumModel museum, IFormFile? imageFile)
+        public async Task<IActionResult> Create(MuseumModel museum)
         {
             ModelState.Remove(nameof(MuseumModel.TicketTypes));
             ModelState.Remove(nameof(MuseumModel.Orders));
             ModelState.Remove(nameof(MuseumModel.Employees));
             ModelState.Remove(nameof(MuseumModel.Images));
 
+            // Remove nested collection ModelState entries that commonly block saving
+            foreach (var key in ModelState.Keys.Where(k =>
+                         k.StartsWith("TicketTypes[", StringComparison.OrdinalIgnoreCase) ||
+                         k.StartsWith("Images[", StringComparison.OrdinalIgnoreCase) ||
+                         k.StartsWith("Orders[", StringComparison.OrdinalIgnoreCase) ||
+                         k.StartsWith("Employees[", StringComparison.OrdinalIgnoreCase))
+                     .ToList())
+            {
+                ModelState.Remove(key);
+            }
+
+            // Robustly parse OpeningTime / ClosingTime as before...
+            if (Request.Form.TryGetValue("OpeningTime", out var openingVal))
+            {
+                var s = openingVal.ToString();
+                if (!string.IsNullOrWhiteSpace(s))
+                {
+                    if (DateTime.TryParse(s, out var dt))
+                    {
+                        museum.OpeningTime = dt.TimeOfDay;
+                        ModelState.Remove(nameof(MuseumModel.OpeningTime));
+                    }
+                    else if (TimeSpan.TryParse(s, out var ts))
+                    {
+                        museum.OpeningTime = ts;
+                        ModelState.Remove(nameof(MuseumModel.OpeningTime));
+                    }
+                    else
+                    {
+                        ModelState.Remove(nameof(MuseumModel.OpeningTime));
+                        museum.OpeningTime = TimeSpan.Zero;
+                    }
+                }
+                else
+                {
+                    ModelState.Remove(nameof(MuseumModel.OpeningTime));
+                    museum.OpeningTime = TimeSpan.Zero;
+                }
+            }
+            else
+            {
+                ModelState.Remove(nameof(MuseumModel.OpeningTime));
+                museum.OpeningTime = TimeSpan.Zero;
+            }
+
+            if (Request.Form.TryGetValue("ClosingTime", out var closingVal))
+            {
+                var s = closingVal.ToString();
+                if (!string.IsNullOrWhiteSpace(s))
+                {
+                    if (DateTime.TryParse(s, out var dt))
+                    {
+                        museum.ClosingTime = dt.TimeOfDay;
+                        ModelState.Remove(nameof(MuseumModel.ClosingTime));
+                    }
+                    else if (TimeSpan.TryParse(s, out var ts))
+                    {
+                        museum.ClosingTime = ts;
+                        ModelState.Remove(nameof(MuseumModel.ClosingTime));
+                    }
+                    else
+                    {
+                        ModelState.Remove(nameof(MuseumModel.ClosingTime));
+                        museum.ClosingTime = TimeSpan.Zero;
+                    }
+                }
+                else
+                {
+                    ModelState.Remove(nameof(MuseumModel.ClosingTime));
+                    museum.ClosingTime = TimeSpan.Zero;
+                }
+            }
+            else
+            {
+                ModelState.Remove(nameof(MuseumModel.ClosingTime));
+                museum.ClosingTime = TimeSpan.Zero;
+            }
+
             if (!ModelState.IsValid)
             {
                 ViewBag.Museums = await _context.Museums.ToListAsync();
-                return View("Index", museum);
+                return View("Create", museum);
             }
 
-            museum.Images ??= new System.Collections.Generic.List<MuseumImageModel>();
-            museum.TicketTypes ??= new List<TicketTypeModel>();
-
-            if (imageFile != null && imageFile.Length > 0)
+            // If an image URL was provided, attach it to the new museum as a MuseumImageModel.
+            var imageUrl = Request.Form["ImageUrl"].ToString();
+            if (!string.IsNullOrWhiteSpace(imageUrl))
             {
-                // validate content-type and size as needed (example below)
-                var permittedTypes = new[] { "image/jpeg", "image/png", "image/gif" };
-                if (!permittedTypes.Contains(imageFile.ContentType))
-                {
-                    ModelState.AddModelError("imageFile", "Only JPG/PNG/GIF images are allowed.");
-                    ViewBag.Museums = await _context.Museums.ToListAsync();
-                    return View(museum);
-                }
-
-                var imagesFolder = Path.Combine(_env.WebRootPath, "images", "museums");
-                if (!Directory.Exists(imagesFolder))
-                {
-                    Directory.CreateDirectory(imagesFolder);
-                }
-
-                var ext = Path.GetExtension(imageFile.FileName);
-                var fileName = $"{Guid.NewGuid()}{ext}";
-                var fullPath = Path.Combine(imagesFolder, fileName);
-
-                await using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    await imageFile.CopyToAsync(stream);
-                }
-
-                var imageUrl = $"/images/museums/{fileName}";
+                museum.Images = museum.Images ?? new List<MuseumImageModel>();
                 museum.Images.Add(new MuseumImageModel
                 {
                     ImageUrl = imageUrl
                 });
             }
 
-            // Clean up ticket types submitted from the form: remove empty rows
-            if (museum.TicketTypes != null)
-            {
-                var cleaned = museum.TicketTypes
-                    .Where(tt => !string.IsNullOrWhiteSpace(tt.Name) && tt.Price > 0)
-                    .Select(tt => new TicketTypeModel
-                    {
-                        Name = tt.Name,
-                        Price = tt.Price,
-                        IsActive = tt.IsActive
-                    })
-                    .ToList();
-
-                museum.TicketTypes = cleaned;
-            }
-
+            // Add the museum and related child entities (ticket types if you later add them)
             _context.Museums.Add(museum);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Catalogue(
-            string searchString,
-            string cityFilter,
-            string typeFilter,
-            int page = 1,
-            int pageSize = 6)
+        // Catalogue with pagination, filters and images included
+        public async Task<IActionResult> Catalogue(string? searchString, string? cityFilter, string? typeFilter, int page = 1, int pageSize = 6)
         {
-            if (pageSize <= 0) pageSize = 6;
+            // Preserve current filter/search values for the view
+            ViewBag.SearchString = searchString ?? string.Empty;
+            ViewBag.CityFilter = cityFilter ?? string.Empty;
+            ViewBag.TypeFilter = typeFilter ?? string.Empty;
 
-            var query = _context.Museums
-                .Include(m => m.Images)
+            // Provide lists for the filter dropdowns (distinct non-empty values)
+            ViewBag.Cities = await _context.Museums
                 .AsNoTracking()
-                .AsQueryable();
+                .Where(m => !string.IsNullOrEmpty(m.City))
+                .Select(m => m.City!)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToListAsync();
 
-            // 🔎 GLOBAL SEARCH
+            ViewBag.Types = await _context.Museums
+                .AsNoTracking()
+                .Where(m => !string.IsNullOrEmpty(m.Type))
+                .Select(m => m.Type!)
+                .Distinct()
+                .OrderBy(t => t)
+                .ToListAsync();
+
+            // Base query (include images)
+            IQueryable<MuseumModel> query = _context.Museums
+                .Include(m => m.Images)
+                .AsNoTracking();
+
+            // Apply search
             if (!string.IsNullOrWhiteSpace(searchString))
             {
+                var s = $"%{searchString.Trim()}%";
                 query = query.Where(m =>
-                    m.Name.Contains(searchString) ||
-                    m.City.Contains(searchString) ||
-                    m.Type.Contains(searchString) ||
-                    m.Description.Contains(searchString) ||
-                    m.Address.Contains(searchString));
+                    EF.Functions.Like(m.Name, s) ||
+                    EF.Functions.Like(m.Description, s) ||
+                    EF.Functions.Like(m.City, s) ||
+                    EF.Functions.Like(m.Type, s));
             }
 
-            // 🏙 CITY FILTER
+            // Apply city/type filters
             if (!string.IsNullOrWhiteSpace(cityFilter))
             {
                 query = query.Where(m => m.City == cityFilter);
             }
 
-            // 🏛 TYPE FILTER
             if (!string.IsNullOrWhiteSpace(typeFilter))
             {
                 query = query.Where(m => m.Type == typeFilter);
             }
 
+            // Ordering + pagination
             query = query.OrderBy(m => m.MuseumId);
 
             var totalCount = await query.CountAsync();
-            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-            if (totalPages == 0) totalPages = 1;
-
+            var totalPages = Math.Max(1, (int)Math.Ceiling(totalCount / (double)pageSize));
             page = Math.Clamp(page, 1, totalPages);
 
             var museums = await query
@@ -178,49 +228,49 @@ namespace TestProj.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
-            // Send filter values back to View
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
-            ViewBag.SearchString = searchString;
-            ViewBag.CityFilter = cityFilter;
-            ViewBag.TypeFilter = typeFilter;
-
-            // For dropdown lists
-            ViewBag.Cities = await _context.Museums
-                .Select(m => m.City)
-                .Distinct()
-                .ToListAsync();
-
-            ViewBag.Types = await _context.Museums
-                .Select(m => m.Type)
-                .Distinct()
-                .ToListAsync();
+            ViewBag.PageSize = pageSize;
 
             return View(museums);
         }
 
-
-        public async Task<IActionResult> Dashboard(
-            string searchString,
-            string cityFilter,
-            string typeFilter,
-            int page = 1,
-            int pageSize = 6)
+        // Dashboard now sets the same ViewBag values the view expects.
+        // Supports filtering, paging and provides Cities/Types lists to avoid NRE in the view.
+        public async Task<IActionResult> Dashboard(string? searchString, string? cityFilter, string? typeFilter, int page = 1, int pageSize = 10)
         {
-            if (pageSize <= 0) pageSize = 6;
+            ViewBag.SearchString = searchString ?? string.Empty;
+            ViewBag.CityFilter = cityFilter ?? string.Empty;
+            ViewBag.TypeFilter = typeFilter ?? string.Empty;
 
-            var query = _context.Museums
+            ViewBag.Cities = await _context.Museums
                 .AsNoTracking()
-                .AsQueryable();
+                .Where(m => !string.IsNullOrEmpty(m.City))
+                .Select(m => m.City!)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToListAsync();
+
+            ViewBag.Types = await _context.Museums
+                .AsNoTracking()
+                .Where(m => !string.IsNullOrEmpty(m.Type))
+                .Select(m => m.Type!)
+                .Distinct()
+                .OrderBy(t => t)
+                .ToListAsync();
+
+            IQueryable<MuseumModel> query = _context.Museums
+                .AsNoTracking()
+                .Include(m => m.Images);
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
+                var s = $"%{searchString.Trim()}%";
                 query = query.Where(m =>
-                    m.Name.Contains(searchString) ||
-                    m.City.Contains(searchString) ||
-                    m.Type.Contains(searchString) ||
-                    m.Description.Contains(searchString) ||
-                    m.Address.Contains(searchString));
+                    EF.Functions.Like(m.Name, s) ||
+                    EF.Functions.Like(m.Description, s) ||
+                    EF.Functions.Like(m.City, s) ||
+                    EF.Functions.Like(m.Type, s));
             }
 
             if (!string.IsNullOrWhiteSpace(cityFilter))
@@ -236,9 +286,7 @@ namespace TestProj.Controllers
             query = query.OrderBy(m => m.MuseumId);
 
             var totalCount = await query.CountAsync();
-            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-            if (totalPages == 0) totalPages = 1;
-
+            var totalPages = Math.Max(1, (int)Math.Ceiling(totalCount / (double)pageSize));
             page = Math.Clamp(page, 1, totalPages);
 
             var museums = await query
@@ -248,19 +296,7 @@ namespace TestProj.Controllers
 
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
-            ViewBag.SearchString = searchString;
-            ViewBag.CityFilter = cityFilter;
-            ViewBag.TypeFilter = typeFilter;
-
-            ViewBag.Cities = await _context.Museums
-                .Select(m => m.City)
-                .Distinct()
-                .ToListAsync();
-
-            ViewBag.Types = await _context.Museums
-                .Select(m => m.Type)
-                .Distinct()
-                .ToListAsync();
+            ViewBag.PageSize = pageSize;
 
             return View(museums);
         }
@@ -269,7 +305,6 @@ namespace TestProj.Controllers
         {
             var museum = await _context.Museums
                 .Include(m => m.Images)
-                .Include(m => m.TicketTypes)
                 .FirstOrDefaultAsync(m => m.MuseumId == id);
 
             if (museum == null)
@@ -295,7 +330,7 @@ namespace TestProj.Controllers
             _context.Museums.Remove(museum);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Dashboard));
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -311,6 +346,86 @@ namespace TestProj.Controllers
             return View(museum);
         }
 
+        [Authorize(Roles = Roles.Admin)]
+        public async Task<IActionResult> Accounts(string? search, int page = 1, int pageSize = 20)
+        {
+            ViewBag.Search = search ?? string.Empty;
+
+            IQueryable<UserModel> usersQuery = _userManager.Users;
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var normalized = search.Trim();
+                usersQuery = usersQuery.Where(u =>
+                    EF.Functions.Like(u.UserName!, $"%{normalized}%") ||
+                    EF.Functions.Like(u.Email!, $"%{normalized}%"));
+            }
+
+            var orderedQuery = usersQuery.AsNoTracking().OrderBy(u => u.Id);
+
+            var totalCount = await orderedQuery.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            if (totalPages == 0) totalPages = 1;
+            page = Math.Clamp(page, 1, totalPages);
+
+            var users = await orderedQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var model = new System.Collections.Generic.List<AccountViewModel>();
+            foreach (var u in users)
+            {
+                var roles = await _userManager.GetRolesAsync(u);
+                model.Add(new AccountViewModel
+                {
+                    Id = u.Id,
+                    UserName = u.UserName ?? u.Email ?? "(n/a)",
+                    Email = u.Email ?? "",
+                    CurrentRole = roles.FirstOrDefault()
+                });
+            }
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageSize = pageSize;
+
+            ViewBag.Roles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
+
+            return View(model);
+        }
+
+        // Update role POST
+        [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateRole(int userId, string newRole, string? search, int page = 1)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null) return NotFound();
+
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            if (currentRoles.Any())
+            {
+                var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                if (!removeResult.Succeeded)
+                {
+                    ModelState.AddModelError("", "Failed to remove existing roles.");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(newRole))
+            {
+                var addResult = await _userManager.AddToRoleAsync(user, newRole);
+                if (!addResult.Succeeded)
+                {
+                    ModelState.AddModelError("", "Failed to add role.");
+                }
+            }
+
+            return RedirectToAction(nameof(Accounts), new { search, page });
+        }
+
         // Diagnostic endpoint. Visit /Home/WhoAmI to see current identity and roles.
         public IActionResult WhoAmI()
         {
@@ -322,75 +437,6 @@ namespace TestProj.Controllers
 
             var text = $"Name: {name}\nAuthenticated: {isAuthenticated}\nRoles: {rolesText}\nClaims: {claimsText}";
             return Content(text, "text/plain");
-        }
-
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> BuyTickets([FromForm] OrderCreateDto dto)
-        {
-            if (dto == null)
-            {
-                return BadRequest();
-            }
-
-            // Basic validation
-            if (dto.Items == null || !dto.Items.Any(i => i.Quantity > 0))
-            {
-                TempData["Error"] = "Select at least one ticket.";
-                return RedirectToAction(nameof(Details), new { id = dto.MuseumId });
-            }
-
-            var museum = await _context.Museums.FindAsync(dto.MuseumId);
-            if (museum == null)
-            {
-                return NotFound();
-            }
-
-            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out var userId))
-            {
-                return Challenge(); // not authenticated or invalid id
-            }
-
-            var order = new OrderModel
-            {
-                OrderCode = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper(),
-                VisitDate = dto.VisitDate.Date,
-                CreatedAt = DateTime.Now,
-                MuseumId = dto.MuseumId,
-                UserId = userId,
-                OrderItems = new List<OrderItemModel>()
-            };
-
-            foreach (var item in dto.Items.Where(i => i.Quantity > 0))
-            {
-                var tt = await _context.TicketTypes.FindAsync(item.TicketTypeId);
-                if (tt == null)
-                {
-                    // skip invalid ticket types
-                    continue;
-                }
-
-                order.OrderItems.Add(new OrderItemModel
-                {
-                    TicketTypeId = item.TicketTypeId,
-                    Quantity = item.Quantity,
-                    PriceAtPurchase = tt.Price
-                });
-            }
-
-            if (!order.OrderItems.Any())
-            {
-                TempData["Error"] = "No valid tickets selected.";
-                return RedirectToAction(nameof(Details), new { id = dto.MuseumId });
-            }
-
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            TempData["Success"] = $"Order {order.OrderCode} created. Visit date: {order.VisitDate:yyyy-MM-dd}.";
-            return RedirectToAction(nameof(Details), new { id = dto.MuseumId });
         }
     }
 }

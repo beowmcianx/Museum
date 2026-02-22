@@ -15,6 +15,10 @@
     </form>
 
     <h2>Add New Museum</h2>
+    <br />
+    <hr class="hr-dark" />
+    <h4>Museum Info</h4>
+
     <div asp-validation-summary="All"></div>
 
     <form asp-action="Create" method="post" enctype="multipart/form-data">
@@ -61,33 +65,31 @@
         </div>
 
         <div class="mb-3">
-            <label for="imageFile" class="form-label">Museum image</label>
-            <input type="file" name="imageFile" id="imageFile" accept="image/*" class="form-control" />
-            <div class="form-text">Optional. JPG/PNG/GIF. Will be stored under /images/museums/</div>
+            <label for="imageUrl" class="form-label">Museum image URL</label>
+            <input type="url" name="ImageUrl" id="imageUrl" class="form-control" placeholder="https://example.com/path/to/image.jpg" />
+            <div class="form-text">Optional. Paste a public image URL (JPG/PNG/GIF). Our site stores and displays the URL.</div>
             <span asp-validation-for="Images" class="text-danger"></span>
         </div>
 
-        <hr />
+        <hr class="hr-dark" />
 
         <h4>Ticket types</h4>
-        <p class="text-muted">Add ticket types (name and price). Leave rows empty to ignore.</p>
+        <p class="text-muted">Add ticket types. Leave rows empty to ignore.</p>
+
+        <div class="mb-3">
+            <button type="button" id="addTicketBtn" class="btn btn-success btn-sm">Add Row</button>
+        </div>
 
         <div id="ticketTypesContainer">
             <!-- existing server-side entries (if any) will be rendered here by server-side when editing; for Create, no initial types -->
             <div class="ticket-row d-flex gap-2 mb-2 align-items-center">
-                <input type="text" name="TicketTypes[0].Name" class="form-control" placeholder="Name (Adult, Child...)" style="max-width:250px;" />
-                <input type="number" name="TicketTypes[0].Price" class="form-control" placeholder="Price" step="0.01" min="0" style="max-width:140px;" />
-                <label class="form-check form-check-inline mb-0">
-                    <input type="checkbox" name="TicketTypes[0].IsActive" class="form-check-input" checked /> Active
-                </label>
-                <button type="button" class="btn btn-outline-danger btn-sm remove-ticket" style="margin-left:6px;">Remove</button>
+                <input type="text" name="TicketTypes[0].Name" class="form-control" placeholder="Name (Adult, Child...)" style="max-width:250px;" required />
+                <input type="number" name="TicketTypes[0].Price" class="form-control" placeholder="Price" step="0.1" min="0" style="max-width:140px;" required />
+                <button type="button" class="btn btn-danger btn-sm remove-ticket" style="margin-left:6px;">Remove Row</button>
             </div>
         </div>
 
-        <div class="mb-3">
-            <button type="button" id="addTicketBtn" class="btn btn-secondary btn-sm">Add ticket type</button>
-        </div>
-
+        <hr class="hr-dark"/>
         <br />
         <button type="submit" class="btn btn-red">Add Museum</button>
     </form>
@@ -147,9 +149,10 @@
 
                 var removeBtn = document.createElement('button');
                 removeBtn.type = 'button';
-                removeBtn.className = 'btn btn-outline-danger btn-sm remove-ticket';
+                // use same default bootstrap danger button for consistency
+                removeBtn.className = 'btn btn-danger btn-sm remove-ticket';
                 removeBtn.style.marginLeft = '6px';
-                removeBtn.textContent = 'Remove';
+                removeBtn.textContent = 'Remove Row';
                 removeBtn.addEventListener('click', function () {
                     row.remove();
                 });

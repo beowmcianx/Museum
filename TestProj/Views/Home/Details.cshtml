@@ -17,20 +17,21 @@
     }
 
     <form asp-controller="Home"
-           asp-action="Catalogue"
-           method="post"
-           class="text-end mb-3 container-back">
+          asp-action="Catalogue"
+          method="post"
+          class="text-end mb-3 container-back">
         <button type="submit" class="btn btn-back">
             Back
         </button>
     </form>
 
+    <!-- ===================== MUSEUM INFO ===================== -->
     <div class="row">
         <div class="col-md-4">
             <div class="container">
                 <h1 class="display-4 text-red">@Model.Name</h1>
 
-                <hr class="hr-dark"/>
+                <hr class="hr-dark" />
 
                 <p>@Model.Description</p>
 
@@ -42,15 +43,15 @@
                     @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
                 </p>
                 <p><strong>Museum Type:</strong> @Model.Type</p>
-
             </div>
         </div>
 
+        <!-- ===================== MAP ===================== -->
         <div class="col-md-6 offset-md-2">
             @if (!string.IsNullOrWhiteSpace(Model.Address))
             {
                 <h4>Location</h4>
-                <iframe width="500"
+                <iframe width="100%"
                         height="450"
                         frameborder="0"
                         style="border: 2px solid #ccc; border-radius: 8px;"
@@ -59,93 +60,178 @@
                 </iframe>
             }
         </div>
+    </div>
 
-        <p style="color: #e4e2dd;">adada</p>
-        <hr class="hr-dark" />
-        <br />
+    <hr class="hr-dark" />
 
-        <div class="row">
-            <div class="col-md-4">
-                <button type="button" class="btn btn-red" data-bs-toggle="modal" data-bs-target="#buyTicketsModal">
-                    Buy Tickets
-                </button>
-            </div>
-        </div>
+    <!-- ===================== IMAGE CAROUSEL ===================== -->
+    @if (Model.Images != null && Model.Images.Any())
+    {
+        <div id="museumHeroCarousel"
+             class="carousel slide carousel-fade position-relative"
+             data-bs-ride="carousel"
+             data-bs-interval="5000">
 
-        <div class="modal fade" id="buyTicketsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="buyTicketsLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <form asp-controller="Home" asp-action="BuyTickets" method="post">
-                        @Html.AntiForgeryToken()
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="buyTicketsLabel">Buy Tickets - @Model.Name</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- Carousel Images -->
+            <div class="carousel-inner">
+
+                @{
+                    var first = true;
+                    foreach (var image in Model.Images)
+                    {
+                        <div class="carousel-item @(first ? "active" : "")">
+                            <div class="vh-100 d-flex align-items-center justify-content-center"
+                                 style="
+                                            background-image: url('@image.ImageUrl');
+                                            background-size: cover;
+                                            background-position: center;
+                                            position: relative;
+                                         ">
+
+                                <!-- Dark Overlay -->
+                                <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+
+                                <!-- Foreground Content -->
+                                <div class="container position-relative text-white text-center">
+                                    <h1 class="display-3 fw-bold">@Model.Name</h1>
+                                    <p class="lead">@Model.Description</p>
+
+                                    <hr class="border-light w-50 mx-auto" />
+
+                                    <p>
+                                        <strong>@Model.City</strong> |
+                                        @Model.Address
+                                    </p>
+
+                                    <p>
+                                        @(DateTime.Today.Add(Model.OpeningTime).ToString("h:mm tt").ToLowerInvariant())
+                                        -
+                                        @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
+                                    </p>
+
+                                    <button type="button"
+                                            class="btn btn-red btn-lg mt-3"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#buyTicketsModal">
+                                        Tickets
+                                    </button>
+                                </div>
+
+                            </div>
                         </div>
 
-                        <div class="modal-body">
-                            <input type="hidden" name="MuseumId" value="@Model.MuseumId" />
+                        first = false;
+                    }
+                }
 
-                            @if (!isAuthenticated)
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#museumHeroCarousel"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <button class="carousel-control-next"
+                    type="button"
+                    data-bs-target="#museumHeroCarousel"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+
+        </div>
+    }
+    <hr class="hr-dark" />
+
+    <!-- ===================== BUY TICKETS MODAL ===================== -->
+    <div class="modal fade" id="buyTicketsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <form asp-controller="Home" asp-action="BuyTickets" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Buy Tickets - @Model.Name</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" name="MuseumId" value="@Model.MuseumId" />
+
+                        @if (!isAuthenticated)
+                        {
+                            <div class="alert alert-info">
+                                You must
+                                <a asp-area="Identity" asp-page="/Account/Login">log in</a>
+                                or
+                                <a asp-area="Identity" asp-page="/Account/Register">register</a>
+                                to purchase tickets.
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Visit date</strong></label>
+                            <input name="VisitDate"
+                                   type="date"
+                                   class="form-control"
+                                   value="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   @(isAuthenticated ? "" : "disabled") />
+                        </div>
+
+                        <hr />
+
+                        <h5>Ticket types</h5>
+
+                        @if (Model.TicketTypes != null && Model.TicketTypes.Any())
+                        {
+                            for (var i = 0; i < Model.TicketTypes.Count; i++)
                             {
-                                <div class="alert alert-info">
-                                    You are not signed in. You can view ticket types here but must
-                                    <a class="link-primary" asp-area="Identity" asp-page="/Account/Login">log in</a>
-                                    or
-                                    <a class="link-primary" asp-area="Identity" asp-page="/Account/Register">register</a>
-                                    to purchase.
+                                var tt = Model.TicketTypes.ElementAt(i);
+
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="flex-grow-1">
+                                        <strong>@tt.Name</strong> — @tt.Price.ToString("F2") $
+                                    </div>
+
+                                    <input type="hidden" name="Items[@i].TicketTypeId" value="@tt.TicketTypeId" />
+
+                                    <input type="number"
+                                           name="Items[@i].Quantity"
+                                           class="form-control qty"
+                                           style="width:100px;"
+                                           min="0"
+                                           max="20"
+                                           value="0"
+                                           data-price="@tt.Price"
+                                           @(isAuthenticated ? "" : "disabled") />
                                 </div>
                             }
+                        }
+                        else
+                        {
+                            <p class="text-muted">No ticket types available.</p>
+                        }
 
-                            <div class="mb-3">
-                                <label for="visitDate" class="form-label"><strong>Visit date</strong></label>
-                                <input id="visitDate" name="VisitDate" type="date" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" min="@DateTime.Today.ToString("yyyy-MM-dd")" @(isAuthenticated ? "" : "disabled") />
-                            </div>
+                        <hr />
 
-                            <hr />
-
-                            <div>
-                                <h5>Ticket types</h5>
-                                @if (Model.TicketTypes != null && Model.TicketTypes.Any())
-                                {
-                                    for (var i = 0; i < Model.TicketTypes.Count; i++)
-                                    {
-                                        var tt = Model.TicketTypes.ElementAt(i);
-                                        <div class="d-flex align-items-center mb-2">
-                                            <div class="flex-grow-1">
-                                                <strong>@tt.Name</strong> — @tt.Price.ToString("F2") $
-                                            </div>
-                                            <input type="hidden" name="Items[@i].TicketTypeId" value="@tt.TicketTypeId" />
-                                            <input type="number" name="Items[@i].Quantity" class="form-control qty" style="width:100px;" min="0" max="20" value="0" data-price="@tt.Price" @(isAuthenticated ? "" : "disabled") />
-                                        </div>
-                                    }
-                                }
-                                else
-                                {
-                                    <p class="text-muted">No ticket types available for this museum.</p>
-                                }
-                            </div>
-
-                            <hr />
-
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>Total:</strong>
-                                </div>
-                                <div>
-                                    <span id="totalAmount">0.00</span> $
-                                </div>
-                            </div>
+                        <div class="d-flex justify-content-between">
+                            <strong>Total:</strong>
+                            <span><span id="totalAmount">0.00</span> $</span>
                         </div>
+                    </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary rounded-2" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-red" @(isAuthenticated ? "" : "disabled")>Buy</button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-red" @(isAuthenticated ? "" : "disabled")>
+                            Buy
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -154,18 +240,21 @@
         (function () {
             function updateTotal() {
                 var total = 0.0;
+
                 document.querySelectorAll('.qty').forEach(function (el) {
                     var qty = parseInt(el.value || '0', 10);
                     var price = parseFloat(el.getAttribute('data-price') || '0');
+
                     if (!isNaN(qty) && !isNaN(price)) {
                         total += qty * price;
                     }
                 });
+
                 document.getElementById('totalAmount').textContent = total.toFixed(2);
             }
 
             document.addEventListener('input', function (e) {
-                if (e.target && e.target.classList && e.target.classList.contains('qty')) {
+                if (e.target && e.target.classList.contains('qty')) {
                     updateTotal();
                 }
             });

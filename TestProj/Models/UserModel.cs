@@ -16,6 +16,6 @@ namespace TestProj.Models
         public string FullName { get; set; }
 
         public ICollection<OrderModel> Orders { get; set; }
-        public MuseumEmployeeModel MuseumEmployee { get; set; }
+        public MuseumEmployeeModel? MuseumEmployee { get; set; } 
     }
 }
