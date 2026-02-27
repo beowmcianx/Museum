@@ -4,85 +4,127 @@
     ViewData["Title"] = "Dashboard";
 }
 
-
 <div class="text-center">
     <h1 class="display-4">Dashboard</h1>
     <h4 class="text-secondary text-muted">view, create, and edit museums and accounts</h4>
 
     <br />
     <hr />
+    <br />
 
-    <div class="align-content-between">
+    <h3 class="text-center">Museum, Account and Analytics Settings</h3>
+    <br />
 
-        <a class="btn btn-success page-dashboard-button"
-           asp-controller="Home"    
-           asp-action="Create">
-            Create Museum
-        </a>
+        <div class="d-flex justify-content-between gap-3">
+            <a class="btn btn-success page-dashboard-button flex-fill text-center"
+               asp-controller="Home"
+               asp-action="Create">
+                <i class="fas fa-landmark"></i><br />
+                Create Museum
+            </a>
 
-        <a class="btn btn-warning page-dashboard-button"
-           asp-controller="Home"
-           asp-action="Accounts">
-            Accounts
-        </a>
+            <a class="btn btn-warning page-dashboard-button flex-fill text-center"
+               asp-controller="Home"
+               asp-action="Accounts">
+                <i class="fa-solid fa-users"></i><br />
+                Accounts
+            </a>
 
-        <a class="btn btn-info page-dashboard-button"
-           asp-controller="Home"
-           asp-action="Create">
-            Analytics
-        </a>
-    </div>
+            <a class="btn btn-info page-dashboard-button flex-fill text-center"
+               asp-controller="Home"
+               asp-action="Create">
+                <i class="fa-solid fa-chart-simple"></i><br />  
+                Analytics
+            </a>
+        </div>
 
-    <hr />  
+    <hr />
     <br />
 
     <h3 class="text-center">Museums</h3>
     <br />
 
-    @* Search Card *@
-        <form asp-action="Dashboard" method="get" class="row g-2">
+    <!-- Search / Filter Form -->
+    <div class="card mx-auto shadow-sm p-4 mb-5 rounded-5 page-catalogue-search-bar">
+        <form asp-action="Dashboard" method="get" class="row g-2 align-items-center">
 
+            <!-- Search -->
             <div class="col-md-4">
-                <input class="form-control"
-                       type="search"
-                       name="searchString"
-                       value="@ViewBag.SearchString"
-                       placeholder="Search anything..." />
+                <div class="input-group h-100">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <input class="form-control"
+                           type="search"
+                           name="searchString"
+                           value="@ViewBag.SearchString"
+                           placeholder="Search anything..." />
+                </div>
             </div>
 
-            <div class="col-md-3">
-                <select class="form-select" name="cityFilter">
-                    <option value="">All Cities</option>
-                    @foreach (var city in ViewBag.Cities)
-                    {
-                        <option value="@city"
-                                selected="@(city == ViewBag.CityFilter)">
-                            @city
-                        </option>
-                    }
-                </select>
-            </div>
-
-            <div class="col-md-3">
-                <select class="form-select" name="typeFilter">
-                    <option value="">All Types</option>
-                    @foreach (var type in ViewBag.Types)
-                    {
-                        <option value="@type"
-                                selected="@(type == ViewBag.TypeFilter)">
-                            @type
-                        </option>
-                    }
-                </select>
-            </div>
-
+            <!-- Country Filter -->
             <div class="col-md-2">
-                <button class="btn btn-red w-100" type="submit">
-                    Filter
+                <div class="input-group h-100">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-flag"></i>
+                    </span>
+                    <select class="form-select" name="countryFilter">
+                        <option value="">All Countries</option>
+                        @foreach (var country in ViewBag.Countries)
+                        {
+                            <option value="@country" selected="@(country == ViewBag.CountryFilter)">
+                                @country
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <!-- City Filter -->
+            <div class="col-md-2">
+                <div class="input-group h-100">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-city"></i>
+                    </span>
+                    <select class="form-select" name="cityFilter">
+                        <option value="">All Cities</option>
+                        @foreach (var city in ViewBag.Cities)
+                        {
+                            <option value="@city" selected="@(city == ViewBag.CityFilter)">
+                                @city
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <!-- Type Filter -->
+            <div class="col-md-2">
+                <div class="input-group h-100">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-landmark"></i>
+                    </span>
+                    <select class="form-select" name="typeFilter">
+                        <option value="">All Types</option>
+                        @foreach (var type in ViewBag.Types)
+                        {
+                            <option value="@type" selected="@(type == ViewBag.TypeFilter)">
+                                @type
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <!-- Filter Button -->
+            <div class="col-md-2">
+                <button class="btn btn-red w-100 d-flex align-items-center justify-content-center" type="submit">
+                    <i class="fas fa-filter me-2"></i> Filter
                 </button>
             </div>
 
         </form>
+    </div>
 
     <br />
 
@@ -91,7 +133,7 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>City/Address</th>
+                <th>Country/City/Address</th>
                 <th>Type</th>
                 <th>Working Hours</th>
                 <th>Active</th>
@@ -105,7 +147,7 @@
                 <tr>
                     <td>@museum.MuseumId</td>
                     <td>@museum.Name</td>
-                    <td>@museum.City, @museum.Address</td>
+                    <td>@museum.Country, @museum.City, @museum.Address</td>
                     <td>@museum.Type</td>
                     <td>
                         @(DateTime.Today.Add(museum.OpeningTime).ToString("h:mm tt").ToLowerInvariant())
@@ -113,29 +155,28 @@
                         @(DateTime.Today.Add(museum.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
                     </td>
                     <td>@museum.IsActive</td>
-
                     <td>
-                        <a class="btn btn-info"
-                           asp-controller="Home"
-                           asp-action="Edit"
-                           asp-route-id="@museum.MuseumId">
-                            Edit
-                        </a>
+                        <div class="d-flex gap-1">
+                            <a class="btn btn-info"
+                               asp-controller="Home"
+                               asp-action="Edit"
+                               asp-route-id="@museum.MuseumId">
+                                Edit
+                            </a>
 
-                        <form asp-controller="Home"
-                              asp-action="Delete"
-                              asp-route-id="@museum.MuseumId"
-                              method="post"
-                              style="display:inline;">
-
-                            @Html.AntiForgeryToken()
-
-                            <button type="submit"
-                                    class="btn btn-danger"
-                                    onclick="return confirm('Are you sure you want to delete this museum?');">
-                                Delete
-                            </button>
-                        </form>
+                            <form asp-controller="Home"
+                                  asp-action="Delete"
+                                  asp-route-id="@museum.MuseumId"
+                                  method="post"
+                                  style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit"
+                                        class="btn btn-danger"
+                                        onclick="return confirm('Are you sure you want to delete this museum?');">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             }
@@ -148,7 +189,6 @@
 
     <nav>
         <ul class="pagination justify-content-center">
-
             @if (ViewBag.CurrentPage > 1)
             {
                 <li class="page-item">
@@ -190,8 +230,6 @@
                     </a>
                 </li>
             }
-
         </ul>
     </nav>
-
 </div>

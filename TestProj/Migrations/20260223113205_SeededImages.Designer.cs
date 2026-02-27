@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestProj.Data;
 
@@ -11,9 +12,11 @@ using TestProj.Data;
 namespace TestProj.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260223113205_SeededImages")]
+    partial class SeededImages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,10 +255,6 @@ namespace TestProj.Migrations
                     b.Property<TimeSpan>("ClosingTime")
                         .HasColumnType("time");
 
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -285,7 +284,6 @@ namespace TestProj.Migrations
                             Address = "Rue de Rivoli",
                             City = "Paris",
                             ClosingTime = new TimeSpan(0, 18, 0, 0, 0),
-                            Country = "France",
                             Description = "World's largest art museum.",
                             IsActive = true,
                             Name = "Louvre Museum",
@@ -298,7 +296,6 @@ namespace TestProj.Migrations
                             Address = "Great Russell St",
                             City = "London",
                             ClosingTime = new TimeSpan(0, 17, 30, 0, 0),
-                            Country = "United Kingdom",
                             Description = "Museum dedicated to human history and culture.",
                             IsActive = true,
                             Name = "British Museum",
@@ -311,7 +308,6 @@ namespace TestProj.Migrations
                             Address = "1000 5th Ave",
                             City = "New York",
                             ClosingTime = new TimeSpan(0, 17, 0, 0, 0),
-                            Country = "USA",
                             Description = "Largest art museum in the US.",
                             IsActive = true,
                             Name = "Metropolitan Museum of Art",
@@ -324,7 +320,6 @@ namespace TestProj.Migrations
                             Address = "Viale Vaticano",
                             City = "Vatican City",
                             ClosingTime = new TimeSpan(0, 16, 0, 0, 0),
-                            Country = "Vatican City",
                             Description = "Christian and art museums.",
                             IsActive = true,
                             Name = "Vatican Museums",
@@ -337,7 +332,6 @@ namespace TestProj.Migrations
                             Address = "Calle de Ruiz de Alarcón",
                             City = "Madrid",
                             ClosingTime = new TimeSpan(0, 20, 0, 0, 0),
-                            Country = "Spain",
                             Description = "Spanish national art museum.",
                             IsActive = true,
                             Name = "Prado Museum",
@@ -350,7 +344,6 @@ namespace TestProj.Migrations
                             Address = "Palace Square",
                             City = "Saint Petersburg",
                             ClosingTime = new TimeSpan(0, 18, 0, 0, 0),
-                            Country = "Russia",
                             Description = "One of the largest museums in the world.",
                             IsActive = true,
                             Name = "State Hermitage Museum",
@@ -363,7 +356,6 @@ namespace TestProj.Migrations
                             Address = "Trafalgar Square",
                             City = "London",
                             ClosingTime = new TimeSpan(0, 18, 0, 0, 0),
-                            Country = "United Kingdom",
                             Description = "Collection of European paintings.",
                             IsActive = true,
                             Name = "National Gallery",
@@ -376,7 +368,6 @@ namespace TestProj.Migrations
                             Address = "Museumstraat 1",
                             City = "Amsterdam",
                             ClosingTime = new TimeSpan(0, 17, 0, 0, 0),
-                            Country = "Netherlands",
                             Description = "Dutch national museum.",
                             IsActive = true,
                             Name = "Rijksmuseum",
@@ -389,7 +380,6 @@ namespace TestProj.Migrations
                             Address = "Piazzale degli Uffizi",
                             City = "Florence",
                             ClosingTime = new TimeSpan(0, 18, 30, 0, 0),
-                            Country = "Italy",
                             Description = "Famous Italian art museum.",
                             IsActive = true,
                             Name = "Uffizi Gallery",
@@ -402,7 +392,6 @@ namespace TestProj.Migrations
                             Address = "Dionysiou Areopagitou 15",
                             City = "Athens",
                             ClosingTime = new TimeSpan(0, 20, 0, 0, 0),
-                            Country = "Greece",
                             Description = "Archaeological museum focused on the Acropolis.",
                             IsActive = true,
                             Name = "Acropolis Museum",
@@ -415,7 +404,6 @@ namespace TestProj.Migrations
                             Address = "Tahrir Square",
                             City = "Cairo",
                             ClosingTime = new TimeSpan(0, 17, 0, 0, 0),
-                            Country = "Egypt",
                             Description = "Ancient Egyptian antiquities.",
                             IsActive = true,
                             Name = "Egyptian Museum",
@@ -428,7 +416,6 @@ namespace TestProj.Migrations
                             Address = "600 Independence Ave SW",
                             City = "Washington",
                             ClosingTime = new TimeSpan(0, 17, 30, 0, 0),
-                            Country = "USA",
                             Description = "Aviation and space artifacts.",
                             IsActive = true,
                             Name = "Smithsonian National Air and Space Museum",
@@ -441,7 +428,6 @@ namespace TestProj.Migrations
                             Address = "East Chang'an Avenue",
                             City = "Beijing",
                             ClosingTime = new TimeSpan(0, 17, 0, 0, 0),
-                            Country = "China",
                             Description = "Chinese art and history.",
                             IsActive = true,
                             Name = "National Museum of China",
@@ -454,7 +440,6 @@ namespace TestProj.Migrations
                             Address = "13-9 Uenokoen",
                             City = "Tokyo",
                             ClosingTime = new TimeSpan(0, 17, 0, 0, 0),
-                            Country = "Japan",
                             Description = "Japanese art and antiquities.",
                             IsActive = true,
                             Name = "Tokyo National Museum",
@@ -467,7 +452,6 @@ namespace TestProj.Migrations
                             Address = "137 Seobinggo-ro",
                             City = "Seoul",
                             ClosingTime = new TimeSpan(0, 18, 0, 0, 0),
-                            Country = "South Korea",
                             Description = "Korean history and art.",
                             IsActive = true,
                             Name = "National Museum of Korea",
@@ -480,7 +464,6 @@ namespace TestProj.Migrations
                             Address = "111 S Michigan Ave",
                             City = "Chicago",
                             ClosingTime = new TimeSpan(0, 17, 0, 0, 0),
-                            Country = "USA",
                             Description = "Famous art museum in Chicago.",
                             IsActive = true,
                             Name = "Art Institute of Chicago",
@@ -493,7 +476,6 @@ namespace TestProj.Migrations
                             Address = "11 W 53rd St",
                             City = "New York",
                             ClosingTime = new TimeSpan(0, 17, 30, 0, 0),
-                            Country = "USA",
                             Description = "Modern and contemporary art.",
                             IsActive = true,
                             Name = "Museum of Modern Art",
@@ -506,7 +488,6 @@ namespace TestProj.Migrations
                             Address = "Museumplein 6",
                             City = "Amsterdam",
                             ClosingTime = new TimeSpan(0, 18, 0, 0, 0),
-                            Country = "Netherlands",
                             Description = "Works of Vincent van Gogh.",
                             IsActive = true,
                             Name = "Van Gogh Museum",
@@ -519,7 +500,6 @@ namespace TestProj.Migrations
                             Address = "Abandoibarra Etorbidea 2",
                             City = "Bilbao",
                             ClosingTime = new TimeSpan(0, 19, 0, 0, 0),
-                            Country = "Spain",
                             Description = "Contemporary art museum.",
                             IsActive = true,
                             Name = "Guggenheim Museum",
@@ -532,7 +512,6 @@ namespace TestProj.Migrations
                             Address = "945 Magazine St",
                             City = "New Orleans",
                             ClosingTime = new TimeSpan(0, 17, 0, 0, 0),
-                            Country = "USA",
                             Description = "World War II history.",
                             IsActive = true,
                             Name = "National WWII Museum",
@@ -545,7 +524,6 @@ namespace TestProj.Migrations
                             Address = "100 Laurier St",
                             City = "Gatineau",
                             ClosingTime = new TimeSpan(0, 17, 0, 0, 0),
-                            Country = "Canada",
                             Description = "Canadian history and culture.",
                             IsActive = true,
                             Name = "Canadian Museum of History",
@@ -558,7 +536,6 @@ namespace TestProj.Migrations
                             Address = "Av. Paseo de la Reforma",
                             City = "Mexico City",
                             ClosingTime = new TimeSpan(0, 19, 0, 0, 0),
-                            Country = "Mexico",
                             Description = "Mexican archaeology and anthropology.",
                             IsActive = true,
                             Name = "Museo Nacional de Antropología",
@@ -571,7 +548,6 @@ namespace TestProj.Migrations
                             Address = "Bodestraße 1-3",
                             City = "Berlin",
                             ClosingTime = new TimeSpan(0, 18, 0, 0, 0),
-                            Country = "Germany",
                             Description = "Classical antiquities museum.",
                             IsActive = true,
                             Name = "Pergamon Museum",
@@ -584,7 +560,6 @@ namespace TestProj.Migrations
                             Address = "221 Zhishan Rd",
                             City = "Taipei",
                             ClosingTime = new TimeSpan(0, 17, 0, 0, 0),
-                            Country = "Taiwan",
                             Description = "Chinese imperial artifacts.",
                             IsActive = true,
                             Name = "National Palace Museum",
@@ -597,7 +572,6 @@ namespace TestProj.Migrations
                             Address = "Praça Mauá 1",
                             City = "Rio de Janeiro",
                             ClosingTime = new TimeSpan(0, 18, 0, 0, 0),
-                            Country = "Brazil",
                             Description = "Science museum focused on sustainability.",
                             IsActive = true,
                             Name = "Museum of Tomorrow",
@@ -610,7 +584,6 @@ namespace TestProj.Migrations
                             Address = "55 Cable St",
                             City = "Wellington",
                             ClosingTime = new TimeSpan(0, 18, 0, 0, 0),
-                            Country = "New Zealand",
                             Description = "Museum of New Zealand.",
                             IsActive = true,
                             Name = "Te Papa Tongarewa",
@@ -623,7 +596,6 @@ namespace TestProj.Migrations
                             Address = "Calle Alfonso XII 68",
                             City = "Madrid",
                             ClosingTime = new TimeSpan(0, 15, 0, 0, 0),
-                            Country = "Spain",
                             Description = "Anthropology museum.",
                             IsActive = true,
                             Name = "National Museum of Anthropology",
@@ -636,7 +608,6 @@ namespace TestProj.Migrations
                             Address = "500 Harris St",
                             City = "Sydney",
                             ClosingTime = new TimeSpan(0, 17, 0, 0, 0),
-                            Country = "Australia",
                             Description = "Science and design museum.",
                             IsActive = true,
                             Name = "Powerhouse Museum",
@@ -649,7 +620,6 @@ namespace TestProj.Migrations
                             Address = "Northern Parkway Rd",
                             City = "Johannesburg",
                             ClosingTime = new TimeSpan(0, 17, 0, 0, 0),
-                            Country = "South Africa",
                             Description = "History of apartheid in South Africa.",
                             IsActive = true,
                             Name = "Apartheid Museum",
@@ -662,7 +632,6 @@ namespace TestProj.Migrations
                             Address = "Corniche",
                             City = "Doha",
                             ClosingTime = new TimeSpan(0, 19, 0, 0, 0),
-                            Country = "Qatar",
                             Description = "Islamic art collection.",
                             IsActive = true,
                             Name = "Museum of Islamic Art",

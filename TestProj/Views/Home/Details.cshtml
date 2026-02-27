@@ -16,61 +16,24 @@
         <div class="alert alert-danger">@TempData["Error"]</div>
     }
 
+
+    <!-- ===================== BACK BUTTON ===================== -->
     <form asp-controller="Home"
-          asp-action="Catalogue"
-          method="post"
-          class="text-end mb-3 container-back">
+    asp-action="Catalogue"
+    method="post"
+    class="text-end mb-3 container-back">
         <button type="submit" class="btn btn-back">
             Back
         </button>
     </form>
 
-    <!-- ===================== MUSEUM INFO ===================== -->
-    <div class="row">
-        <div class="col-md-4">
-            <div class="container">
-                <h1 class="display-4 text-red">@Model.Name</h1>
-
-                <hr class="hr-dark" />
-
-                <p>@Model.Description</p>
-
-                <hr class="hr-dark" />
-
-                <p><strong>City:</strong> @Model.City | <strong>Address:</strong> @Model.Address</p>
-                <p>
-                    @(DateTime.Today.Add(Model.OpeningTime).ToString("h:mm tt").ToLowerInvariant()) -
-                    @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
-                </p>
-                <p><strong>Museum Type:</strong> @Model.Type</p>
-            </div>
-        </div>
-
-        <!-- ===================== MAP ===================== -->
-        <div class="col-md-6 offset-md-2">
-            @if (!string.IsNullOrWhiteSpace(Model.Address))
-            {
-                <h4>Location</h4>
-                <iframe width="100%"
-                        height="450"
-                        frameborder="0"
-                        style="border: 2px solid #ccc; border-radius: 8px;"
-                        src="https://www.google.com/maps?q=@Uri.EscapeDataString($"{Model.Address}, {Model.City}")&output=embed"
-                        allowfullscreen>
-                </iframe>
-            }
-        </div>
-    </div>
-
-    <hr class="hr-dark" />
-
     <!-- ===================== IMAGE CAROUSEL ===================== -->
     @if (Model.Images != null && Model.Images.Any())
     {
         <div id="museumHeroCarousel"
-             class="carousel slide carousel-fade position-relative"
-             data-bs-ride="carousel"
-             data-bs-interval="5000">
+        class="carousel slide carousel-fade position-relative"
+        data-bs-ride="carousel"
+        data-bs-interval="5000">
 
             <!-- Carousel Images -->
             <div class="carousel-inner">
@@ -81,27 +44,23 @@
                     {
                         <div class="carousel-item @(first ? "active" : "")">
                             <div class="vh-100 d-flex align-items-center justify-content-center"
-                                 style="
-                                            background-image: url('@image.ImageUrl');
-                                            background-size: cover;
-                                            background-position: center;
-                                            position: relative;
-                                         ">
+                            style="
+                                                        background-image: url('@image.ImageUrl');
+                                                        background-size: cover;
+                                                        background-position: center;
+                                                        position: relative;
+                            ">
 
                                 <!-- Dark Overlay -->
                                 <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
 
                                 <!-- Foreground Content -->
                                 <div class="container position-relative text-white text-center">
-                                    <h1 class="display-3 fw-bold">@Model.Name</h1>
-                                    <p class="lead">@Model.Description</p>
-
-                                    <hr class="border-light w-50 mx-auto" />
-
-                                    <p>
-                                        <strong>@Model.City</strong> |
-                                        @Model.Address
+                                    <h1 class="display-3 fw-bold text-red">@Model.Name</h1>
+                                    <p class="lead">
+                                        <strong>@Model.Country, @Model.City, @Model.Address</strong>
                                     </p>
+                                    <hr class="border-light w-50 mx-auto" />
 
                                     <p>
                                         @(DateTime.Today.Add(Model.OpeningTime).ToString("h:mm tt").ToLowerInvariant())
@@ -110,9 +69,9 @@
                                     </p>
 
                                     <button type="button"
-                                            class="btn btn-red btn-lg mt-3"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#buyTicketsModal">
+                                    class="btn btn-red btn-lg mt-3"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#buyTicketsModal">
                                         Tickets
                                     </button>
                                 </div>
@@ -128,21 +87,77 @@
 
             <!-- Controls -->
             <button class="carousel-control-prev"
-                    type="button"
-                    data-bs-target="#museumHeroCarousel"
-                    data-bs-slide="prev">
+            type="button"
+            data-bs-target="#museumHeroCarousel"
+            data-bs-slide="prev">
                 <span class="carousel-control-prev-icon"></span>
             </button>
 
             <button class="carousel-control-next"
-                    type="button"
-                    data-bs-target="#museumHeroCarousel"
-                    data-bs-slide="next">
+            type="button"
+            data-bs-target="#museumHeroCarousel"
+            data-bs-slide="next">
                 <span class="carousel-control-next-icon"></span>
             </button>
 
         </div>
     }
+
+    <hr class="hr-dark" />
+
+    <!-- ===================== MUSEUM INFO ===================== -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="container">
+
+                <h4>About</h4>
+                <p>@Model.Description</p>
+                <p><strong>Type - </strong> @Model.Type</p>
+                <hr class="hr-dark" />
+
+                <h4>Working Hours:</h4>
+                <p class="fs-5">
+                    @(DateTime.Today.Add(Model.OpeningTime).ToString("h:mm tt").ToLowerInvariant()) -
+                    @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
+                </p>
+                <hr class="hr-dark" />
+
+                <h4>Tickets:</h4>
+
+                @if (Model.TicketTypes != null && Model.TicketTypes.Any())
+                {
+                    <ul class="list-unstyled">
+                        @for (var i = 0; i < Model.TicketTypes.Count; i++)
+                        {
+                            var tt = Model.TicketTypes.ElementAt(i);
+                                
+                            <li class="mb-2">
+                                <p>@tt.Name — @tt.Price.ToString("F2") $</p>
+                            </li>
+                        }
+                    </ul>
+                }
+                <hr class="hr-dark" />
+
+            </div>
+        </div>
+
+        <!-- ===================== MAP ===================== -->
+        <div class="col-md-6 offset-md-2">
+
+            @if (!string.IsNullOrWhiteSpace(Model.Address))
+            {
+                <h4>Location - @Model.Country, @Model.City, @Model.Address</h4>
+                <iframe width="100%"
+                        height="450"
+                        frameborder="0"
+                        style="border: 2px solid #ccc; border-radius: 8px;"
+                        src="https://www.google.com/maps?q=@Uri.EscapeDataString($"{Model.Address}, {Model.City}")&output=embed"
+                        allowfullscreen>
+                </iframe>
+            }
+        </div>
+    </div>
     <hr class="hr-dark" />
 
     <!-- ===================== BUY TICKETS MODAL ===================== -->
@@ -217,6 +232,29 @@
 
                         <hr />
 
+                        <hr />
+
+                        <!-- Rules Acceptance -->
+                        @if (isAuthenticated)
+                        {
+                            <div class="form-check mb-3">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="acceptRules"
+                                       name="AcceptRules"
+                                       value="true" />
+
+                                <label class="form-check-label" for="acceptRules">
+                                    I have read and agree to the
+                                    <a asp-controller="Home"
+                                       asp-action="Rules"
+                                       target="_blank">
+                                        Rules & Terms
+                                    </a>.
+                                </label>
+                            </div>
+                        }
+
                         <div class="d-flex justify-content-between">
                             <strong>Total:</strong>
                             <span><span id="totalAmount">0.00</span> $</span>
@@ -224,8 +262,11 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-red" @(isAuthenticated ? "" : "disabled")>
+                        <button type="button" class="btn btn-secondary" style="border-radius: 8px;" data-bs-dismiss="modal">Close</button>
+                        <button type="submit"
+                                id="buyButton"
+                                class="btn btn-red"
+                                disabled>
                             Buy
                         </button>
                     </div>
@@ -233,6 +274,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 @section Scripts {
@@ -259,6 +301,17 @@
                 }
             });
 
+                    // Enable Buy button only if rules accepted
+        var acceptCheckbox = document.getElementById('acceptRules');
+        var buyButton = document.getElementById('buyButton');
+
+        if (acceptCheckbox && buyButton) {
+            buyButton.disabled = true;
+
+            acceptCheckbox.addEventListener('change', function () {
+                buyButton.disabled = !this.checked;
+            });
+        }
             updateTotal();
         })();
     </script>

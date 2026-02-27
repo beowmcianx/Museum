@@ -1,6 +1,164 @@
-﻿@{
+﻿@model TestProj.Models.UserModel
+@using TestProj.Models
+
+@{
     ViewData["Title"] = "My Cart";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="mb-4">@ViewData["Title"]</h1>
 
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+@if (Model?.Orders == null || !Model.Orders.Any())
+{
+    <div class="alert alert-info">
+        You have no orders yet.
+    </div>
+}
+else
+{
+    foreach (var order in Model.Orders.OrderByDescending(o => o.CreatedAt))
+    {
+        var items = order.OrderItems ?? new List<TestProj.Models.OrderItemModel>();
+        decimal orderTotal = items.Sum(i => i.PriceAtPurchase * i.Quantity);
+
+        string badgeClass = order.Status switch
+        {
+            OrderStatus.New => "bg-primary",
+            OrderStatus.Confirmed => "bg-success",
+            OrderStatus.Cancelled => "bg-secondary",
+            OrderStatus.Used => "bg-dark",
+            _ => "bg-light"
+        };
+
+        <div class="card shadow-sm mb-4">
+
+            <!-- Card Header -->
+            <div class="card-header text-white d-flex justify-content-between align-items-center"
+                 style="background-color: #db4a2b;">
+                <span><strong>Order @order.OrderCode</strong></span>
+                <span class="badge @badgeClass">
+                    @order.Status
+                </span>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body">
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        @{
+                            var museumText = order.Museum?.Name ?? "—";
+                            if (!string.IsNullOrEmpty(order.Museum?.City))
+                            {
+                                museumText += $" - {order.Museum.Country}, {order.Museum.City}, {order.Museum.Address}";
+                            }
+                        }
+                        <span class="p-3">@museumText</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="p-3" style="margin-right: 40px;">
+                            Visit Date: @order.VisitDate.ToString("yyyy-MM-dd")
+                        </span>
+                        <span class="text-muted p-3">
+                            Created: @order.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+                        </span>
+                    </div>
+                </div>
+
+                <hr />
+
+                @if (!items.Any())
+                {
+                    <p class="text-muted">No tickets in this order.</p>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Ticket</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th class="text-end">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in items)
+                                {
+                                    var ticketName = item.TicketType?.Name ?? "(ticket type removed)";
+                                    <tr>
+                                        <td>@ticketName</td>
+                                        <td>@item.PriceAtPurchase.ToString("C")</td>
+                                        <td>@item.Quantity</td>
+                                        <td class="text-end">
+                                            @((item.PriceAtPurchase * item.Quantity).ToString("C"))
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+
+            <!-- Card Footer -->
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <strong>Total: @orderTotal.ToString("C")</strong>
+
+                @if (order.Status == OrderStatus.New && order.VisitDate > DateTime.Today)
+                {
+                    <form asp-action="CancelOrder"
+                          method="post"
+                          class="m-0 cancel-form">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" name="orderId" value="@order.OrderId" />
+
+                        <button type="submit"
+                                class="btn btn-sm btn-danger">
+                            Cancel Order
+                        </button>
+                    </form>
+                }
+            </div>
+
+        </div>
+    }
+}
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.cancel-form').forEach(function (form) {
+
+            form.addEventListener('submit', function (e) {
+
+                var confirmed = confirm(
+                    "Are you sure you want to cancel this order?\n\n" +
+                    "• This action cannot be undone.\n" +
+                    "• Refunds (if applicable) follow the cancellation policy.\n\n" +
+                    "Do you want to continue?"
+                );
+
+                if (!confirmed) {
+                    e.preventDefault();
+                }
+            });
+
+        });
+    </script>
+}

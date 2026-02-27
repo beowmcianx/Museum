@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace TestProj.Models
+namespace TestProj.Models.ViewModels
 {
     public class OrderItemInput
     {
@@ -13,6 +13,8 @@ namespace TestProj.Models
     public class OrderCreateDto
     {
         public int MuseumId { get; set; }
+
+        public bool AcceptRules { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime VisitDate { get; set; } = DateTime.Today;

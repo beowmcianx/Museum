@@ -13,6 +13,8 @@ namespace TestProj.Models
         [Required]
         public string Name { get; set; }
 
+        public string Country { get; set; }
+
         [Required]
         public string City { get; set; }
 
