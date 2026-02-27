@@ -17,7 +17,7 @@
 }
 
 * {
-    font-family: Aileron;
+    font-family: Aileron, Helvetica, sans-serif;
 }
 
 html {
@@ -285,6 +285,40 @@ a {
 
 .page-dashboard-button {
     font-size: 20px;
-    padding: 15px 10px;
+    padding: 12px 12px;
     border-radius: 12px
+}
+
+/*Borders Catalogue*/
+
+/* Make input groups look consistent */
+.page-catalogue-search-bar .input-group-text,
+.page-catalogue-search-bar .form-control,
+.page-catalogue-search-bar .form-select {
+    border: 3px solid;
+}
+
+/* Remove double borders between icon and input */
+.page-catalogue-search-bar .input-group-text {
+    border-right: 0;
+    border-radius: 8px 0 0 8px;
+}
+
+.page-catalogue-search-bar .form-control,
+.page-catalogue-search-bar .form-select {
+    border-left: 0;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Match filter button */
+.page-catalogue-search-bar .btn-filter {
+    border: 3px solid;
+    border-radius: 8px;
+}
+
+/*Icons*/
+
+.fa-arrow-right-from-bracket, .fa-circle-user {
+    font-size: 25px;
+    padding: 8px 6px;
 }

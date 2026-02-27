@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TestProj</title>
+    <title>@ViewData["Title"] - TMC</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/nav.css" asp-append-version="true" />
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="~/css/pagnintation.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/header.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TestProj.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -44,9 +45,18 @@
                         @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Client"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : "")"
+                                <a class="nav-link text-dark @(ViewContext.RouteData.Values["Action"]?.ToString() == "Cart" ? "active" : "")"
                                    asp-area="" asp-controller="Home" asp-action="Cart">
                                     My Cart
+                                </a>
+                            </li>
+                        }
+                        @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Worker"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark @(ViewContext.RouteData.Values["Action"]?.ToString() == "Museum" ? "active" : "")"
+                                   asp-area="" asp-controller="Home" asp-action="Museum">
+                                    My Museum
                                 </a>
                             </li>
                         }
@@ -89,8 +99,8 @@
                 </a>
                 <span class="mx-2">-</span>
 
-                <a class="text-decoration-none" asp-area="" asp-controller="Home" asp-action="Privacy">
-                    Terms of Use
+                <a class="text-decoration-none" asp-area="" asp-controller="Home" asp-action="Rules">
+                    Rules & Conditions
                 </a>
                 <span class="mx-2">-</span>
 

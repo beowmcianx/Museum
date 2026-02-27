@@ -5,39 +5,72 @@
     ViewData["Title"] = "Profile";
 }
 
-<h3>@ViewData["Title"]</h3>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
 
-<div class="row">
-    <div class="col-md-6">
-        <form method="post">
-            <div class="form-floating mb-3">
-                <input value="@Model.Username" class="form-control" disabled />
-                <label>Username</label>
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-dark text-white rounded-top-4 py-3">
+                    <h4 class="mb-0">
+                        <i class="fa-solid fa-user fa-lg" style="color: #db4a2a; margin-right: 12px"></i>
+                        My Profile
+                    </h4>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <!-- Account Information -->
+                    <h6 class="text-muted mb-3 text-uppercase fw-bold">
+                        Account Information
+                    </h6>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted">Username</label>
+                            <input value="@Model.Username" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted">Role</label>
+                            <input value="@Model.Role" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small text-muted">Full Name</label>
+                            <input value="@Model.FullName" class="form-control" disabled />
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small text-muted">Email</label>
+                            <input value="@Model.Email" class="form-control" disabled />
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <!-- Editable Section -->
+                    <form method="post">
+                        <h6 class="text-muted mb-3 text-uppercase fw-bold">
+                            Contact Information
+                        </h6>
+
+                        <div class="mb-4">
+                            <label asp-for="Input.PhoneNumber" class="form-label small text-muted"></label>
+                            <input asp-for="Input.PhoneNumber" class="form-control form-control-lg" />
+                            <span asp-validation-for="Input.PhoneNumber" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <i class="bi bi-save me-2"></i>
+                            <button type="submit" class="btn btn-red">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
             </div>
 
-            <div class="form-floating mb-3">
-                <input value="@Model.FullName" class="form-control" disabled />
-                <label>Full Name</label>
-            </div>
-
-            <div class="form-floating mb-3">
-                <input value="@Model.Email" class="form-control" disabled />
-                <label>Email</label>
-            </div>
-
-            <div class="form-floating mb-3">
-                <input value="@Model.Role" class="form-control" disabled />
-                <label>Role</label>
-            </div>
-
-            <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <label asp-for="Input.PhoneNumber"></label>
-            </div>
-
-            <button type="submit" class="w-100 btn btn-red">
-                Save
-            </button>
-        </form>
+        </div>
     </div>
 </div>
