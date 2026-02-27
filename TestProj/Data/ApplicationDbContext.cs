@@ -134,7 +134,7 @@ namespace TestProj.Data
                 {
                     MuseumImageId = 1,
                     MuseumId = 1,
-                    ImageUrl = "https://api-www.louvre.fr/sites/default/files/2021-01/cour-napoleon-et-pyramide_1.jpg"
+                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/a/aa/Louvre_Museum_Wikimedia_Commons.jpg"
                 },
 
                 new MuseumImageModel
@@ -148,7 +148,7 @@ namespace TestProj.Data
                 {
                     MuseumImageId = 3,
                     MuseumId = 3,
-                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/7/7c/The_Metropolitan_Museum_of_Art_%28The_Met%29_Logo.svg"
+                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/0/0c/Metropolitan_Museum_of_Art_entrance_NYC.jpg"
                 },
 
                 new MuseumImageModel

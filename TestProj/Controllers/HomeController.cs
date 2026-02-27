@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TestProj.Data;
 using TestProj.Models;
+using TestProj.Models.NewFolder;
+using TestProj.Models.ViewModels;
 
 namespace TestProj.Controllers
 {
@@ -147,14 +150,74 @@ namespace TestProj.Controllers
             }
 
             // If an image URL was provided, attach it to the new museum as a MuseumImageModel.
+            // If no image provided, use default "/images/imagenotfound.png".
             var imageUrl = Request.Form["ImageUrl"].ToString();
+            museum.Images = museum.Images ?? new List<MuseumImageModel>();
             if (!string.IsNullOrWhiteSpace(imageUrl))
             {
-                museum.Images = museum.Images ?? new List<MuseumImageModel>();
                 museum.Images.Add(new MuseumImageModel
                 {
                     ImageUrl = imageUrl
                 });
+            }
+            else
+            {
+                // default image when user did not provide one
+                museum.Images.Add(new MuseumImageModel
+                {
+                    ImageUrl = "/images/imagenotfound.png"
+                });
+            }
+
+            // Parse posted TicketTypes from the form and attach to the museum so they are saved
+            var ttKeys = Request.Form.Keys
+                .Where(k => k.StartsWith("TicketTypes[", StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (ttKeys.Any())
+            {
+                museum.TicketTypes = museum.TicketTypes ?? new List<TicketTypeModel>();
+
+                // extract indices like TicketTypes[0].Name -> 0
+                var indices = ttKeys
+                    .Select(k =>
+                    {
+                        var start = k.IndexOf('[');
+                        var end = k.IndexOf(']');
+                        if (start >= 0 && end > start) return k.Substring(start + 1, end - start - 1);
+                        return null;
+                    })
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .Distinct();
+
+                foreach (var idx in indices)
+                {
+                    var name = Request.Form[$"TicketTypes[{idx}].Name"].ToString();
+                    var priceStr = Request.Form[$"TicketTypes[{idx}].Price"].ToString();
+                    var isActivePresent = Request.Form.ContainsKey($"TicketTypes[{idx}].IsActive");
+
+                    if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(priceStr))
+                        continue;
+
+                    if (!decimal.TryParse(priceStr, NumberStyles.Number | NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var price))
+                    {
+                        // try current culture as fallback
+                        if (!decimal.TryParse(priceStr, NumberStyles.Number | NumberStyles.AllowDecimalPoint, CultureInfo.CurrentCulture, out price))
+                        {
+                            continue;
+                        }
+                    }
+
+                    var tt = new TicketTypeModel
+                    {
+                        Name = name.Trim(),
+                        Price = price,
+                        IsActive = isActivePresent,
+                        Museum = museum // ensure the relationship is established for EF
+                    };
+
+                    museum.TicketTypes.Add(tt);
+                }
             }
 
             // Add the museum and related child entities (ticket types if you later add them)
@@ -164,7 +227,6 @@ namespace TestProj.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Catalogue with pagination, filters and images included
         public async Task<IActionResult> Catalogue(string? searchString, string? cityFilter, string? typeFilter, int page = 1, int pageSize = 6)
         {
             // Preserve current filter/search values for the view
@@ -235,8 +297,6 @@ namespace TestProj.Controllers
             return View(museums);
         }
 
-        // Dashboard now sets the same ViewBag values the view expects.
-        // Supports filtering, paging and provides Cities/Types lists to avoid NRE in the view.
         public async Task<IActionResult> Dashboard(string? searchString, string? cityFilter, string? typeFilter, int page = 1, int pageSize = 10)
         {
             ViewBag.SearchString = searchString ?? string.Empty;
@@ -303,8 +363,10 @@ namespace TestProj.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            // Include TicketTypes so the Details view can display available ticket types
             var museum = await _context.Museums
                 .Include(m => m.Images)
+                .Include(m => m.TicketTypes)
                 .FirstOrDefaultAsync(m => m.MuseumId == id);
 
             if (museum == null)
@@ -313,6 +375,185 @@ namespace TestProj.Controllers
             }
 
             return View(museum);
+        }
+
+        public async Task<IActionResult> Museum(int id)
+        {
+            var museum = await _context.Museums
+                .Include(m => m.Images)
+                .Include(m => m.TicketTypes)
+                .FirstOrDefaultAsync(m => m.MuseumId == id);
+
+            if (museum == null)
+            {
+                return NotFound();
+            }
+
+            return View(museum);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = Roles.Client)]
+        public async Task<IActionResult> Cart()
+        {
+            // Use the current authenticated user rather than requiring an id route value.
+            var current = await _userManager.GetUserAsync(User);
+            if (current == null)
+            {
+                // Not authenticated — redirect to login
+                return Challenge();
+            }
+
+            var user = await _context.Users
+                .Where(u => u.Id == current.Id)
+                .Include(u => u.Orders!)
+                    .ThenInclude(o => o.OrderItems!)
+                        .ThenInclude(oi => oi.TicketType)
+                .Include(u => u.Orders!)
+                    .ThenInclude(o => o.Museum)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost, ActionName("Cart")]
+        [Authorize(Roles = Roles.Client)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cart_Post()
+        {
+            // reuse GET behavior
+            return await Cart();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = Roles.Client)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BuyTickets(OrderCreateDto input)
+        {
+            if (!input.AcceptRules)
+            {
+                TempData["Error"] = "You must accept the rules before purchasing.";
+                return RedirectToAction(nameof(Details), new { id = input.MuseumId });
+            }
+
+            if (input == null)
+            {
+                TempData["Error"] = "Invalid request.";
+                return RedirectToAction(nameof(Catalogue));
+            }
+
+            // get current user
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                TempData["Error"] = "You must be signed in to buy tickets.";
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
+
+            // Validate museum exists
+            var museum = await _context.Museums
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.MuseumId == input.MuseumId);
+
+            if (museum == null)
+            {
+                TempData["Error"] = "Museum not found.";
+                return RedirectToAction(nameof(Catalogue));
+            }
+
+            // Filter selected items (quantity > 0)
+            var selected = input.Items?.Where(i => i.Quantity > 0).ToList() ?? new List<OrderItemInput>();
+            if (!selected.Any())
+            {
+                TempData["Error"] = "No tickets selected.";
+                return RedirectToAction(nameof(Details), new { id = input.MuseumId });
+            }
+
+            // Load ticket types used for the order
+            var ticketTypeIds = selected.Select(i => i.TicketTypeId).Distinct().ToList();
+            var ticketTypes = await _context.TicketTypes
+                .Where(tt => ticketTypeIds.Contains(tt.TicketTypeId))
+                .ToListAsync();
+
+            // Ensure all requested ticket types are valid and belong to this museum
+            foreach (var sel in selected)
+            {
+                var tt = ticketTypes.FirstOrDefault(t => t.TicketTypeId == sel.TicketTypeId);
+                if (tt == null || tt.MuseumId != input.MuseumId)
+                {
+                    TempData["Error"] = "One or more selected ticket types are invalid.";
+                    return RedirectToAction(nameof(Details), new { id = input.MuseumId });
+                }
+            }
+
+            // Create order and order items
+            var order = new OrderModel
+            {
+                OrderCode = $"ORD-{Guid.NewGuid().ToString("N").Substring(0, 8).ToUpperInvariant()}",
+                VisitDate = input.VisitDate.Date,
+                UserId = user.Id,
+                MuseumId = input.MuseumId,
+                Status = OrderStatus.New,
+                CreatedAt = DateTime.Now,
+                OrderItems = new List<OrderItemModel>()
+            };
+
+            foreach (var sel in selected)
+            {
+                var tt = ticketTypes.First(t => t.TicketTypeId == sel.TicketTypeId);
+                var oi = new OrderItemModel
+                {
+                    TicketTypeId = tt.TicketTypeId,
+                    Quantity = sel.Quantity,
+                    PriceAtPurchase = tt.Price
+                };
+                order.OrderItems.Add(oi);
+            }
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Purchase successful. Order code: " + order.OrderCode;
+            return RedirectToAction(nameof(Details), new { id = input.MuseumId });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = Roles.Client)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(o => o.OrderId == orderId && o.UserId == currentUser.Id);
+
+            if (order == null)
+                return NotFound();
+
+            if (order.Status != OrderStatus.New)
+            {
+                TempData["Error"] = "Only new orders can be cancelled.";
+                return RedirectToAction(nameof(Cart));
+            }
+
+            if (order.VisitDate <= DateTime.Today)
+            {
+                TempData["Error"] = "You cannot cancel visits happening today or in the past.";
+                return RedirectToAction(nameof(Cart));
+            }
+
+            order.Status = OrderStatus.Cancelled;
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Order cancelled successfully.";
+            return RedirectToAction(nameof(Cart));
         }
 
         [HttpPost]
@@ -339,11 +580,34 @@ namespace TestProj.Controllers
                 .FirstOrDefaultAsync(m => m.MuseumId == id);
 
             if (museum == null)
-            {
                 return NotFound();
-            }
 
             return View(museum);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(MuseumModel museum)
+        {
+            ModelState.Remove(nameof(MuseumModel.TicketTypes));
+            ModelState.Remove(nameof(MuseumModel.Orders));
+            ModelState.Remove(nameof(MuseumModel.Employees));
+            ModelState.Remove(nameof(MuseumModel.Images));
+
+            // 🔥 ADD THESE
+            ModelState.Remove(nameof(MuseumModel.OpeningTime));
+            ModelState.Remove(nameof(MuseumModel.ClosingTime));
+
+            if (!ModelState.IsValid)
+            {
+                return View(museum);
+            }
+
+            _context.Update(museum);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Dashboard));
         }
 
         [Authorize(Roles = Roles.Admin)]
@@ -395,7 +659,6 @@ namespace TestProj.Controllers
             return View(model);
         }
 
-        // Update role POST
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
         [ValidateAntiForgeryToken]
@@ -426,7 +689,12 @@ namespace TestProj.Controllers
             return RedirectToAction(nameof(Accounts), new { search, page });
         }
 
-        // Diagnostic endpoint. Visit /Home/WhoAmI to see current identity and roles.
+        public IActionResult Rules()
+        {
+            return View();
+        }
+
+        // Visit /Home/WhoAmI to see current identity and roles.
         public IActionResult WhoAmI()
         {
             var name = User.Identity?.Name ?? "(not authenticated)";

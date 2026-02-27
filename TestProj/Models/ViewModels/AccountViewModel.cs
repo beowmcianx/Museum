@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TestProj.Models
+namespace TestProj.Models.NewFolder
 {
     public class AccountViewModel
     {
