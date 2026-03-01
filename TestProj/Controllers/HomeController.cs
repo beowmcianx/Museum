@@ -236,6 +236,14 @@ namespace TestProj.Controllers
             ViewBag.TypeFilter = typeFilter ?? string.Empty;
 
             // Provide lists for the filter dropdowns (distinct non-empty values)
+            ViewBag.Countries = await _context.Museums
+                .AsNoTracking()
+                .Where(m => !string.IsNullOrEmpty(m.Country))
+                .Select(m => m.Country!)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToListAsync();
+
             ViewBag.Cities = await _context.Museums
                 .AsNoTracking()
                 .Where(m => !string.IsNullOrEmpty(m.City))
@@ -352,6 +360,7 @@ namespace TestProj.Controllers
                 .OrderBy(t => t)
                 .ToListAsync();
 
+            // Base query (include images)
             IQueryable<MuseumModel> query = _context.Museums
                 .Include(m => m.Images)
                 .AsNoTracking();
@@ -608,9 +617,12 @@ namespace TestProj.Controllers
             return RedirectToAction(nameof(Dashboard));
         }
 
-        public async Task<IActionResult> Edit(int id)
+
+       public async Task<IActionResult> Edit(int id)
         {
             var museum = await _context.Museums
+                .Include(m => m.TicketTypes)
+                .Include(m => m.Images)
                 .FirstOrDefaultAsync(m => m.MuseumId == id);
 
             if (museum == null)
