@@ -22,7 +22,11 @@
 
     <form asp-action="Edit" method="post">
         @Html.AntiForgeryToken()
+<<<<<<< HEAD
         <input type="hidden" name="TicketTypes[0].MuseumId" value="@Model.MuseumId" />
+=======
+        <input type="hidden" asp-for="MuseumId" />
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
 
         <div>
             <label asp-for="Name"></label>
@@ -62,7 +66,6 @@
             </div>
 
         </div>
-
 
         <div>
             <label asp-for="Type"></label>

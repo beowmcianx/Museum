@@ -58,7 +58,12 @@
                                 <div class="container position-relative text-white text-center">
                                     <h1 class="display-3 fw-bold text-red">@Model.Name</h1>
                                     <p class="lead">
+<<<<<<< HEAD
                                         <strong>@Model.Country, @Model.City, @Model.Address</strong>
+=======
+                                        <strong>@Model.City</strong> |
+                                        @Model.Address
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
                                     </p>
                                     <hr class="border-light w-50 mx-auto" />
 
@@ -147,7 +152,11 @@
 
             @if (!string.IsNullOrWhiteSpace(Model.Address))
             {
+<<<<<<< HEAD
                 <h4>Location - @Model.Country, @Model.City, @Model.Address</h4>
+=======
+                <h4>Location - @Model.City, @Model.Address</h4>
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
                 <iframe width="100%"
                         height="450"
                         frameborder="0"

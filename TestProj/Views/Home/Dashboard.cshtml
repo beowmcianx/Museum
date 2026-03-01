@@ -45,6 +45,7 @@
     <br />
 
     <!-- Search / Filter Form -->
+<<<<<<< HEAD
     <div class="card mx-auto shadow-sm p-4 mb-5 rounded-5 page-catalogue-search-bar">
         <form asp-action="Dashboard" method="get" class="row g-2 align-items-center">
 
@@ -60,8 +61,59 @@
                            value="@ViewBag.SearchString"
                            placeholder="Search anything..." />
                 </div>
+=======
+    <form asp-action="Dashboard" method="get" class="row g-2 page-catalogue-search-bar">
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text bg-white">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input class="form-control"
+                       type="search"
+                       name="searchString"
+                       value="@ViewBag.SearchString"
+                       placeholder="Search anything..." />
             </div>
+        </div>
 
+        <div class="col-md-3">
+            <div class="input-group">
+                <span class="input-group-text bg-white">
+                    <i class="fas fa-map-marker-alt"></i>
+                </span>
+                <select class="form-select" name="cityFilter">
+                    <option value="">All Cities</option>
+                    @foreach (var city in ViewBag.Cities)
+                    {
+                        <option value="@city"
+                                selected="@(city == ViewBag.CityFilter)">
+                            @city
+                        </option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="input-group">
+                <span class="input-group-text bg-white">
+                    <i class="fas fa-landmark"></i>
+                </span>
+                <select class="form-select" name="typeFilter">
+                    <option value="">All Types</option>
+                    @foreach (var type in ViewBag.Types)
+                    {
+                        <option value="@type"
+                                selected="@(type == ViewBag.TypeFilter ? "selected" : null)">
+                            @type
+                        </option>
+                    }
+                </select>
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
+            </div>
+        </div>
+
+<<<<<<< HEAD
             <!-- Country Filter -->
             <div class="col-md-2">
                 <div class="input-group h-100">
@@ -125,6 +177,15 @@
 
         </form>
     </div>
+=======
+        <div class="col-md-2">
+            <button class="btn btn-red w-100 d-flex align-items-center justify-content-between px-3" type="submit">
+                <i class="fas fa-filter"></i>
+                <span class="me-5 px-1">Filter</span>
+            </button>
+        </div>
+    </form>
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
 
     <br />
 

@@ -227,7 +227,11 @@ namespace TestProj.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+<<<<<<< HEAD
         public async Task<IActionResult> Catalogue(string? searchString, string? countryFilter, string? cityFilter, string? typeFilter, int page = 1, int pageSize = 6)
+=======
+        public async Task<IActionResult> Catalogue(string? searchString, string? cityFilter, string? typeFilter, int page = 1, int pageSize = 6)
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
         {
             // Preserve current filter/search values for the view
             ViewBag.SearchString = searchString ?? string.Empty;
@@ -312,7 +316,11 @@ namespace TestProj.Controllers
             return View(museums);
         }
 
+<<<<<<< HEAD
         public async Task<IActionResult> Dashboard(string? searchString, string? countryFilter, string? cityFilter, string? typeFilter, int page = 1, int pageSize = 10)
+=======
+        public async Task<IActionResult> Dashboard(string? searchString, string? cityFilter, string? typeFilter, int page = 1, int pageSize = 10)
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
         {
             ViewBag.SearchString = searchString ?? string.Empty;
             ViewBag.CountryFilter = countryFilter ?? string.Empty;
@@ -622,6 +630,7 @@ namespace TestProj.Controllers
             return View(museum);
         }
 
+<<<<<<< HEAD
 [HttpPost]
 [Authorize(Roles = Roles.Admin)]
 [ValidateAntiForgeryToken]
@@ -677,6 +686,32 @@ public async Task<IActionResult> Edit(MuseumModel museum)
 
     return RedirectToAction(nameof(Dashboard));
 }
+=======
+        [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(MuseumModel museum)
+        {
+            ModelState.Remove(nameof(MuseumModel.TicketTypes));
+            ModelState.Remove(nameof(MuseumModel.Orders));
+            ModelState.Remove(nameof(MuseumModel.Employees));
+            ModelState.Remove(nameof(MuseumModel.Images));
+
+            // 🔥 ADD THESE
+            ModelState.Remove(nameof(MuseumModel.OpeningTime));
+            ModelState.Remove(nameof(MuseumModel.ClosingTime));
+
+            if (!ModelState.IsValid)
+            {
+                return View(museum);
+            }
+
+            _context.Update(museum);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Dashboard));
+        }
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
 
         [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> Accounts(string? search, int page = 1, int pageSize = 20)

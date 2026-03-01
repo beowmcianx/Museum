@@ -17,7 +17,11 @@
 
                 <!-- Search -->
                 <div class="col-md-4">
+<<<<<<< HEAD
                     <div class="input-group h-100">
+=======
+                    <div class="input-group">
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
                         <span class="input-group-text bg-white">
                             <i class="fas fa-search"></i>
                         </span>
@@ -27,10 +31,52 @@
                                value="@ViewBag.SearchString"
                                placeholder="Search anything..." />
                     </div>
+<<<<<<< HEAD
+=======
+                </div>
+
+                <!-- City Filter -->
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </span>
+                        <select class="form-select" name="cityFilter">
+                            <option value="">All Cities</option>
+                            @foreach (var city in ViewBag.Cities)
+                            {
+                                <option value="@city"
+                                        selected="@(city == ViewBag.CityFilter)">
+                                    @city
+                                </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Type Filter -->
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="fas fa-landmark"></i>
+                        </span>
+                        <select class="form-select" name="typeFilter">
+                            <option value="">All Types</option>
+                            @foreach (var type in ViewBag.Types)
+                            {
+                                <option value="@type"
+                                        selected="@(type == ViewBag.TypeFilter)">
+                                    @type
+                                </option>
+                            }
+                        </select>
+                    </div>
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
                 </div>
 
                 <!-- Country Filter -->
                 <div class="col-md-2">
+<<<<<<< HEAD
                     <div class="input-group h-100">
                         <span class="input-group-text bg-white">
                             <i class="fas fa-flag"></i>
@@ -87,6 +133,11 @@
                 <div class="col-md-2">
                     <button class="btn btn-red w-100 d-flex align-items-center justify-content-center" type="submit">
                         <i class="fas fa-filter me-2"></i> Filter
+=======
+                    <button class="btn btn-red w-100 btn-filter d-flex align-items-center justify-content-between px-3" type="submit">
+                        <i class="fas fa-filter"></i>
+                        <span class="me-5 px-1">Filter</span>
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
                     </button>
                 </div>
 
@@ -121,11 +172,27 @@
                                          class="img-fluid rounded-3 mb-4 w-100"
                                          style="height: 220px; object-fit: cover;" />
 
+<<<<<<< HEAD
                                     <p class="mb-2 fs-6">
                                         <i class="fa-solid fa-location-dot me-2 text-danger"></i>
                                         @museum.Country, @museum.City, @museum.Address
                                     </p>
 
+=======
+                                    <h6 class="text-muted text-uppercase fw-bold mb-3">
+                                        Location
+                                    </h6>
+
+                                    <p class="mb-2 fs-6">
+                                        <i class="fa-solid fa-location-dot me-2 text-danger"></i>
+                                        @museum.City, @museum.Address
+                                    </p>
+
+                                    <h6 class="text-muted text-uppercase fw-bold mt-4 mb-3">
+                                        Opening Hours
+                                    </h6>
+
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
                                     <p class="mb-4 fs-6">
                                         <i class="fa-solid fa-clock me-2 text-danger"></i>
                                         @(DateTime.Today.Add(museum.OpeningTime).ToString("h:mm tt").ToLowerInvariant())

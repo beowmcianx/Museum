@@ -63,7 +63,11 @@ else
                             var museumText = order.Museum?.Name ?? "—";
                             if (!string.IsNullOrEmpty(order.Museum?.City))
                             {
+<<<<<<< HEAD
                                 museumText += $" - {order.Museum.Country}, {order.Museum.City}, {order.Museum.Address}";
+=======
+                                museumText += $" - {order.Museum.City}";
+>>>>>>> 0af9bfd1856e1d24bcf0d57bbcf7a4890a4c23cb
                             }
                         }
                         <span class="p-3">@museumText</span>
