@@ -132,7 +132,7 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>City/Address</th>
+                <th>Country/City/Address</th>
                 <th>Type</th>
                 <th>Working Hours</th>
                 <th>Active</th>
@@ -146,7 +146,7 @@
                 <tr>
                     <td>@museum.MuseumId</td>
                     <td>@museum.Name</td>
-                    <td>@museum.City, @museum.Address</td>
+                    <td>@museum.Country, @museum.City, @museum.Address</td>
                     <td>@museum.Type</td>
                     <td>
                         @(DateTime.Today.Add(museum.OpeningTime).ToString("h:mm tt").ToLowerInvariant())
