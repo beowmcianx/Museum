@@ -91,7 +91,6 @@
                 </div>
 
             </form>
-            </form>
         </div>
 
         @*Museum Card*@
@@ -122,9 +121,7 @@
                                          class="img-fluid rounded-3 mb-4 w-100"
                                          style="height: 220px; object-fit: cover;" />
 
-                                    <h6 class="text-muted text-uppercase fw-bold mb-3">
-                                        Location
-                                    </h6>
+                                    <hr class="hr-dark" />
 
                                     <p class="mb-2 fs-6">
                                         <i class="fa-solid fa-location-dot me-2 text-danger"></i>
@@ -137,6 +134,7 @@
                                         -
                                         @(DateTime.Today.Add(museum.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
                                     </p>
+
                                     <hr class="hr-dark" />
 
                                     <div class="d-grid">

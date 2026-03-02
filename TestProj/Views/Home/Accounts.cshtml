@@ -9,85 +9,149 @@
     int totalPages = ViewBag.TotalPages ?? 1;
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="text-center">
 
-<div class="position-relative" style="margin: 0;">
+    <h1>@ViewData["Title"]</h1>
 
- <form asp-controller="Home"
-          asp-action="Dashboard"
-          method="post"
-          class="text-end mb-3 container-back">
-        <button type="submit" class="btn btn-back">
-            Back
-        </button>
-    </form>
+    <div class="position-relative" style="margin: 0;">
 
-<form method="get" asp-action="Accounts" class="row g-2 mb-3">
-    <div class="col-auto">
-        <input type="text" name="search" value="@search" class="form-control" placeholder="Search username/email" />
-    </div>
-    <div class="col-auto">
-        <button class="btn btn-red" type="submit">Search</button>
-    </div>
-</form>
+        <form asp-controller="Home"
+              asp-action="Dashboard"
+              method="post"
+              class="text-end mb-3 container-back">
+            <button type="submit" class="btn btn-back">
+                Back
+            </button>
+        </form>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th style="width:10%;">Id</th>
-            <th style="width:30%;">Username</th>
-            <th style="width:35%;">Email</th>
-            <th style="width:25%;">Role</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var account in Model)
-        {
-            <tr>
-                <td>@account.Id</td>
-                <td>@account.UserName</td>
-                <td>@account.Email</td>
-                <td>
-                    <form asp-action="UpdateRole" method="post" class="d-flex align-items-center">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="userId" value="@account.Id" />
-                        <input type="hidden" name="search" value="@search" />
-                        <input type="hidden" name="page" value="@currentPage" />
-                        <select name="newRole" class="form-select me-2" style="max-width:220px;">
-                            <option value="">(none)</option>
-                            @foreach (var r in availableRoles)
+        <div class="card mx-auto shadow-sm rounded-5 page-catalogue-search-bar">
+            <form method="get" asp-action="Accounts" class="m-0">
+
+                <div class="col-auto">
+                    <div class="input-group h-100">
+                        <span class="input-group-text bg-white">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input class="form-control"
+                               type="search"
+                               name="search"
+                               value="@search"
+                               placeholder="Search username/email" />
+                    </div>
+                </div>
+
+                <div class="col-auto">
+                    <button class="btn btn-red" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width:10%;">Id</th>
+                    <th style="width:25%;">Username</th>
+                    <th style="width:25%;">Email</th>
+                    <th style="width:20%;">Role</th>
+                    <th style="width:20%;">Museum</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var account in Model)
+                {
+                    <tr>
+                        <form asp-action="UpdateRole" method="post">
+                            @Html.AntiForgeryToken()
+
+                        <td>@account.Id</td>
+                        <td>@account.UserName</td>
+                        <td>@account.Email</td>
+
+                        <td>
+                            <input type="hidden" name="userId" value="@account.Id" />
+                            <input type="hidden" name="search" value="@search" />
+                            <input type="hidden" name="page" value="@currentPage" />
+
+                            <select name="newRole" class="form-select">
+                                <option value="">(none)</option>
+                                @foreach (var r in availableRoles)
+                                {
+                                    <option value="@r"
+                                            selected="@(r == account.CurrentRole ? "selected" : null)">
+                                        @r
+                                    </option>
+                                }
+                            </select>
+                        </td>
+
+                        <td>
+                            @if (account.CurrentRole == "Worker")
                             {
-                                <option value="@r" selected="@(r == account.CurrentRole ? "selected" : null)">@r</option>
+                                <select name="museumId" class="form-select">
+                                    <option value="">(no museum)</option>
+                                    @foreach (var museum in ViewBag.Museums as List<TestProj.Models.MuseumModel>)
+                                    {
+                                        <option value="@museum.MuseumId"
+                                                selected="@(museum.MuseumId == account.AssignedMuseumId ? "selected" : null)">
+                                            @museum.Name
+                                        </option>
+                                    }
+                                </select>
                             }
-                        </select>
-                        <button type="submit" class="btn btn-sm btn-red">Save</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                            else
+                            {
+                                <!-- Disabled select for non-workers, but include hidden to submit value -->
+                                <select class="form-select" disabled>
+                                    <option value="">(no museum)</option>
+                                    @foreach (var museum in ViewBag.Museums as List<TestProj.Models.MuseumModel>)
+                                    {
+                                        <option value="@museum.MuseumId"
+                                                selected="@(museum.MuseumId == account.AssignedMuseumId ? "selected" : null)">
+                                            @museum.Name
+                                        </option>
+                                    }
+                                </select>
+                                <input type="hidden" name="museumId" value="@account.AssignedMuseumId" />
+                            }
+                        </td>
 
-<nav aria-label="Accounts pagination">
-    <ul class="pagination">
-        @if (currentPage > 1)
-        {
-            <li class="page-item">
-                <a class="page-link" asp-action="Accounts" asp-route-search="@search" asp-route-page="@(currentPage - 1)">Previous</a>
-            </li>
-        }
-        @for (int i = 1; i <= totalPages; i++)
-        {
-            <li class="page-item @(i == currentPage ? "active" : "")">
-                <a class="page-link" asp-action="Accounts" asp-route-search="@search" asp-route-page="@i">@i</a>
-            </li>
-        }
-        @if (currentPage < totalPages)
-        {
-            <li class="page-item">
-                <a class="page-link" asp-action="Accounts" asp-route-search="@search" asp-route-page="@(currentPage + 1)">Next</a>
-            </li>
-        }
-    </ul>
-</nav>
+                        <td>
+                            <button type="submit" class="btn btn-sm btn-red">
+                                Save
+                            </button>
+                        </td>
+                        </form>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <hr />
+
+        <h5>Showing page @ViewBag.CurrentPage of @ViewBag.TotalPages pages</h5>
+
+        <nav aria-label="Accounts pagination">
+            <ul class="pagination justify-content-center">
+                @if (currentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Accounts" asp-route-search="@search" asp-route-page="@(currentPage - 1)">Previous</a>
+                    </li>
+                }
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" asp-action="Accounts" asp-route-search="@search" asp-route-page="@i">@i</a>
+                    </li>
+                }
+                @if (currentPage < totalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Accounts" asp-route-search="@search" asp-route-page="@(currentPage + 1)">Next</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+
 </div>

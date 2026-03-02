@@ -420,17 +420,30 @@ namespace TestProj.Controllers
             return View(museum);
         }
 
-        public async Task<IActionResult> Museum(int id)
+        public async Task<IActionResult> Museum(int? id)
         {
+            if (id == null) return NotFound();
+
             var museum = await _context.Museums
                 .Include(m => m.Images)
                 .Include(m => m.TicketTypes)
-                .FirstOrDefaultAsync(m => m.MuseumId == id);
+                .FirstOrDefaultAsync(m => m.MuseumId == id.Value);
 
-            if (museum == null)
-            {
-                return NotFound();
-            }
+            if (museum == null) return NotFound();
+
+            return View(museum);
+        }
+
+        public async Task<IActionResult> EditMuseum(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var museum = await _context.Museums
+                .Include(m => m.Images)
+                .Include(m => m.TicketTypes)
+                .FirstOrDefaultAsync(m => m.MuseumId == id.Value);
+
+            if (museum == null) return NotFound();
 
             return View(museum);
         }
@@ -661,6 +674,11 @@ namespace TestProj.Controllers
         {
             ViewBag.Search = search ?? string.Empty;
 
+            ViewBag.Museums = await _context.Museums
+            .AsNoTracking()
+            .OrderBy(m => m.Name)
+            .ToListAsync();
+
             IQueryable<UserModel> usersQuery = _userManager.Users;
 
             if (!string.IsNullOrWhiteSpace(search))
@@ -683,16 +701,23 @@ namespace TestProj.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
-            var model = new System.Collections.Generic.List<AccountViewModel>();
+            var model = new List<AccountViewModel>();
+
             foreach (var u in users)
             {
                 var roles = await _userManager.GetRolesAsync(u);
+
+                var employee = await _context.MuseumEmployees
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(e => e.UserId == u.Id);
+
                 model.Add(new AccountViewModel
                 {
                     Id = u.Id,
                     UserName = u.UserName ?? u.Email ?? "(n/a)",
                     Email = u.Email ?? "",
-                    CurrentRole = roles.FirstOrDefault()
+                    CurrentRole = roles.FirstOrDefault(),
+                    AssignedMuseumId = employee?.MuseumId
                 });
             }
 
@@ -708,29 +733,77 @@ namespace TestProj.Controllers
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateRole(int userId, string newRole, string? search, int page = 1)
+        public async Task<IActionResult> UpdateRole(int userId, string? newRole, int? museumId, string? search,int page = 1)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user == null) return NotFound();
+            var user = await _context.Users
+                .Include(u => u.MuseumEmployee)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return NotFound();
+
+            // -----------------------
+            // ROLE UPDATE
+            // -----------------------
 
             var currentRoles = await _userManager.GetRolesAsync(user);
+
             if (currentRoles.Any())
             {
                 var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
                 if (!removeResult.Succeeded)
-                {
                     ModelState.AddModelError("", "Failed to remove existing roles.");
-                }
             }
 
             if (!string.IsNullOrWhiteSpace(newRole))
             {
                 var addResult = await _userManager.AddToRoleAsync(user, newRole);
                 if (!addResult.Succeeded)
-                {
                     ModelState.AddModelError("", "Failed to add role.");
+            }
+
+            // -----------------------
+            // MUSEUM ASSIGNMENT
+            // -----------------------
+
+            // If role is NOT MuseumEmployee → remove museum link
+            if (newRole != Roles.Worker)
+            {
+                if (user.MuseumEmployee != null)
+                {
+                    _context.MuseumEmployees.Remove(user.MuseumEmployee);
                 }
             }
+            else
+            {
+                // Role IS MuseumEmployee
+
+                if (museumId == null)
+                {
+                    // No museum selected → remove link
+                    if (user.MuseumEmployee != null)
+                    {
+                        _context.MuseumEmployees.Remove(user.MuseumEmployee);
+                    }
+                }
+                else
+                {
+                    if (user.MuseumEmployee == null)
+                    {
+                        _context.MuseumEmployees.Add(new MuseumEmployeeModel
+                        {
+                            UserId = userId,
+                            MuseumId = museumId.Value
+                        });
+                    }
+                    else
+                    {
+                        user.MuseumEmployee.MuseumId = museumId.Value;
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Accounts), new { search, page });
         }

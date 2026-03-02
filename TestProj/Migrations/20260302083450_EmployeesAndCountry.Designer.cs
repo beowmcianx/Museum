@@ -12,8 +12,8 @@ using TestProj.Data;
 namespace TestProj.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260301102224_AddedCountriesToSeed")]
-    partial class AddedCountriesToSeed
+    [Migration("20260302083450_EmployeesAndCountry")]
+    partial class EmployeesAndCountry
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

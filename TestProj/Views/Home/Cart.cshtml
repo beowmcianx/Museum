@@ -48,7 +48,7 @@ else
             <!-- Card Header -->
             <div class="card-header text-white d-flex justify-content-between align-items-center"
                  style="background-color: #db4a2b;">
-                <span><strong>Order @order.OrderCode</strong></span>
+                <span><strong><i class="fa-solid fa-ticket"></i> @order.OrderCode</strong></span>
                 <span class="badge @badgeClass">
                     @order.Status
                 </span>
@@ -63,7 +63,7 @@ else
                             var museumText = order.Museum?.Name ?? "—";
                             if (!string.IsNullOrEmpty(order.Museum?.City))
                             {
-                                museumText += $" - {order.Museum.City}";
+                                museumText += $" ({order.Museum.Country}, {order.Museum.City})";
                             }
                         }
                         <span class="p-3">@museumText</span>
@@ -73,7 +73,7 @@ else
                             Visit Date: @order.VisitDate.ToString("yyyy-MM-dd")
                         </span>
                         <span class="text-muted p-3">
-                            Created: @order.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+                            Ordered: @order.CreatedAt.ToString("yyyy-MM-dd HH:mm")
                         </span>
                     </div>
                 </div>
@@ -90,10 +90,10 @@ else
                         <table class="table table-sm align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Ticket</th>
-                                    <th>Unit Price</th>
-                                    <th>Quantity</th>
-                                    <th class="text-end">Subtotal</th>
+                                    <th><strong>Ticket</strong></th>
+                                    <th><strong>Unit Price</strong></th>
+                                    <th><strong>Quantity</strong></th>
+                                    <th class="text-end"><strong>Subtotal</strong></th>
                                 </tr>
                             </thead>
                             <tbody>

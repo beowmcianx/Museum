@@ -68,6 +68,18 @@ namespace TestProj.Data
             .HasForeignKey(mi => mi.MuseumId)
             .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<MuseumEmployeeModel>()
+            .HasOne(me => me.User)
+            .WithOne(u => u.MuseumEmployee)
+            .HasForeignKey<MuseumEmployeeModel>(me => me.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<MuseumEmployeeModel>()
+            .HasOne(me => me.Museum)
+            .WithMany(m => m.Employees)
+            .HasForeignKey(me => me.MuseumId)
+            .OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<MuseumModel>().HasData(
                new MuseumModel { MuseumId = 1, Name = "Louvre Museum", Country = "France", City = "Paris", Address = "Rue de Rivoli", Description = "World's largest art museum.", OpeningTime = new TimeSpan(9, 0, 0), ClosingTime = new TimeSpan(18, 0, 0), Type = "Art", IsActive = true },
                new MuseumModel { MuseumId = 2, Name = "British Museum", Country = "United Kingdom", City = "London", Address = "Great Russell St", Description = "Museum dedicated to human history and culture.", OpeningTime = new TimeSpan(10, 0, 0), ClosingTime = new TimeSpan(17, 30, 0), Type = "History", IsActive = true },
