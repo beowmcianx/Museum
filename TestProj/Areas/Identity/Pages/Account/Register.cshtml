@@ -60,22 +60,45 @@
                         <div class="mb-4">
                             <label asp-for="Input.Password"
                                    class="form-label small text-muted"></label>
-                            <input asp-for="Input.Password"
-                                   type="password"
-                                   class="form-control form-control-lg"
-                                   autocomplete="new-password" />
+
+                            <div class="input-group">
+                                <input asp-for="Input.Password"
+                                       type="password"
+                                       class="form-control form-control-lg"
+                                       autocomplete="new-password"
+                                       id="registerPassword" />
+
+                                <button type="button"
+                                        class="btn bg-white border"
+                                        id="toggleRegisterPassword">
+                                    <i class="fa-solid fa-eye fa-lg"
+                                       style="color:#db4a2a;"></i>
+                                </button>
+                            </div>
+
                             <span asp-validation-for="Input.Password"
                                   class="text-danger small"></span>
                         </div>
-
                         <!-- Confirm Password -->
                         <div class="mb-4">
                             <label asp-for="Input.ConfirmPassword"
                                    class="form-label small text-muted"></label>
-                            <input asp-for="Input.ConfirmPassword"
-                                   type="password"
-                                   class="form-control form-control-lg"
-                                   autocomplete="new-password" />
+
+                            <div class="input-group">
+                                <input asp-for="Input.ConfirmPassword"
+                                       type="password"
+                                       class="form-control form-control-lg"
+                                       autocomplete="new-password"
+                                       id="confirmPassword" />
+
+                                <button type="button"
+                                        class="btn bg-white border"
+                                        id="toggleConfirmPassword">
+                                    <i class="fa-solid fa-eye fa-lg"
+                                       style="color:#db4a2a;"></i>
+                                </button>
+                            </div>
+
                             <span asp-validation-for="Input.ConfirmPassword"
                                   class="text-danger small"></span>
                         </div>
@@ -108,6 +131,38 @@
     </div>
 </div>
 
+<ul class='circles'>
+    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
+</ul>
+
 @section Scripts {
+    <script src="~/js/site.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function setupPasswordToggle(buttonId, inputId) {
+            const toggleButton = document.getElementById(buttonId);
+            const passwordInput = document.getElementById(inputId);
+            const icon = toggleButton.querySelector("i");
+
+            toggleButton.addEventListener("click", function () {
+                const type = passwordInput.type === "password" ? "text" : "password";
+                passwordInput.type = type;
+
+                icon.classList.toggle("fa-eye");
+                icon.classList.toggle("fa-eye-slash");
+            });
+        }
+
+        setupPasswordToggle("toggleRegisterPassword", "registerPassword");
+        setupPasswordToggle("toggleConfirmPassword", "confirmPassword");
+    </script>
 }

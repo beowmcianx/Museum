@@ -1,0 +1,118 @@
+/* ===================== Floating Museum Icons ===================== */
+
+.circles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 100px); /* leave space for footer */
+    z-index: -1;
+    pointer-events: none; /* icons won't block clicks */
+}
+
+    .circles li {
+        position: absolute;
+        display: block;
+        list-style: none;
+        animation: floatUp 30s linear infinite;
+        opacity: 0.2;
+    }
+
+        /* Each icon gets slightly different start position, size, color, animation */
+        .circles li:nth-child(1) {
+            left: 5%;
+            top: 80%;
+            font-size: 24px;
+            animation-duration: 20s;
+        }
+
+        .circles li:nth-child(2) {
+            left: 20%;
+            top: 75%;
+            font-size: 28px;
+            animation-duration: 25s;
+        }
+
+        .circles li:nth-child(3) {
+            left: 35%;
+            top: 85%;
+            font-size: 22px;
+            animation-duration: 30s;
+        }
+
+        .circles li:nth-child(4) {
+            left: 50%;
+            top: 78%;
+            font-size: 26px;
+            animation-duration: 22s;
+        }
+
+        .circles li:nth-child(5) {
+            left: 60%;
+            top: 82%;
+            font-size: 24px;
+            animation-duration: 28s;
+        }
+
+        .circles li:nth-child(6) {
+            left: 70%;
+            top: 77%;
+            font-size: 30px;
+            animation-duration: 35s;
+        }
+
+        .circles li:nth-child(7) {
+            left: 80%;
+            top: 83%;
+            font-size: 20px;
+            animation-duration: 32s;
+        }
+
+        .circles li:nth-child(8) {
+            left: 90%;
+            top: 79%;
+            font-size: 22px;
+            animation-duration: 27s;
+        }
+
+        .circles li:nth-child(9) {
+            left: 30%;
+            top: 81%;
+            font-size: 28px;
+            animation-duration: 24s;
+        }
+
+        .circles li:nth-child(10) {
+            left: 15%;
+            top: 76%;
+            font-size: 26px;
+            animation-duration: 30s;
+        }
+
+/* Floating and swaying animation */
+@keyframes floatUp {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+    }
+
+    25% {
+        transform: translateX(20px) translateY(-25vh) rotate(90deg);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateX(-15px) translateY(-50vh) rotate(180deg);
+        opacity: 1;
+    }
+
+    75% {
+        transform: translateX(10px) translateY(-75vh) rotate(270deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(0) translateY(-90vh) rotate(360deg);
+        opacity: 0;
+    }
+}

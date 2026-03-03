@@ -5,32 +5,32 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Dashboard</h1>
-    <h4 class="text-secondary text-muted">view, create, and edit museums and accounts</h4>
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <h4 class="text-secondary text-muted">view, create, & edit museums & accounts</h4>
 
     <br />
     <hr />
     <br />
 
-    <h3 class="text-center">Museum, Account and Analytics Settings</h3>
+    <h3 class="text-center">Museum, Account & Analytics Settings</h3>
     <br />
 
     <div class="d-flex justify-content-between gap-3">
-            <a class="btn btn-success page-dashboard-button flex-fill text-center"
+            <a class="btn btn-red page-dashboard-button flex-fill text-center"
                asp-controller="Home"
                asp-action="Create">
                 <i class="fas fa-landmark"></i><br />
                 Create Museum
             </a>
 
-            <a class="btn btn-warning page-dashboard-button flex-fill text-center"
+            <a class="btn btn-red page-dashboard-button flex-fill text-center"
                asp-controller="Home"
                asp-action="Accounts">
                 <i class="fa-solid fa-users"></i><br />
                 Accounts
             </a>
 
-            <a class="btn btn-info page-dashboard-button flex-fill text-center"
+            <a class="btn btn-red page-dashboard-button flex-fill text-center"
                asp-controller="Home"
                asp-action="Create">
                 <i class="fa-solid fa-chart-simple"></i><br />  

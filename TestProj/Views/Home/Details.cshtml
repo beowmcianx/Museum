@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = $"{Model.Name}";
-    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+    var isClient = User.Identity?.IsAuthenticated == true && User.IsInRole("Client");
 }
 
 <div class="position-relative" style="margin: 0;">
@@ -44,17 +44,13 @@
                     {
                         <div class="carousel-item @(first ? "active" : "")">
                             <div class="vh-100 d-flex align-items-center justify-content-center"
-                                style="
-                                      background-image: url('@image.ImageUrl');
-                                      background-size: cover;
-                                      background-position: center;
-                                      position: relative;
-                                ">
+                                 style="background-image: url('@image.ImageUrl');
+                                                    background-size: cover;
+                                                    background-position: center;
+                                                    position: relative;">
 
-                                <!-- Dark Overlay -->
                                 <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
 
-                                <!-- Foreground Content -->
                                 <div class="container position-relative text-white text-center">
                                     <h1 class="display-3 fw-bold text-red">@Model.Name</h1>
                                     <p class="lead">@Model.Country, @Model.City</p>
@@ -66,14 +62,25 @@
                                         @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
                                     </p>
 
-                                    <button type="button"
-                                    class="btn btn-red btn-lg mt-3"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#buyTicketsModal">
-                                        Tickets
-                                    </button>
-                                </div>
+                                    @if (isClient)
+                                    {
+                                        <button type="button"
+                                                class="btn btn-red btn-lg mt-3"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#buyTicketsModal">
+                                            Tickets
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <a asp-area="Identity"
+                                           asp-page="/Account/Login"
+                                           class="btn btn-secondary btn-lg mt-3">
+                                            Login as Client to Buy Tickets
+                                        </a>
+                                    }
 
+                                </div>
                             </div>
                         </div>
 
@@ -159,9 +166,11 @@
     <hr class="hr-dark" />
 
     <!-- ===================== BUY TICKETS MODAL ===================== -->
-    <div class="modal fade" id="buyTicketsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <!-- BUY TICKETS MODAL -->
+    <div class="modal fade" id="buyTicketsModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
+
                 <form asp-controller="Home" asp-action="BuyTickets" method="post">
                     @Html.AntiForgeryToken()
 
@@ -171,18 +180,8 @@
                     </div>
 
                     <div class="modal-body">
-                        <input type="hidden" name="MuseumId" value="@Model.MuseumId" />
 
-                        @if (!isAuthenticated)
-                        {
-                            <div class="alert alert-info">
-                                You must
-                                <a asp-area="Identity" asp-page="/Account/Login">log in</a>
-                                or
-                                <a asp-area="Identity" asp-page="/Account/Register">register</a>
-                                to purchase tickets.
-                            </div>
-                        }
+                        <input type="hidden" name="MuseumId" value="@Model.MuseumId" />
 
                         <div class="mb-3">
                             <label class="form-label"><strong>Visit date</strong></label>
@@ -191,7 +190,7 @@
                                    class="form-control"
                                    value="@DateTime.Today.ToString("yyyy-MM-dd")"
                                    min="@DateTime.Today.ToString("yyyy-MM-dd")"
-                                   @(isAuthenticated ? "" : "disabled") />
+                                   @(isClient ? "" : "disabled") />
                         </div>
 
                         <hr />
@@ -219,21 +218,14 @@
                                            max="20"
                                            value="0"
                                            data-price="@tt.Price"
-                                           @(isAuthenticated ? "" : "disabled") />
+                                           @(isClient ? "" : "disabled") />
                                 </div>
                             }
                         }
-                        else
-                        {
-                            <p class="text-muted">No ticket types available.</p>
-                        }
 
                         <hr />
 
-                        <hr />
-
-                        <!-- Rules Acceptance -->
-                        @if (isAuthenticated)
+                        @if (isClient)
                         {
                             <div class="form-check mb-3">
                                 <input class="form-check-input"
@@ -243,7 +235,7 @@
                                        value="true" />
 
                                 <label class="form-check-label" for="acceptRules">
-                                    I have read and agree to the
+                                    I agree to the
                                     <a asp-controller="Home"
                                        asp-action="Rules"
                                        target="_blank">
@@ -257,22 +249,29 @@
                             <strong>Total:</strong>
                             <span><span id="totalAmount">0.00</span> $</span>
                         </div>
+
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" style="border-radius: 8px;" data-bs-dismiss="modal">Close</button>
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Close
+                        </button>
+
                         <button type="submit"
                                 id="buyButton"
                                 class="btn btn-red"
-                                disabled>
+                                @(isClient ? "disabled" : "disabled")>
                             Buy
                         </button>
                     </div>
+
                 </form>
             </div>
         </div>
-    </div>
 
+    </div>
 </div>
 
 @section Scripts {
@@ -314,3 +313,17 @@
         })();
     </script>
 }
+
+<ul class='circles'>
+    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
+</ul>
+
+<script src="~/js/site.js" asp-append-version="true"></script>

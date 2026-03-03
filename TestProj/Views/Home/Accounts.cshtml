@@ -7,6 +7,7 @@
     string search = ViewBag.Search ?? "";
     int currentPage = ViewBag.CurrentPage ?? 1;
     int totalPages = ViewBag.TotalPages ?? 1;
+    string roleFilter = ViewBag.RoleFilter ?? "";
 }
 
 <div class="text-center">
@@ -24,10 +25,11 @@
             </button>
         </form>
 
-        <div class="card mx-auto shadow-sm rounded-5 page-catalogue-search-bar">
-            <form method="get" asp-action="Accounts" class="m-0">
+        <div class="card mx-auto shadow-sm p-4 mb-4 rounded-5 page-catalogue-search-bar">
+            <form asp-action="Accounts" method="get" class="row g-2 align-items-center">
 
-                <div class="col-auto">
+                <!-- Search -->
+                <div class="col-md-4">
                     <div class="input-group h-100">
                         <span class="input-group-text bg-white">
                             <i class="fas fa-search"></i>
@@ -36,15 +38,41 @@
                                type="search"
                                name="search"
                                value="@search"
-                               placeholder="Search username/email" />
+                               placeholder="Search username/email..." />
                     </div>
                 </div>
 
-                <div class="col-auto">
-                    <button class="btn btn-red" type="submit">Search</button>
+                <!-- Role Filter -->
+                <div class="col-md-3">
+                    <div class="input-group h-100">
+                        <span class="input-group-text bg-white">
+                            <i class="fa-solid fa-user-tag"></i>
+                        </span>
+                        <select class="form-select" name="roleFilter">
+                            <option value="">All Roles</option>
+                            @foreach (var role in availableRoles)
+                            {
+                                <option value="@role"
+                                        selected="@(role == ViewBag.RoleFilter)">
+                                    @role
+                                </option>
+                            }
+                        </select>
+                    </div>
                 </div>
+
+                <!-- Filter Button -->
+                <div class="col-md-2">
+                    <button class="btn btn-red w-100 d-flex align-items-center justify-content-center"
+                            type="submit">
+                        <i class="fas fa-filter me-2"></i> Filter
+                    </button>
+                </div>
+
             </form>
         </div>
+
+        <br />
 
         <table class="table table-striped">
             <thead>
@@ -135,19 +163,30 @@
                 @if (currentPage > 1)
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Accounts" asp-route-search="@search" asp-route-page="@(currentPage - 1)">Previous</a>
+                        <a class="page-link" asp-action="Accounts"
+                           asp-route-search="@search"
+                           asp-route-roleFilter="@roleFilter"
+                           asp-route-page="@(currentPage - 1)">
+                            Previous
+                        </a>
                     </li>
                 }
                 @for (int i = 1; i <= totalPages; i++)
                 {
                     <li class="page-item @(i == currentPage ? "active" : "")">
-                        <a class="page-link" asp-action="Accounts" asp-route-search="@search" asp-route-page="@i">@i</a>
+                        <a class="page-link" asp-action="Accounts"
+                           asp-route-search="@search"
+                           asp-route-roleFilter="@roleFilter"
+                           asp-route-roleFilter="@roleFilter" asp-route-page="@i">@i</a>
                     </li>
                 }
                 @if (currentPage < totalPages)
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Accounts" asp-route-search="@search" asp-route-page="@(currentPage + 1)">Next</a>
+                        <a class="page-link" asp-action="Accounts"
+                           asp-route-search="@search"
+                           asp-route-roleFilter="@roleFilter"
+                           asp-route-roleFilter="@roleFilter" asp-route-page="@(currentPage + 1)">Next</a>
                     </li>
                 }
             </ul>
