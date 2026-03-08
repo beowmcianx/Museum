@@ -1,0 +1,291 @@
+﻿@model TestProj.Models.MuseumModel
+
+@{
+    ViewData["Title"] = "Create Page";
+}
+
+<body class="page-catalogue">
+
+    <div class="container mt-5">
+
+        <div class="text-center mb-4">
+            <h1 class="display-5">
+                <i class="fa-solid fa-landmark me-2" style="color:#db4a2a"></i>
+                Add New Museum
+            </h1>
+            <p class="text-secondary">Fill in the information below</p>
+        </div>
+
+        <!-- Back Button -->
+        <div class="mb-3">
+            <form asp-controller="Dashboard" asp-action="Dashboard" method="post">
+                <button type="submit" class="btn btn-outline-dark">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Back
+                </button>
+            </form>
+        </div>
+
+        <div class="card shadow-lg rounded-5 p-4">
+
+            <form asp-controller="Dashboard" asp-action="Create" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <!-- Museum Info -->
+                <h4 class="mb-3">
+                    <i class="fa-solid fa-circle-info me-2 text-danger"></i>
+                    Museum Info
+                </h4>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" required />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="Country" class="form-label"></label>
+                        <input asp-for="Country" class="form-control" required />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="City" class="form-label"></label>
+                        <input asp-for="City" class="form-control" required />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="Address" class="form-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="OpeningTime" class="form-label"></label>
+                        <input asp-for="OpeningTime" class="form-control" type="time" step="60" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="ClosingTime" class="form-label"></label>
+                        <input asp-for="ClosingTime" class="form-control" type="time" step="60" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="Type" class="form-label"></label>
+                        <input asp-for="Type" class="form-control" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="imageUrl" class="form-label">
+                            <i class="fa-solid fa-image me-2 text-danger"></i>
+                            Museum Image URL
+                        </label>
+
+                        <input type="url"
+                               id="imageUrl"
+                               name="ImageUrl"
+                               class="form-control"
+                               placeholder="https://example.com/image.jpg" />
+
+                        <div class="mt-3 text-center">
+                            <img id="imagePreview"
+                                 src=""
+                                 alt="Image preview"
+                                 style="max-height:250px; display:none; border-radius:12px;"
+                                 class="shadow" />
+                        </div>
+
+                        <div class="form-text">
+                            Optional. Paste a public image URL.
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <!-- Ticket Types -->
+                <h4 class="mb-3">
+                    <i class="fa-solid fa-ticket me-2 text-danger"></i>
+                    Ticket Types
+                </h4>
+
+                <p class="text-muted">Add ticket types. Leave empty rows to ignore.</p>
+
+                <div class="mb-3">
+                    <button type="button" id="addTicketBtn" class="btn btn-red">
+                        <i class="fa-solid fa-plus me-2"></i>
+                        Add Ticket
+                    </button>
+                </div>
+
+                <div id="ticketTypesContainer">
+
+                    <div class="ticket-row card p-3 mb-2 shadow-sm border-0 rounded-4">
+                        <div class="row g-2 align-items-center">
+
+                            <div class="col-md-5">
+                                <input type="text"
+                                       name="TicketTypes[0].Name"
+                                       class="form-control"
+                                       placeholder="Ticket type (Adult, Child...)" 
+                                       required/>
+                            </div>
+
+                            <div class="col-md-3">
+                                <input type="number"
+                                       name="TicketTypes[0].Price"
+                                       step="0.01"
+                                       min="0"
+                                       class="form-control"
+                                       placeholder="Price" 
+                                       required />
+                            </div>
+
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-red remove-ticket">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-red btn-lg">
+                        <i class="fa-solid fa-plus me-2"></i>
+                        Add Museum
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+<ul class='circles'>
+    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
+</ul>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+        const container = document.getElementById("ticketTypesContainer");
+        const addBtn = document.getElementById("addTicketBtn");
+
+        function getNextIndex() {
+
+            const inputs = container.querySelectorAll("[name^='TicketTypes[']");
+            let max = -1;
+
+            inputs.forEach(el => {
+
+                const match = el.name.match(/TicketTypes\[(\d+)\]/);
+
+                if (match) {
+                    const i = parseInt(match[1]);
+                    if (i > max) max = i;
+                }
+
+            });
+
+            return max + 1;
+        }
+
+        function createRow(index) {
+
+            const row = document.createElement("div");
+            row.className = "ticket-row card p-3 mb-2 shadow-sm border-0 rounded-4";
+
+            row.innerHTML = `
+                <div class="row g-2 align-items-center">
+
+                    <div class="col-md-5">
+                        <input type="text"
+                               name="TicketTypes[${index}].Name"
+                               class="form-control"
+                               placeholder="Ticket type (Adult, Child...)" 
+                               required/>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="number"
+                               name="TicketTypes[${index}].Price"
+                               step="0.01"
+                               min="0"
+                               class="form-control"
+                               placeholder="Price"
+                               required/>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-red remove-ticket">
+                            Remove
+                        </button>
+                    </div>
+
+                </div>
+            `;
+
+            return row;
+        }
+
+        addBtn.addEventListener("click", function () {
+
+            const index = getNextIndex();
+            const row = createRow(index);
+
+            container.appendChild(row);
+
+        });
+
+        container.addEventListener("click", function (e) {
+
+            if (e.target.classList.contains("remove-ticket")) {
+
+                const row = e.target.closest(".ticket-row");
+
+                if (row) row.remove();
+
+            }
+
+        });
+
+    });
+
+        const imageInput = document.getElementById("imageUrl");
+        const preview = document.getElementById("imagePreview");
+
+        imageInput.addEventListener("input", function () {
+            const url = imageInput.value;
+
+            if (url) {
+                preview.src = url;
+                preview.style.display = "block";
+            } else {
+                preview.style.display = "none";
+            }
+        });
+</script>

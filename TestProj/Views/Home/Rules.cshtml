@@ -2,24 +2,24 @@
     ViewData["Title"] = "Ticket Purchase & Cancellation Rules";
 }
 
-<div class="container mt-5 mb-5">
+<div class="container page-policy py-5">
 
-    <h1 class="mb-4 text-center">Ticket Purchase & Cancellation Rules</h1>
-
-    <div class="alert alert-info">
-        Please read these rules carefully before purchasing tickets.
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-red">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Please read the following rules carefully before purchasing or cancelling tickets.</p>
+        <hr class="hr-light" />
     </div>
 
-    <!-- BUYING RULES -->
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            1. Ticket Purchase Rules
+    <!-- Ticket Purchase Rules -->
+    <div class="card shadow-lg rounded-4 mb-4">
+        <div class="card-header text-white bg-red">
+            <i class="fa-solid fa-ticket me-2"></i> 1. Ticket Purchase Rules
         </div>
         <div class="card-body">
             <ul>
                 <li>You must be logged in to purchase tickets.</li>
-                <li>The visit date must not be in the past.</li>
-                <li>At least one ticket must be selected.</li>
+                <li>The visit date cannot be in the past.</li>
+                <li>At least one ticket must be selected per order.</li>
                 <li>Only active ticket types may be purchased.</li>
                 <li>All ticket purchases are subject to museum availability.</li>
                 <li>Once an order is completed, the price at purchase time is final.</li>
@@ -27,10 +27,10 @@
         </div>
     </div>
 
-    <!-- CANCELLATION RULES -->
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-danger text-white">
-            2. Cancellation Rules
+    <!-- Cancellation Rules -->
+    <div class="card shadow-lg rounded-4 mb-4">
+        <div class="card-header text-white bg-danger">
+            <i class="fa-solid fa-ban me-2"></i> 2. Cancellation Rules
         </div>
         <div class="card-body">
             <ul>
@@ -38,45 +38,45 @@
                 <li>Orders cannot be cancelled on or after the visit date.</li>
                 <li>Cancelled orders cannot be restored.</li>
                 <li>Used or Confirmed tickets cannot be cancelled.</li>
-                <li>The system reserves the right to refuse cancellation if policy conditions are not met.</li>
+                <li>The system may refuse cancellation if policy conditions are not met.</li>
             </ul>
         </div>
     </div>
 
-    <!-- ORDER STATUS EXPLANATION -->
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-secondary text-white">
-            3. Order Status Explanation
+    <!-- Order Status Explanation -->
+    <div class="card shadow-lg rounded-4 mb-4">
+        <div class="card-header text-white bg-secondary">
+            <i class="fa-solid fa-info-circle me-2"></i> 3. Order Status Explanation
         </div>
         <div class="card-body">
             <ul>
-                <li><strong>New</strong> – The order has been created but not yet processed.</li>
-                <li><strong>Confirmed</strong> – The order has been approved and is valid for entry.</li>
-                <li><strong>Cancelled</strong> – The order has been cancelled and is no longer valid.</li>
-                <li><strong>Used</strong> – The tickets have already been scanned and used for entry.</li>
+                <li><strong>New</strong> – Order created but not yet processed.</li>
+                <li><strong>Confirmed</strong> – Order approved and valid for entry.</li>
+                <li><strong>Cancelled</strong> – Order cancelled and no longer valid.</li>
+                <li><strong>Used</strong> – Tickets scanned and used for entry.</li>
             </ul>
         </div>
     </div>
 
-    <!-- REFUND POLICY -->
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-warning">
-            4. Refund Policy
+    <!-- Refund Policy -->
+    <div class="card shadow-lg rounded-4 mb-4">
+        <div class="card-header text-white bg-warning">
+            <i class="fa-solid fa-money-bill-wave me-2"></i> 4. Refund Policy
         </div>
         <div class="card-body">
             <ul>
                 <li>Full refunds may be issued if cancellation occurs more than 48 hours before the visit date.</li>
-                <li>Partial refunds may apply between 24–48 hours before the visit date.</li>
+                <li>Partial refunds may apply 24–48 hours before the visit date.</li>
                 <li>No refunds are issued within 24 hours of the visit date.</li>
-                <li>Refund policies may vary depending on special events or promotions.</li>
+                <li>Refunds may vary for special events or promotions.</li>
             </ul>
         </div>
     </div>
 
-    <!-- GENERAL CONDITIONS -->
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-dark text-white">
-            5. General Conditions
+    <!-- General Conditions -->
+    <div class="card shadow-lg rounded-4 mb-4">
+        <div class="card-header text-white bg-dark">
+            <i class="fa-solid fa-gavel me-2"></i> 5. General Conditions
         </div>
         <div class="card-body">
             <ul>
@@ -89,13 +89,14 @@
     </div>
 
     <div class="text-center mt-4">
-        <a asp-action="Catalogue" asp-controller="Home" class="btn btn-red">
-            To Museums
+        <a asp-controller="Museum" asp-action="Catalogue" class="btn btn-red px-4 py-2">
+            Browse Museums
         </a>
     </div>
 
 </div>
 
+<!-- Floating background icons -->
 <ul class='circles'>
     <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
     <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>

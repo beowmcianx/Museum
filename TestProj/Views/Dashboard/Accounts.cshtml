@@ -1,0 +1,360 @@
+﻿@using TestProj.Models.NewFolder
+@model List<AccountViewModel>
+
+@{
+    ViewData["Title"] = "Accounts";
+
+    var availableRoles = ViewBag.Roles as List<string> ?? new List<string>();
+    var museums = ViewBag.Museums as List<TestProj.Models.MuseumModel> ?? new List<TestProj.Models.MuseumModel>();
+
+    string search = ViewBag.Search ?? "";
+    string roleFilter = ViewBag.RoleFilter ?? "";
+    string museumFilter = ViewBag.MuseumFilter ?? "";
+
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+}
+
+<body class="page-catalogue">
+
+    <div class="container mt-4">
+
+        <div class="text-center mb-4">
+            <h1 class="display-5">
+                <i class="fa-solid fa-users me-2" style="color:#db4a2a"></i>
+                Manage Accounts
+            </h1>
+        </div>
+
+        <!-- Back -->
+        <form asp-controller="Dashboard"
+              asp-action="Dashboard"
+              method="post"
+              class="mb-3">
+
+            <button class="btn btn-outline-dark">
+                <i class="fa-solid fa-arrow-left me-2"></i>
+                Back
+            </button>
+
+        </form>
+
+        <!-- FILTER CARD -->
+        <div class="card mx-auto shadow-sm p-4 mb-4 rounded-5 page-catalogue-search-bar">
+
+            <form asp-controller="Dashboard"
+                  asp-action="Accounts"
+                  method="get"
+                  class="row g-2 align-items-center">
+
+                <!-- SEARCH -->
+                <div class="col-md-4">
+                    <div class="input-group w-100">
+                        <span class="input-group-text bg-white">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input class="form-control"
+                               type="search"
+                               name="search"
+                               value="@search"
+                               placeholder="Search username/email..." />
+                    </div>
+                </div>
+
+                <!-- ROLE FILTER -->
+                <div class="col-md-3">
+
+                    <div class="input-group">
+
+                        <span class="input-group-text bg-white">
+                            <i class="fa-solid fa-user-tag"></i>
+                        </span>
+
+                        <select class="form-select" name="roleFilter">
+
+                            <option value="">All Roles</option>
+
+                            @foreach (var role in availableRoles)
+                            {
+                                <option value="@role"
+                                        selected="@(role == roleFilter)">
+                                    @role
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- MUSEUM FILTER -->
+                <div class="col-md-3">
+
+                    <div class="input-group">
+
+                        <span class="input-group-text bg-white">
+                            <i class="fa-solid fa-landmark"></i>
+                        </span>
+
+                        <select class="form-select" name="museumFilter">
+
+                            <option value="">All Museums</option>
+
+                            @foreach (var museum in museums)
+                            {
+                                <option value="@museum.MuseumId"
+                                        selected="@(museumFilter == museum.MuseumId.ToString())">
+                                    @museum.Name
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- FILTER BUTTON -->
+                <div class="col-md-2">
+
+                    <button class="btn btn-red w-100">
+                        <i class="fas fa-filter me-2"></i> Filter
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- TABLE CARD -->
+        <div class="card shadow-lg rounded-5 p-3">
+
+            <div class="card-body">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+                            <th><i class="fa-solid fa-id-badge"></i> Id</th>
+                            <th><i class="fa-solid fa-user"></i> Username</th>
+                            <th><i class="fa-solid fa-envelope"></i> Email</th>
+                            <th><i class="fa-solid fa-user-shield"></i> Role</th>
+                            <th><i class="fa-solid fa-landmark"></i> Museum</th>
+                            <th></th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var account in Model)
+                        {
+
+                            <tr>
+
+                                <form asp-controller="Dashboard"
+                                      asp-action="UpdateRole"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                <td>@account.Id</td>
+
+                                <td>@account.UserName</td>
+
+                                <td>@account.Email</td>
+
+                                <!-- ROLE -->
+                                <td>
+
+                                    <input type="hidden" name="userId" value="@account.Id" />
+                                    <input type="hidden" name="search" value="@search" />
+                                    <input type="hidden" name="page" value="@currentPage" />
+
+                                    <select name="newRole" class="form-select role-select">
+
+                                        <option value="">(none)</option>
+
+                                        @foreach (var r in availableRoles)
+                                        {
+                                            <option value="@r"
+                                                    selected="@(r == account.CurrentRole)">
+                                                @r
+                                            </option>
+                                        }
+
+                                    </select>
+
+                                </td>
+
+                                <!-- MUSEUM -->
+                                <td>
+
+                                    <select name="museumId"
+                                            class="form-select museum-select"
+                                            @(account.CurrentRole != "Worker" ? "disabled" : "")>
+
+                                        <option value="">(no museum)</option>
+
+                                        @foreach (var museum in museums)
+                                        {
+                                            <option value="@museum.MuseumId"
+                                                    selected="@(museum.MuseumId == account.AssignedMuseumId)">
+                                                @museum.Name
+                                            </option>
+                                        }
+
+                                    </select>
+
+                                </td>
+
+                                <!-- SAVE -->
+                                <td>
+
+                                    <button class="btn btn-red btn-sm">
+                                        <i class="fa-solid fa-save me-1"></i>
+                                        Save
+                                    </button>
+
+                                </td>
+
+                                </form>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        <h5 class="text-center">
+            Showing page @currentPage of @totalPages
+        </h5>
+
+        <!-- PAGINATION -->
+        <nav>
+
+            <ul class="pagination justify-content-center">
+
+                @if (currentPage > 1)
+                {
+                    <li class="page-item">
+
+                        <a class="page-link"
+                           asp-controller="Dashboard"
+                           asp-action="Accounts"
+                           asp-route-search="@search"
+                           asp-route-roleFilter="@roleFilter"
+                           asp-route-museumFilter="@museumFilter"
+                           asp-route-page="@(currentPage - 1)">
+                            Previous
+                        </a>
+
+                    </li>
+                }
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+
+                        <a class="page-link"
+                           asp-controller="Dashboard"
+                           asp-action="Accounts"
+                           asp-route-search="@search"
+                           asp-route-roleFilter="@roleFilter"
+                           asp-route-museumFilter="@museumFilter"
+                           asp-route-page="@i">
+                            @i
+                        </a>
+
+                    </li>
+                }
+
+                @if (currentPage < totalPages)
+                {
+                    <li class="page-item">
+
+                        <a class="page-link"
+                           asp-controller="Dashboard"
+                           asp-action="Accounts"
+                           asp-route-search="@search"
+                           asp-route-roleFilter="@roleFilter"
+                           asp-route-museumFilter="@museumFilter"
+                           asp-route-page="@(currentPage + 1)">
+                            Next
+                        </a>
+
+                    </li>
+                }
+
+            </ul>
+
+        </nav>
+
+    </div>
+
+</body>
+
+<ul class='circles'>
+    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
+</ul>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function(){
+
+            const roleSelects = document.querySelectorAll(".role-select");
+
+            roleSelects.forEach(function(roleSelect){
+
+                const row = roleSelect.closest("tr");
+                const museumSelect = row.querySelector(".museum-select");
+
+                function updateState(){
+
+                    if(roleSelect.value === "Worker"){
+
+                        museumSelect.removeAttribute("disabled");
+
+                    } else {
+
+                        museumSelect.value = "";
+                        museumSelect.setAttribute("disabled","disabled");
+
+                    }
+
+                }
+
+                roleSelect.addEventListener("change", updateState);
+
+                updateState();
+
+            });
+
+        });
+
+    </script>
+
+}

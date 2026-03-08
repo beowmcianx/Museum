@@ -1,0 +1,20 @@
+.ticket-row {
+    transition: all 0.2s ease;
+}
+
+    .ticket-row:hover {
+        transform: scale(1.01);
+    }
+
+.page-catalogue .card {
+    border: none;
+}
+
+.btn-red {
+    background: #db4a2a;
+    color: white;
+}
+
+    .btn-red:hover {
+        background: #c43d1f;
+    }

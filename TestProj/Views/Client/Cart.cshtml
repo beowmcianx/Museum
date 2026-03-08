@@ -5,25 +5,30 @@
     ViewData["Title"] = "My Cart";
 }
 
-<h1 class="mb-4">@ViewData["Title"]</h1>
+<h1 class="display-5 text-center mb-4">
+    <i class="fa-solid fa-cart-shopping me-2" style="color:#db4a2a"></i>
+    @ViewData["Title"]
+</h1>
+
+<br />
 
 @if (TempData["Success"] != null)
 {
-    <div class="alert alert-success">
+    <div class="alert alert-success shadow-sm rounded-3">
         @TempData["Success"]
     </div>
 }
 
 @if (TempData["Error"] != null)
 {
-    <div class="alert alert-danger">
+    <div class="alert alert-danger shadow-sm rounded-3">
         @TempData["Error"]
     </div>
 }
 
 @if (Model?.Orders == null || !Model.Orders.Any())
 {
-    <div class="alert alert-info">
+    <div class="alert alert-info shadow-sm rounded-3">
         You have no orders yet.
     </div>
 }
@@ -43,15 +48,15 @@ else
             _ => "bg-light"
         };
 
-        <div class="card shadow-sm mb-4">
+        <div class="card shadow-lg mb-4 rounded-4 cart-order-card">
 
             <!-- Card Header -->
-            <div class="card-header text-white d-flex justify-content-between align-items-center"
-                 style="background-color: #db4a2b;">
-
-                <span><strong><i class="fa-solid fa-ticket" style="margin-right: 12px;"></i> @order.OrderCode</strong></span>
-
-                <span class="badge @badgeClass">
+            <div class="card-header d-flex justify-content-between align-items-center text-white order-card-header">
+                <span>
+                    <i class="fa-solid fa-ticket fa-lg me-2"></i>
+                    <strong>@order.OrderCode</strong>
+                </span>
+                <span class="badge @badgeClass fs-6">
                     @order.Status
                 </span>
             </div>
@@ -68,19 +73,19 @@ else
                                 museumText += $" ({order.Museum.Country}, {order.Museum.City})";
                             }
                         }
-                        <span class="p-3">@museumText</span>
+                        <span class="d-block museum-info p-2">@museumText</span>
                     </div>
-                    <div class="col-md-6">
-                        <span class="p-3" style="margin-right: 40px;">
+                    <div class="col-md-6 text-md-end">
+                        <span class="d-block p-2">
                             Visit Date: @order.VisitDate.ToString("yyyy-MM-dd")
                         </span>
-                        <span class="text-muted p-3">
-                            Ordered: @order.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+                        <span class="d-block text-muted p-2">
+                            Ordered: @order.CreatedAt.ToString("yyyy-MM-dd")
                         </span>
                     </div>
                 </div>
 
-                <hr />
+                <hr class="hr-dark" />
 
                 @if (!items.Any())
                 {
@@ -89,13 +94,13 @@ else
                 else
                 {
                     <div class="table-responsive">
-                        <table class="table table-sm align-middle">
+                        <table class="table table-hover table-sm align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th><strong>Ticket</strong></th>
-                                    <th><strong>Unit Price</strong></th>
-                                    <th><strong>Quantity</strong></th>
-                                    <th class="text-end"><strong>Subtotal</strong></th>
+                                    <th>Ticket</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th class="text-end">Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -106,9 +111,7 @@ else
                                         <td>@ticketName</td>
                                         <td>@item.PriceAtPurchase.ToString("C")</td>
                                         <td>@item.Quantity</td>
-                                        <td class="text-end">
-                                            @((item.PriceAtPurchase * item.Quantity).ToString("C"))
-                                        </td>
+                                        <td class="text-end">@((item.PriceAtPurchase * item.Quantity).ToString("C"))</td>
                                     </tr>
                                 }
                             </tbody>
@@ -118,12 +121,13 @@ else
             </div>
 
             <!-- Card Footer -->
-            <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="card-footer d-flex justify-content-between align-items-center bg-light">
                 <strong>Total: @orderTotal.ToString("C")</strong>
 
                 @if (order.Status == OrderStatus.New && order.VisitDate > DateTime.Today)
                 {
-                    <form asp-action="CancelOrder"
+                    <form asp-controller="Client"
+                          asp-action="CancelOrder"
                           method="post"
                           class="m-0 cancel-form">
 
@@ -131,8 +135,7 @@ else
 
                         <input type="hidden" name="orderId" value="@order.OrderId" />
 
-                        <button type="submit"
-                                class="btn btn-sm btn-danger">
+                        <button type="submit" class="btn btn-sm btn-danger">
                             Cancel Order
                         </button>
                     </form>
@@ -143,24 +146,55 @@ else
     }
 }
 
+<style>
+    /* Card header gradient */
+    .order-card-header {
+        background: linear-gradient(90deg, #db4a2a, #ff6b61);
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+    }
+
+    /* Museum info style */
+    .museum-info {
+        font-weight: 500;
+        color: #333;
+    }
+
+    /* Horizontal rule style */
+    .hr-dark {
+        border-top: 2px solid #db4a2a;
+        margin: 1rem 0;
+    }
+
+    .cart-order-card {
+        transition: transform 0.2s;
+    }
+
+        /* Card hover effect */
+        .cart-order-card:hover {
+            transform: translateY(-3px);
+            transition: transform 0.2s;
+        }
+
+    /* Badge style */
+    .badge {
+        font-size: 0.9rem;
+    }
+</style>
+
 @section Scripts {
     <script>
         document.querySelectorAll('.cancel-form').forEach(function (form) {
-
             form.addEventListener('submit', function (e) {
-
                 var confirmed = confirm(
                     "Are you sure you want to cancel this order?\n\n" +
                     "• This action cannot be undone.\n" +
                     "• Refunds (if applicable) follow the cancellation policy.\n\n" +
                     "Do you want to continue?"
                 );
-
-                if (!confirmed) {
-                    e.preventDefault();
-                }
+                if (!confirmed) e.preventDefault();
             });
-
         });
     </script>
 }
+

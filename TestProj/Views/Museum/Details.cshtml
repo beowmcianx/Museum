@@ -18,10 +18,12 @@
 
 
     <!-- ===================== BACK BUTTON ===================== -->
-    <form asp-controller="Home"
-    asp-action="Catalogue"
-    method="post"
-    class="text-end mb-3 container-back">
+    <form 
+        asp-controller="Museum"
+        asp-action="Catalogue"
+        method="post"
+        class="text-end mb-3 container-back">
+
         <button type="submit" class="btn btn-back">
             Back
         </button>
@@ -166,12 +168,11 @@
     <hr class="hr-dark" />
 
     <!-- ===================== BUY TICKETS MODAL ===================== -->
-    <!-- BUY TICKETS MODAL -->
     <div class="modal fade" id="buyTicketsModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
 
-                <form asp-controller="Home" asp-action="BuyTickets" method="post">
+                <form asp-controller="Museum" asp-action="BuyTickets" method="post">
                     @Html.AntiForgeryToken()
 
                     <div class="modal-header">
@@ -186,11 +187,16 @@
                         <div class="mb-3">
                             <label class="form-label"><strong>Visit date</strong></label>
                             <input name="VisitDate"
-                                   type="date"
+                                   type="date" 
+                                   id="visitDate"
                                    class="form-control"
                                    value="@DateTime.Today.ToString("yyyy-MM-dd")"
                                    min="@DateTime.Today.ToString("yyyy-MM-dd")"
                                    @(isClient ? "" : "disabled") />
+
+                            <small id="sameDayWarning" class="text-danger d-none">
+                                Tickets purchased at the day of visit cannot be cancelled.
+                            </small>
                         </div>
 
                         <hr />
@@ -274,6 +280,18 @@
     </div>
 </div>
 
+<ul class='circles'>
+    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
+</ul>
+
 @section Scripts {
     <script>
         (function () {
@@ -311,19 +329,28 @@
         }
             updateTotal();
         })();
+
+        var visitDateInput = document.getElementById("visitDate");
+        var sameDayWarning = document.getElementById("sameDayWarning");
+
+        function checkVisitDate() {
+            if (!visitDateInput) return;
+
+            var selected = visitDateInput.value;
+            var today = new Date().toISOString().split('T')[0];
+
+            if (selected === today) {
+                sameDayWarning.classList.remove("d-none");
+            } else {
+                sameDayWarning.classList.add("d-none");
+            }
+        }
+
+        if (visitDateInput) {
+            visitDateInput.addEventListener("change", checkVisitDate);
+            checkVisitDate(); // run on modal open
+        }
     </script>
 }
-
-<ul class='circles'>
-    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
-</ul>
 
 <script src="~/js/site.js" asp-append-version="true"></script>

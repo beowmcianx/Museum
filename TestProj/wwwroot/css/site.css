@@ -12,8 +12,15 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Rostov';
+    src: url('/fonts\Rostov\Rostov.ttf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 * {
@@ -33,7 +40,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6, span {
-    font-family: Alfran;
+    font-family: Alfran, Rostov, sans-serif;
 }
 
 .layout-logo {
@@ -107,7 +114,7 @@ a {
     color: white;
     font-size: 1rem;
     padding: 10px 15px;
-    margin-right: -100px;
+    margin-right: -250px;
     border-radius: 5px;
     transition: background-color 0.2s ease-in-out;
 }
@@ -117,6 +124,9 @@ a {
         color: white;
     }
 
+.bg-red {
+    background-color: #db4a2b;
+}
 
 .btn-red {
     background-color: #db4a2b;

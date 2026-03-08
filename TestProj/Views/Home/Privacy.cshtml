@@ -1,10 +1,70 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container page-policy py-5">
 
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-red">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Your privacy is important to us. This page explains how we handle your personal information.</p>
+        <hr class="hr-light" />
+    </div>
+
+    <div class="card shadow-lg rounded-4 p-4 mb-4">
+        <h3 class="text-red">Information We Collect</h3>
+        <p>We may collect the following types of information:</p>
+        <ul>
+            <li>Personal information such as name, email, and contact details.</li>
+            <li>Account information if you register on our platform.</li>
+            <li>Usage data, such as pages visited and time spent on our site.</li>
+            <li>Cookies and tracking technologies to improve your experience.</li>
+        </ul>
+    </div>
+
+    <div class="card shadow-lg rounded-4 p-4 mb-4">
+        <h3 class="text-red">How We Use Your Information</h3>
+        <ul>
+            <li>To provide and improve our services, including museum recommendations and bookings.</li>
+            <li>To communicate with you about your account, orders, or updates.</li>
+            <li>For analytics and research to enhance the platform.</li>
+            <li>To comply with legal obligations.</li>
+        </ul>
+    </div>
+
+    <div class="card shadow-lg rounded-4 p-4 mb-4">
+        <h3 class="text-red">Sharing of Information</h3>
+        <p>We do not sell your personal information. We may share your information:</p>
+        <ul>
+            <li>With service providers who assist in website operations.</li>
+            <li>If required by law or legal process.</li>
+            <li>To protect our rights, property, or safety of users.</li>
+        </ul>
+    </div>
+
+    <div class="card shadow-lg rounded-4 p-4 mb-4">
+        <h3 class="text-red">Cookies</h3>
+        <p>We use cookies and similar technologies to:</p>
+        <ul>
+            <li>Maintain user sessions and preferences.</li>
+            <li>Understand website usage and improve performance.</li>
+            <li>Deliver personalized content and recommendations.</li>
+        </ul>
+    </div>
+
+    <div class="card shadow-lg rounded-4 p-4 mb-5">
+        <h3 class="text-red">Your Rights</h3>
+        <p>You have the right to:</p>
+        <ul>
+            <li>Access, correct, or delete your personal information.</li>
+            <li>Opt-out of marketing communications.</li>
+            <li>Request restrictions on processing your data.</li>
+        </ul>
+        <p>Contact us at <a href="mailto:TheMuseumCentral@gmail.bg" class="text-red">TheMuseumCentral@gmail.bg</a> for any requests or questions.</p>
+    </div>
+
+</div>
+
+@* Floating icons background *@
 <ul class='circles'>
     <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
     <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>

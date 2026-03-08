@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = $"Analytics";
+}
+
+<body class="page-catalogue">
+
+    <div class="text-center mb-4">
+        <h1 class="display-5">
+            <i class="fa-solid fa-chart-simple me-2" style="color:#db4a2a"></i>
+            Analytics 
+        </h1>
+        <p class="text-secondary">See extra information for all the museums</p>
+    </div>
+
+    <!-- Back button -->
+    <form asp-controller="Dashboard"
+          asp-action="Dashboard"
+          method="post"
+          class="mb-3">
+
+        <button class="btn btn-outline-dark">
+            <i class="fa-solid fa-arrow-left me-2"></i>
+            Back
+        </button>
+    </form>
+
+</body>
+
+<ul class='circles'>
+    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
+</ul>
+
+<script src="~/js/site.js" asp-append-version="true"></script>

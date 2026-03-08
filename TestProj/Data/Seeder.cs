@@ -4,12 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using TestProj.Models;
-using TestProj.Data;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
-namespace TestProj.Models
+namespace TestProj.Data
 {
     public static class IdentitySeeder
     {
