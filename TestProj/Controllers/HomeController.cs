@@ -46,6 +46,11 @@ namespace TestProj.Controllers
             return View();
         }
 
+        public IActionResult Contacts()
+        {
+            return View();
+        }
+
         public IActionResult Rules()
         {
             return View();

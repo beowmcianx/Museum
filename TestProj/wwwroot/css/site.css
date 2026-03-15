@@ -35,8 +35,11 @@ html {
 
 body {
     margin-bottom: 80px;
-    background-color: #e4e2dd;
     min-height: 1000px;
+
+    /*background: linear-gradient(to bottom, #e6d4d1, #e4e2dd, #e6d4d1);*/
+
+    background-color: #e4e2dd;
 }
 
 h1, h2, h3, h4, h5, h6, span {

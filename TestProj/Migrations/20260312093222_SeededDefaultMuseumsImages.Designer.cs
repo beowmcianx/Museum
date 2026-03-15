@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestProj.Data;
 
@@ -11,9 +12,11 @@ using TestProj.Data;
 namespace TestProj.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260312093222_SeededDefaultMuseumsImages")]
+    partial class SeededDefaultMuseumsImages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,145 +243,145 @@ namespace TestProj.Migrations
                         new
                         {
                             MuseumImageId = 7,
-                            ImageUrl = "https://choosewhere.com/public/images/Uwu6op8/crop_and_zoom_848x560_0x7_2000x1320/shutterstock_2504968227.webp",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/02/67/14/66/240_F_267146668_0k2G3hX2Vf9YJ7bA8nXgR0r0nE5K3F8K.jpg",
                             MuseumId = 7
                         },
                         new
                         {
                             MuseumImageId = 8,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/32/05/61/240_F_232056135_rijksmuseum-amsterdam.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/01/84/22/97/240_F_184229782_yN0kqzP6n3d6XnL3qQqZpM3u6EJr3K8Q.jpg",
                             MuseumId = 8
                         },
                         new
                         {
                             MuseumImageId = 9,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/11/33/76/240_F_211337602_uffizi-gallery-florence.jpg",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/03/21/44/56/240_F_321445673_jJrF1d8Jm5sF7vM1bT0Xc6yL8q9p6n2.jpg",
                             MuseumId = 9
                         },
                         new
                         {
                             MuseumImageId = 10,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/54/12/88/240_F_254128884_acropolis-museum-athens.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/02/94/71/31/240_F_294713180_Zy2VqzE1b1TQn4bS3c0lJ5Fh1Tn8xA0.jpg",
                             MuseumId = 10
                         },
                         new
                         {
                             MuseumImageId = 11,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/72/48/22/240_F_272482248_egyptian-museum-cairo.jpg",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/02/15/32/77/240_F_215327715_qYdE5YjL5r5E9pG3z6H2zY5E1X7p4mK.jpg",
                             MuseumId = 11
                         },
                         new
                         {
                             MuseumImageId = 12,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/34/71/91/240_F_234719167_air-and-space-museum.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/03/12/64/09/240_F_312640987_T6n4gZ9Y5Yk3Yh2F5X5pY0z1C7d8x9.jpg",
                             MuseumId = 12
                         },
                         new
                         {
                             MuseumImageId = 13,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/03/01/44/73/240_F_301447322_national-museum-china.jpg",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/01/97/23/88/240_F_197238884_kJ0P8Y7V8q7X2H2P5m2N4L1c5y3b8k.jpg",
                             MuseumId = 13
                         },
                         new
                         {
                             MuseumImageId = 14,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/41/02/61/240_F_241026191_tokyo-national-museum.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/02/53/11/90/240_F_253119063_L2o2K5y2M8z3L8c8R3P2F6d2B1y8z.jpg",
                             MuseumId = 14
                         },
                         new
                         {
                             MuseumImageId = 15,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/56/23/01/240_F_256230145_national-museum-korea.jpg",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/04/20/77/91/240_F_420779188_m6r8X5Y3H4L3B2Y4m5p7Z9Q1A4Y2x.jpg",
                             MuseumId = 15
                         },
                         new
                         {
                             MuseumImageId = 16,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/60/45/11/240_F_260451198_art-institute-chicago.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/02/18/74/53/240_F_218745357_x6P3k3F3G2F8m2P6q5J4T8Y5z1n2.jpg",
                             MuseumId = 16
                         },
                         new
                         {
                             MuseumImageId = 17,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/43/11/32/240_F_243113278_moma-new-york.jpg",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/03/30/77/45/240_F_330774560_Xc1y6P6X3x9H1P5m2Q4F8z5Z3y1.jpg",
                             MuseumId = 17
                         },
                         new
                         {
                             MuseumImageId = 18,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/67/31/19/240_F_267311973_van-gogh-museum-amsterdam.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/02/88/61/55/240_F_288615596_gY1M1Z7b3X6F5Z9p8T2P7L3Q6F3.jpg",
                             MuseumId = 18
                         },
                         new
                         {
                             MuseumImageId = 19,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/89/63/77/240_F_289637771_guggenheim-bilbao.jpg",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/03/64/70/02/240_F_364700229_bX1F4m2X4Q6n5T3p6L8Z3P4L7.jpg",
                             MuseumId = 19
                         },
                         new
                         {
                             MuseumImageId = 20,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/98/51/63/240_F_298516329_wwii-museum-new-orleans.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/03/45/98/55/240_F_345985574_X3p5X3M7F2K3P7X4L3m6F5Z1.jpg",
                             MuseumId = 20
                         },
                         new
                         {
                             MuseumImageId = 21,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/03/04/65/12/240_F_304651250_canadian-museum-history.jpg",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/02/76/44/11/240_F_276441156_T1y7Y5M3F8X4P9M4Z6X1p3Z.jpg",
                             MuseumId = 21
                         },
                         new
                         {
                             MuseumImageId = 22,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/93/70/11/240_F_293701149_mexico-anthropology-museum.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/02/33/88/90/240_F_233889006_K5Y3Z8Q4F7M2Z5L7F6Q3T2.jpg",
                             MuseumId = 22
                         },
                         new
                         {
                             MuseumImageId = 23,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/58/14/27/240_F_258142731_pergamon-museum-berlin.jpg",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/03/10/75/66/240_F_310756652_L1T4M6P9Z4F2L5P7Y6K3.jpg",
                             MuseumId = 23
                         },
                         new
                         {
                             MuseumImageId = 24,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/62/97/71/240_F_262977152_national-palace-museum-taipei.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/02/64/88/23/240_F_264882381_H4P7M5Z6F3L8Q3P7X5.jpg",
                             MuseumId = 24
                         },
                         new
                         {
                             MuseumImageId = 25,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/95/70/15/240_F_295701556_museum-of-tomorrow-rio.jpg",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/03/91/00/14/240_F_391001462_T3P8Z7F4M5X3L8Y1.jpg",
                             MuseumId = 25
                         },
                         new
                         {
                             MuseumImageId = 26,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/03/12/11/44/240_F_312114410_te-papa-museum.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/02/55/63/12/240_F_255631245_M5X4L6T2Z8P5.jpg",
                             MuseumId = 26
                         },
                         new
                         {
                             MuseumImageId = 27,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/71/60/41/240_F_271604143_national-anthropology-madrid.jpg",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/02/99/55/18/240_F_299551862_Y5M6Z8X4P3F1.jpg",
                             MuseumId = 27
                         },
                         new
                         {
                             MuseumImageId = 28,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/81/33/66/240_F_281336615_powerhouse-museum-sydney.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/02/71/33/66/240_F_271336631_Z4P6L2F9M3.jpg",
                             MuseumId = 28
                         },
                         new
                         {
                             MuseumImageId = 29,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/03/18/02/91/240_F_318029115_apartheid-museum.jpg",
+                            ImageUrl = "https://t3.ftcdn.net/jpg/03/40/19/87/240_F_340198709_Q4M8F5Z2P6.jpg",
                             MuseumId = 29
                         },
                         new
                         {
                             MuseumImageId = 30,
-                            ImageUrl = "https://t4.ftcdn.net/jpg/02/47/19/88/240_F_247198825_museum-islamic-art-doha.jpg",
+                            ImageUrl = "https://t4.ftcdn.net/jpg/02/90/77/44/240_F_290774463_M6X2P8L5F3.jpg",
                             MuseumId = 30
                         });
                 });

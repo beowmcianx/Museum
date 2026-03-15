@@ -145,35 +145,210 @@ namespace TestProj.Data
                 {
                     MuseumImageId = 1,
                     MuseumId = 1,
-                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/a/aa/Louvre_Museum_Wikimedia_Commons.jpg"
+                    ImageUrl = "https://t4.ftcdn.net/jpg/03/02/03/03/240_F_302030306_VLGXUtPa0QId7O6Zqz9AF6RSql6uIdVd.jpg"
                 },
 
                 new MuseumImageModel
                 {
                     MuseumImageId = 2,
                     MuseumId = 2,
-                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/a/a3/British_Museum_from_NE_2.JPG"
+                    ImageUrl = "https://t3.ftcdn.net/jpg/00/95/44/26/240_F_95442619_GrhmvQcSput2G9lrbG8QRzX96H3MAvlG.jpg"
                 },
 
                 new MuseumImageModel
                 {
                     MuseumImageId = 3,
                     MuseumId = 3,
-                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/0/0c/Metropolitan_Museum_of_Art_entrance_NYC.jpg"
+                    ImageUrl = "https://t3.ftcdn.net/jpg/06/66/26/00/240_F_666260007_eCaT4Pk5BP9zWzvY5wPQRjRdLLlkLkVe.jpg"
                 },
 
                 new MuseumImageModel
                 {
                     MuseumImageId = 4,
                     MuseumId = 4,
-                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/6/6f/Vatican_Museums_Entrance.jpg"
+                    ImageUrl = "https://t3.ftcdn.net/jpg/05/07/06/78/240_F_507067856_oeG1oQO9FyZhA7j0e0IpTHwsS3ZVWtln.jpg"
                 },
 
                 new MuseumImageModel
                 {
                     MuseumImageId = 5,
                     MuseumId = 5,
-                    ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/4/4f/Museo_del_Prado_2016_%28cropped%29.jpg"
+                    ImageUrl = "https://t4.ftcdn.net/jpg/00/83/91/39/240_F_83913965_MdPt8k5xeVa4sIx0zuajUTGGtpqQijkv.jpg"
+                },
+
+                 new MuseumImageModel
+                 {
+                     MuseumImageId = 6,
+                     MuseumId = 6,
+                     ImageUrl = "https://t3.ftcdn.net/jpg/18/33/81/44/240_F_1833814465_cDXO5nqwcDp4W9EMiY3eRVkL5zhhQlzJ.jpg"
+                 },
+
+                 new MuseumImageModel
+                 {
+                     MuseumImageId = 7,
+                     MuseumId = 7,
+                     ImageUrl = "https://choosewhere.com/public/images/Uwu6op8/crop_and_zoom_848x560_0x7_2000x1320/shutterstock_2504968227.webp"
+                 },
+
+                 new MuseumImageModel
+                 {
+                     MuseumImageId = 8,
+                     MuseumId = 8,
+                     ImageUrl = "https://t4.ftcdn.net/jpg/02/32/05/61/240_F_232056135_rijksmuseum-amsterdam.jpg"
+                 },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 9,
+                    MuseumId = 9,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/11/33/76/240_F_211337602_uffizi-gallery-florence.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 10,
+                    MuseumId = 10,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/54/12/88/240_F_254128884_acropolis-museum-athens.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 11,
+                    MuseumId = 11,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/72/48/22/240_F_272482248_egyptian-museum-cairo.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 12,
+                    MuseumId = 12,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/34/71/91/240_F_234719167_air-and-space-museum.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 13,
+                    MuseumId = 13,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/03/01/44/73/240_F_301447322_national-museum-china.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 14,
+                    MuseumId = 14,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/41/02/61/240_F_241026191_tokyo-national-museum.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 15,
+                    MuseumId = 15,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/56/23/01/240_F_256230145_national-museum-korea.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 16,
+                    MuseumId = 16,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/60/45/11/240_F_260451198_art-institute-chicago.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 17,
+                    MuseumId = 17,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/43/11/32/240_F_243113278_moma-new-york.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 18,
+                    MuseumId = 18,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/67/31/19/240_F_267311973_van-gogh-museum-amsterdam.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 19,
+                    MuseumId = 19,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/89/63/77/240_F_289637771_guggenheim-bilbao.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 20,
+                    MuseumId = 20,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/98/51/63/240_F_298516329_wwii-museum-new-orleans.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 21,
+                    MuseumId = 21,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/03/04/65/12/240_F_304651250_canadian-museum-history.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 22,
+                    MuseumId = 22,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/93/70/11/240_F_293701149_mexico-anthropology-museum.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 23,
+                    MuseumId = 23,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/58/14/27/240_F_258142731_pergamon-museum-berlin.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 24,
+                    MuseumId = 24,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/62/97/71/240_F_262977152_national-palace-museum-taipei.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 25,
+                    MuseumId = 25,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/95/70/15/240_F_295701556_museum-of-tomorrow-rio.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 26,
+                    MuseumId = 26,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/03/12/11/44/240_F_312114410_te-papa-museum.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 27,
+                    MuseumId = 27,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/71/60/41/240_F_271604143_national-anthropology-madrid.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 28,
+                    MuseumId = 28,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/81/33/66/240_F_281336615_powerhouse-museum-sydney.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 29,
+                    MuseumId = 29,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/03/18/02/91/240_F_318029115_apartheid-museum.jpg"
+                },
+
+                new MuseumImageModel
+                {
+                    MuseumImageId = 30,
+                    MuseumId = 30,
+                    ImageUrl = "https://t4.ftcdn.net/jpg/02/47/19/88/240_F_247198825_museum-islamic-art-doha.jpg"
                 }
             );
 

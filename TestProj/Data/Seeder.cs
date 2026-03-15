@@ -23,6 +23,7 @@ namespace TestProj.Data
 
             string[] roles = { Roles.Client, Roles.Worker, Roles.Admin };
 
+            // --- Create Roles ---
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -43,6 +44,9 @@ namespace TestProj.Data
                 }
             }
 
+            // =========================
+            // ADMIN USER
+            // =========================
             var adminEmail = "admin@museum.com";
             var admin = await userManager.FindByEmailAsync(adminEmail);
 
@@ -65,37 +69,97 @@ namespace TestProj.Data
 
                 logger.LogInformation("Admin user {Email} created", adminEmail);
             }
-            else
-            {
-                logger.LogInformation("Admin user {Email} already exists (Id={Id})", adminEmail, admin.Id);
-            }
 
             if (!await userManager.IsInRoleAsync(admin, Roles.Admin))
             {
                 var addRoleResult = await userManager.AddToRoleAsync(admin, Roles.Admin);
                 if (!addRoleResult.Succeeded)
                 {
-                    logger.LogError("Failed to add admin user {Email} to role {Role}: {Errors}", adminEmail, Roles.Admin, string.Join(", ", addRoleResult.Errors));
+                    logger.LogError("Failed to add admin user to role {Role}: {Errors}", Roles.Admin, string.Join(", ", addRoleResult.Errors));
+                }
+            }
+
+            // =========================
+            // CLIENT USER
+            // =========================
+            var clientEmail = "client@museum.com";
+            var client = await userManager.FindByEmailAsync(clientEmail);
+
+            if (client == null)
+            {
+                client = new UserModel
+                {
+                    UserName = clientEmail,
+                    Email = clientEmail,
+                    FullName = "Demo Client",
+                    EmailConfirmed = true
+                };
+
+                var createResult = await userManager.CreateAsync(client, "Client123!");
+                if (!createResult.Succeeded)
+                {
+                    logger.LogError("Failed to create client user: {Errors}", string.Join(", ", createResult.Errors));
                 }
                 else
                 {
-                    logger.LogInformation("Admin user {Email} added to role {Role}", adminEmail, Roles.Admin);
+                    logger.LogInformation("Client user {Email} created", clientEmail);
                 }
             }
-            else
+
+            if (!await userManager.IsInRoleAsync(client, Roles.Client))
             {
-                logger.LogInformation("Admin user {Email} already in role {Role}", adminEmail, Roles.Admin);
+                var roleResult = await userManager.AddToRoleAsync(client, Roles.Client);
+                if (!roleResult.Succeeded)
+                {
+                    logger.LogError("Failed to add client to role: {Errors}", string.Join(", ", roleResult.Errors));
+                }
             }
 
-            // --- Seed ticket types for seeded museums ---
+            // =========================
+            // WORKER USER
+            // =========================
+            var workerEmail = "worker@museum.com";
+            var worker = await userManager.FindByEmailAsync(workerEmail);
+
+            if (worker == null)
+            {
+                worker = new UserModel
+                {
+                    UserName = workerEmail,
+                    Email = workerEmail,
+                    FullName = "Demo Worker",
+                    EmailConfirmed = true
+                };
+
+                var createResult = await userManager.CreateAsync(worker, "Worker123!");
+                if (!createResult.Succeeded)
+                {
+                    logger.LogError("Failed to create worker user: {Errors}", string.Join(", ", createResult.Errors));
+                }
+                else
+                {
+                    logger.LogInformation("Worker user {Email} created", workerEmail);
+                }
+            }
+
+            if (!await userManager.IsInRoleAsync(worker, Roles.Worker))
+            {
+                var roleResult = await userManager.AddToRoleAsync(worker, Roles.Worker);
+                if (!roleResult.Succeeded)
+                {
+                    logger.LogError("Failed to add worker to role: {Errors}", string.Join(", ", roleResult.Errors));
+                }
+            }
+
+            // =========================
+            // SEED TICKET TYPES
+            // =========================
             try
             {
                 var db = services.GetRequiredService<ApplicationDbContext>();
 
-                // Ensure DB is available
                 if (await db.Museums.AnyAsync())
                 {
-                    // Predefined ticket types to seed for each museum (if museum has none)
                     var defaultTicketTypes = new List<(string Name, decimal Price)>
                     {
                         ("Adult", 15.00m),
@@ -108,6 +172,7 @@ namespace TestProj.Data
                     foreach (var mid in museumIds)
                     {
                         var exists = await db.TicketTypes.AnyAsync(tt => tt.MuseumId == mid);
+
                         if (!exists)
                         {
                             var toAdd = defaultTicketTypes.Select(t => new TicketTypeModel
@@ -132,13 +197,18 @@ namespace TestProj.Data
             }
         }
 
-        // Null logger helper to avoid adding package references
+        // --- Null Logger ---
         private class NullLogger : ILogger
         {
             public static readonly ILogger Instance = new NullLogger();
+
             public IDisposable BeginScope<TState>(TState state) => null!;
+
             public bool IsEnabled(LogLevel logLevel) => false;
-            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter) { }
+
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state,
+                Exception exception, Func<TState, Exception, string> formatter)
+            { }
         }
     }
 }

@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Contacts";
+}
+
+<div class="container page-policy py-5">
+
+    <div class="text-center mb-5">
+        <h1 class="display-5">
+            <i class="fa-solid fa-phone me-2" style="color:#db4a2a"></i>
+            <span class="display-4 text-red">@ViewData["Title"]</span>
+        </h1>
+        <p class="lead text-muted">
+            Have a question, need assistance, or want to reach out? Contact our team and we will be happy to help you.
+        </p>
+        <hr class="hr-light" />
+    </div>
+
+    <!-- Email -->
+    <div class="card shadow-lg rounded-4 p-4 mb-4">
+        <h3 class="text-red"><i class="fa-solid fa-at me-2"></i>Email</h3>
+        <p>
+            <a href="mailto:TheMuseumCentral@museum.com" class="text-red">
+                TheMuseumCentral@museum.com
+            </a>
+        </p>
+    </div>
+
+    <!-- Phone -->
+    <div class="card shadow-lg rounded-4 p-4 mb-4">
+        <h3 class="text-red"><i class="fa-solid fa-phone me-2"></i>Phone</h3>
+        <p>+359 88 123 4567</p>
+    </div>
+
+    <!-- Address -->
+    <div class="card shadow-lg rounded-4 p-4 mb-4">
+        <h3 class="text-red"><i class="fa-solid fa-location-dot me-2"></i>Address</h3>
+        <p>123 Museum Street, Sofia, Bulgaria</p>
+    </div>
+
+    <!-- Optional social media / other contacts -->
+    <div class="card shadow-lg rounded-4 p-4 mb-5">
+        <h3 class="text-red"><i class="fa-solid fa-share-nodes me-2"></i>Social Media</h3>
+        <ul>
+            <li><a href="#" class="text-red"><i class="fa-brands fa-facebook me-1"></i>Facebook</a></li>
+            <li><a href="#" class="text-red"><i class="fa-brands fa-twitter me-1"></i>Twitter</a></li>
+            <li><a href="#" class="text-red"><i class="fa-brands fa-instagram me-1"></i>Instagram</a></li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- Floating icons background -->
+<ul class='circles'>
+    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
+    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
+</ul>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
