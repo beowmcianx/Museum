@@ -5,28 +5,37 @@
     var isClient = User.Identity?.IsAuthenticated == true && User.IsInRole("Client");
 }
 
+<!-- ===================== POPUP ALERT ===================== -->
+@if (TempData["Success"] != null || TempData["Error"] != null)
+{
+    var isSuccess = TempData["Success"] != null;
+    var message = isSuccess ? TempData["Success"] : TempData["Error"];
+
+    <div id="ticketPopup"
+         class="ticket-popup @(isSuccess ? "success" : "error")"
+         data-aos="fade-left">
+
+        <div class="popup-content">
+            <span>@message</span>
+            <button class="popup-close" onclick="closePopup()">×</button>
+        </div>
+
+    </div>
+}
+
 <div class="position-relative" style="margin: 0;">
 
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success">@TempData["Success"]</div>
-    }
-    else if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger">@TempData["Error"]</div>
-    }
-
-
     <!-- ===================== BACK BUTTON ===================== -->
-    <form 
-        asp-controller="Museum"
-        asp-action="Catalogue"
-        method="post"
-        class="text-end mb-3 container-back">
+    <form asp-controller="Museum"
+          asp-action="Catalogue"
+          method="post"
+          class="mb-3">
 
-        <button type="submit" class="btn btn-back">
+        <button class="btn btn-outline-dark">
+            <i class="fa-solid fa-arrow-left me-2"></i>
             Back
         </button>
+
     </form>
 
     <!-- ===================== IMAGE CAROUSEL ===================== -->
@@ -54,8 +63,17 @@
                                 <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
 
                                 <div class="container position-relative text-white text-center">
-                                    <h1 class="display-3 fw-bold text-red">@Model.Name</h1>
-                                    <p class="lead">@Model.Country, @Model.City</p>
+                                    <h1 class="display-3 fw-bold text-red"
+                                        data-aos="fade-down"
+                                        data-aos-duration="800">
+                                        @Model.Name
+                                    </h1>
+
+                                    <p class="lead"
+                                       data-aos="fade-down"
+                                       data-aos-duration="800">@Model.Country, @Model.City
+                                    </p>
+
                                     <hr class="border-light w-50 mx-auto" />
 
                                     <p>
@@ -117,19 +135,29 @@
         <div class="col-md-4">
             <div class="container">
 
-                <h4>About</h4>
+                <h4>
+                    <i class="fa-solid fa-circle-info" style="margin-right: 12px;"></i> 
+                    About
+                </h4>
                 <p>@Model.Description</p>
                 <p><strong>Type - </strong> @Model.Type</p>
                 <hr class="hr-dark" />
 
-                <h4>Working Hours:</h4>
+                <h4>
+                    <i class="fa-regular fa-clock" style="margin-right: 12px;"></i> 
+                    Working Hours
+                </h4>
+
                 <p class="fs-5">
                     @(DateTime.Today.Add(Model.OpeningTime).ToString("h:mm tt").ToLowerInvariant()) -
                     @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
                 </p>
                 <hr class="hr-dark" />
 
-                <h4>Tickets:</h4>
+                <h4>
+                    <i class="fa-solid fa-ticket" style="margin-right: 12px;"></i> 
+                    Tickets
+                </h4>
 
                 @if (Model.TicketTypes != null && Model.TicketTypes.Any())
                 {
@@ -154,7 +182,13 @@
 
             @if (!string.IsNullOrWhiteSpace(Model.Address))
             {
-                <h4>@Model.Country, @Model.City, @Model.Address</h4>
+                <h4>
+                    <i class="fa-solid fa-map" style="margin-right: 12px;"></i> 
+                    @Model.Country, @Model.City,
+                    <br>
+                    <span class="text-muted" style="margin-left: 48px;">@Model.Address</span>
+                </h4>
+
                 <iframe width="100%"
                         height="450"
                         frameborder="0"
@@ -194,7 +228,7 @@
                                    min="@DateTime.Today.ToString("yyyy-MM-dd")"
                                    @(isClient ? "" : "disabled") />
 
-                            <small id="sameDayWarning" class="text-danger d-none">
+                            <small id="sameDayWarning" class="text-red d-none">
                                 Tickets purchased at the day of visit cannot be cancelled.
                             </small>
                         </div>
@@ -280,6 +314,7 @@
     </div>
 </div>
 
+<!-- ===================== STYLIZED BACKGROUND CIRCLES ===================== -->
 <ul class='circles'>
     <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
     <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
@@ -294,6 +329,7 @@
 
 @section Scripts {
     <script>
+        // ===================== TICKET TOTAL UPDATE =====================
         (function () {
             function updateTotal() {
                 var total = 0.0;
@@ -316,20 +352,21 @@
                 }
             });
 
-                    // Enable Buy button only if rules accepted
-        var acceptCheckbox = document.getElementById('acceptRules');
-        var buyButton = document.getElementById('buyButton');
+            var acceptCheckbox = document.getElementById('acceptRules');
+            var buyButton = document.getElementById('buyButton');
 
-        if (acceptCheckbox && buyButton) {
-            buyButton.disabled = true;
+            if (acceptCheckbox && buyButton) {
+                buyButton.disabled = true;
 
-            acceptCheckbox.addEventListener('change', function () {
-                buyButton.disabled = !this.checked;
-            });
-        }
+                acceptCheckbox.addEventListener('change', function () {
+                    buyButton.disabled = !this.checked;
+                });
+            }
+
             updateTotal();
         })();
 
+        // ===================== SAME-DAY WARNING =====================
         var visitDateInput = document.getElementById("visitDate");
         var sameDayWarning = document.getElementById("sameDayWarning");
 
@@ -348,9 +385,19 @@
 
         if (visitDateInput) {
             visitDateInput.addEventListener("change", checkVisitDate);
-            checkVisitDate(); // run on modal open
+            checkVisitDate();
         }
     </script>
-}
 
-<script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- ===================== AOS INIT ===================== -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 600,
+            once: true
+        });
+    </script>
+}

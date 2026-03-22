@@ -4,37 +4,48 @@
 @{
     ViewData["Title"] = "My Cart";
 }
-
-<h1 class="display-5 text-center mb-4">
-    <i class="fa-solid fa-cart-shopping me-2" style="color:#db4a2a"></i>
-    @ViewData["Title"]
-</h1>
+<div class="text-center mb-4">
+    <h1 class="display-5"
+        data-aos="fade-down"
+        data-aos-duration="800">
+        <i class="fa-solid fa-cart-shopping me-2" style="color:#db4a2a"></i>
+        @ViewData["Title"]
+    </h1>
+    <h5 class="text-secondary mb-4">View Your Tickets And Orders</h5>
+</div>
 
 <br />
 
-@if (TempData["Success"] != null)
+@if (TempData["Success"] != null || TempData["Error"] != null)
 {
-    <div class="alert alert-success shadow-sm rounded-3">
-        @TempData["Success"]
+    var isSuccess = TempData["Success"] != null;
+    var message = isSuccess ? TempData["Success"] : TempData["Error"];
+
+    <div id="ticketPopup"   
+         class="ticket-popup @(isSuccess ? "success" : "error")"
+         data-aos="fade-left"
+         data-aos-duration="600">
+
+        <div class="popup-content">
+            <span>@message</span>
+            <button class="popup-close" onclick="closePopup()">×</button>
+        </div>
+
     </div>
 }
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger shadow-sm rounded-3">
-        @TempData["Error"]
-    </div>
-}
-
+<!-- No Orders -->
 @if (Model?.Orders == null || !Model.Orders.Any())
 {
-    <div class="alert alert-info shadow-sm rounded-3">
+    <div class="alert alert-info shadow-sm rounded-3" data-aos="fade-up">
         You have no orders yet.
     </div>
 }
 else
-{
-    foreach (var order in Model.Orders.OrderByDescending(o => o.CreatedAt))
+{ 
+    bool firstOrder = true;
+
+    @foreach (var order in Model.Orders.OrderByDescending(o => o.CreatedAt))
     {
         var items = order.OrderItems ?? new List<TestProj.Models.OrderItemModel>();
         decimal orderTotal = items.Sum(i => i.PriceAtPurchase * i.Quantity);
@@ -48,101 +59,112 @@ else
             _ => "bg-light"
         };
 
-        <div class="card shadow-lg mb-4 rounded-4 cart-order-card">
+        <div class="card shadow-lg mb-4 rounded-4 cart-order-card"
+             data-aos="fade-up"
+             data-aos-duration="800">
 
             <!-- Card Header -->
-            <div class="card-header d-flex justify-content-between align-items-center text-white order-card-header">
+            <div class="card-header d-flex justify-content-between align-items-center text-white order-card-header"
+                 data-bs-toggle="collapse"
+                 data-bs-target="#order-@order.OrderId"
+                 aria-expanded="@(firstOrder ? "true" : "false")"
+                 aria-controls="order-@order.OrderId"
+                 style="cursor:pointer">
+
                 <span>
                     <i class="fa-solid fa-ticket fa-lg me-2"></i>
                     <strong>@order.OrderCode</strong>
                 </span>
-                <span class="badge @badgeClass fs-6">
-                    @order.Status
+
+                <span class="d-flex align-items-center">
+                    <span class="badge @badgeClass fs-6 me-2">@order.Status</span>
+                    <i class="fa-solid fa-chevron-down toggle-icon @(firstOrder ? "rotate" : "")"></i>
                 </span>
             </div>
 
             <!-- Card Body -->
-            <div class="card-body">
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        @{
-                            var museumText = order.Museum?.Name ?? "—";
-                            if (!string.IsNullOrEmpty(order.Museum?.City))
-                            {
-                                museumText += $" ({order.Museum.Country}, {order.Museum.City})";
+            <div class="collapse @(firstOrder ? "show" : "")" id="order-@order.OrderId">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            @{
+                                var museumText = order.Museum?.Name ?? "—";
+                                if (!string.IsNullOrEmpty(order.Museum?.City))
+                                {
+                                    museumText += $" ({order.Museum.Country}, {order.Museum.City})";
+                                }
                             }
-                        }
-                        <span class="d-block museum-info p-2">@museumText</span>
+                            <span class="d-block museum-info">@museumText</span>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <span class="d-block p-2">
+                                Visit Date: @order.VisitDate.ToString("yyyy-MM-dd")
+                            </span>
+                            <span class="d-block text-muted p-2">
+                                Ordered: @order.CreatedAt.ToString("yyyy-MM-dd")
+                            </span>
+                        </div>
                     </div>
-                    <div class="col-md-6 text-md-end">
-                        <span class="d-block p-2">
-                            Visit Date: @order.VisitDate.ToString("yyyy-MM-dd")
-                        </span>
-                        <span class="d-block text-muted p-2">
-                            Ordered: @order.CreatedAt.ToString("yyyy-MM-dd")
-                        </span>
-                    </div>
+
+                    <hr class="hr-dark" />
+
+                    @if (!items.Any())
+                    {
+                        <p class="text-muted">No tickets in this order.</p>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Ticket</th>
+                                        <th>Unit Price</th>
+                                        <th>Quantity</th>
+                                        <th class="text-end">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in items)
+                                    {
+                                        var ticketName = item.TicketType?.Name ?? "(ticket type removed)";
+                                        <tr>
+                                            <td>@ticketName</td>
+                                            <td>@item.PriceAtPurchase.ToString("C")</td>
+                                            <td>@item.Quantity</td>
+                                            <td class="text-end">@((item.PriceAtPurchase * item.Quantity).ToString("C"))</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
                 </div>
 
-                <hr class="hr-dark" />
+                <!-- Card Footer -->
+                <div class="card-footer d-flex justify-content-between align-items-center bg-light">
+                    <strong>Total: @orderTotal.ToString("C")</strong>
 
-                @if (!items.Any())
-                {
-                    <p class="text-muted">No tickets in this order.</p>
-                }
-                else
-                {
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Ticket</th>
-                                    <th>Unit Price</th>
-                                    <th>Quantity</th>
-                                    <th class="text-end">Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in items)
-                                {
-                                    var ticketName = item.TicketType?.Name ?? "(ticket type removed)";
-                                    <tr>
-                                        <td>@ticketName</td>
-                                        <td>@item.PriceAtPurchase.ToString("C")</td>
-                                        <td>@item.Quantity</td>
-                                        <td class="text-end">@((item.PriceAtPurchase * item.Quantity).ToString("C"))</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
+                    @if (order.Status == OrderStatus.New && order.VisitDate > DateTime.Today)
+                    {
+                        <form asp-controller="Client"
+                              asp-action="CancelOrder"
+                              method="post"
+                              class="m-0 cancel-form">
+
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="orderId" value="@order.OrderId" />
+
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Cancel Order
+                            </button>
+                        </form>
+                    }
+                </div>
             </div>
-
-            <!-- Card Footer -->
-            <div class="card-footer d-flex justify-content-between align-items-center bg-light">
-                <strong>Total: @orderTotal.ToString("C")</strong>
-
-                @if (order.Status == OrderStatus.New && order.VisitDate > DateTime.Today)
-                {
-                    <form asp-controller="Client"
-                          asp-action="CancelOrder"
-                          method="post"
-                          class="m-0 cancel-form">
-
-                        @Html.AntiForgeryToken()
-
-                        <input type="hidden" name="orderId" value="@order.OrderId" />
-
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            Cancel Order
-                        </button>
-                    </form>
-                }
-            </div>
-
         </div>
+
+        firstOrder = false;
     }
 }
 
@@ -158,21 +180,20 @@ else
     <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
 </ul>
 
+<script src="~/js/site.js" asp-append-version="true"></script>
+
 <style>
-    /* Card header gradient */
     .order-card-header {
         background: linear-gradient(90deg, #db4a2a, #ff6b61);
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
     }
 
-    /* Museum info style */
     .museum-info {
         font-weight: 500;
         color: #333;
     }
 
-    /* Horizontal rule style */
     .hr-dark {
         border-top: 2px solid #db4a2a;
         margin: 1rem 0;
@@ -182,32 +203,75 @@ else
         transition: transform 0.2s;
     }
 
-        /* Card hover effect */
         .cart-order-card:hover {
             transform: translateY(-3px);
             transition: transform 0.2s;
         }
 
-    /* Badge style */
     .badge {
         font-size: 0.9rem;
     }
+
+    .cart-order-card .order-card-header {
+        cursor: pointer;
+    }
+
+    .order-card-header {
+        background: linear-gradient(90deg, #db4a2a, #ff6b61);
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+        cursor: pointer;
+    }
+
+        .order-card-header:hover {
+            background: linear-gradient(90deg, #ff6b61, #db4a2a);
+        }
+
+    .toggle-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .rotate {
+        transform: rotate(180deg);
+    }
 </style>
 
-<script src="~/js/site.js" asp-append-version="true"></script>
 @section Scripts {
     <script>
+        function closePopup() {
+            var popup = document.getElementById("ticketPopup");
+            if (!popup) return;
+            popup.classList.add("popup-hide");
+            setTimeout(function () {
+                popup.remove();
+            }, 400);
+        }
+
         document.querySelectorAll('.cancel-form').forEach(function (form) {
             form.addEventListener('submit', function (e) {
                 var confirmed = confirm(
                     "Are you sure you want to cancel this order?\n\n" +
                     "• This action cannot be undone.\n" +
-                    "• Refunds (if applicable) follow the cancellation policy.\n\n" +
+                    "• Refunds follow the cancellation policy.\n\n" +
                     "Do you want to continue?"
                 );
                 if (!confirmed) e.preventDefault();
             });
         });
+
+                document.querySelectorAll('.order-card-header').forEach(header => {
+            header.addEventListener('click', function () {
+                const collapseEl = document.querySelector(this.dataset.bsTarget);
+                const icon = this.querySelector('.toggle-icon');
+
+                setTimeout(() => {
+                    if (collapseEl.classList.contains('show')) {
+                        icon.classList.add('rotate');
+                    } else {
+                        icon.classList.remove('rotate');
+                    }
+                }, 10); 
+            });
+        });
     </script>
 }
-

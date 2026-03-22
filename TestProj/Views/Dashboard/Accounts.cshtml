@@ -15,6 +15,24 @@
     int totalPages = ViewBag.TotalPages ?? 1;
 }
 
+<!-- ===================== POPUP ALERT ===================== -->
+@if (TempData["Success"] != null || TempData["Error"] != null)
+{
+    var isSuccess = TempData["Success"] != null;
+    var message = isSuccess ? TempData["Success"] : TempData["Error"];
+
+    <div id="ticketPopup"
+         class="ticket-popup @(isSuccess ? "success" : "error")"
+         data-aos="fade-left">
+
+        <div class="popup-content">
+            <span>@message</span>
+            <button class="popup-close" onclick="closePopup()">×</button>
+        </div>
+
+    </div>
+}
+
 <body class="page-catalogue">
 
     <div class="container mt-4">
@@ -24,6 +42,7 @@
                 <i class="fa-solid fa-users me-2" style="color:#db4a2a"></i>
                 Manage Accounts
             </h1>
+            <p class="text-secondary">See and edit information for all accounts</p>
         </div>
 
         <!-- Back -->
@@ -355,6 +374,6 @@
 
         });
 
+       
     </script>
-
 }

@@ -285,6 +285,7 @@ namespace TestProj.Controllers
             _context.Museums.Add(museum);
             await _context.SaveChangesAsync();
 
+            TempData["Success"] = "Museum created successfully!";
             return RedirectToAction(nameof(Dashboard), "Dashboard");
         }
 
@@ -330,9 +331,31 @@ namespace TestProj.Controllers
                 .FirstOrDefaultAsync(m => m.MuseumId == museum.MuseumId);
 
             if (existingMuseum == null)
-                return NotFound();
+            {
+                TempData["Error"] = "Museum not found.";
+                return RedirectToAction(nameof(Dashboard));
+            }
 
-            // Update basic fields
+            bool infoChanged = false;
+            bool imageChanged = false;
+            bool ticketsChanged = false;
+
+            // ----------------------
+            // UPDATE BASIC INFO
+            // ----------------------
+
+            if (existingMuseum.Name != museum.Name ||
+                existingMuseum.Country != museum.Country ||
+                existingMuseum.City != museum.City ||
+                existingMuseum.Address != museum.Address ||
+                existingMuseum.Description != museum.Description ||
+                existingMuseum.Type != museum.Type ||
+                existingMuseum.OpeningTime != museum.OpeningTime ||
+                existingMuseum.ClosingTime != museum.ClosingTime)
+            {
+                infoChanged = true;
+            }
+
             existingMuseum.Name = museum.Name;
             existingMuseum.Country = museum.Country;
             existingMuseum.City = museum.City;
@@ -360,10 +383,13 @@ namespace TestProj.Controllers
                     MuseumId = existingMuseum.MuseumId
                 }
             };
+
+                    imageChanged = true;
                 }
-                else
+                else if (existingMuseum.Images.First().ImageUrl != imageUrl)
                 {
                     existingMuseum.Images.First().ImageUrl = imageUrl;
+                    imageChanged = true;
                 }
             }
 
@@ -377,9 +403,9 @@ namespace TestProj.Controllers
 
             if (ticketKeys.Any())
             {
-                // Remove old tickets
-                _context.TicketTypes.RemoveRange(existingMuseum.TicketTypes);
+                ticketsChanged = true;
 
+                _context.TicketTypes.RemoveRange(existingMuseum.TicketTypes);
                 existingMuseum.TicketTypes = new List<TicketTypeModel>();
 
                 var indices = ticketKeys
@@ -416,13 +442,109 @@ namespace TestProj.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Dashboard));
+            // ----------------------
+            // POPUP MESSAGE
+            // ----------------------
+
+            if (infoChanged && imageChanged && ticketsChanged)
+                TempData["Success"] = "Museum info, image, and ticket types updated!";
+            else if (infoChanged)
+                TempData["Success"] = "Museum information updated successfully.";
+            else if (imageChanged)
+                TempData["Success"] = "Museum image updated.";
+            else if (ticketsChanged)
+                TempData["Success"] = "Ticket types updated.";
+            else
+                TempData["Info"] = "No changes were made.";
+
+            return RedirectToAction(nameof(Edit), new { id = museum.MuseumId });
         }
 
         [Authorize(Roles = Roles.Admin)]
-        public async Task<IActionResult> Analytics()
+        public async Task<IActionResult> Analytics(DateTime? startDate, DateTime? endDate)
         {
-            return View();
+            // Detect if user wants ALL TIME
+            bool isAllTime = !startDate.HasValue && !endDate.HasValue;
+
+            DateTime? start = null;
+            DateTime? end = null;
+
+            if (!isAllTime)
+            {
+                startDate ??= DateTime.Today.AddMonths(-1);
+                endDate ??= DateTime.Today;
+
+                start = startDate.Value.Date;
+                end = endDate.Value.Date.AddDays(1).AddTicks(-1);
+            }
+
+            ViewBag.StartDate = startDate?.ToString("yyyy-MM-dd");
+            ViewBag.EndDate = endDate?.ToString("yyyy-MM-dd");
+            ViewBag.IsAllTime = isAllTime;
+
+            // Base query
+            var query = _context.Orders
+                .Include(o => o.Museum)
+                .Include(o => o.OrderItems)
+                .AsQueryable();
+
+            // Apply filter ONLY if not all time
+            if (!isAllTime)
+            {
+                query = query.Where(o => o.VisitDate >= start && o.VisitDate <= end);
+            }
+
+            var orders = await query.ToListAsync();
+
+            // ================= STATS =================
+
+            var totalOrders = orders.Count;
+            var totalTickets = orders.Sum(o => o.OrderItems.Count);
+
+            var topMuseums = orders
+                .GroupBy(o => o.Museum)
+                .Select(g => new MuseumStats
+                {
+                    Museum = g.Key,
+                    TicketsSold = g.Sum(o => o.OrderItems.Count),
+                    OrdersCount = g.Count()
+                })
+                .OrderByDescending(x => x.TicketsSold)
+                .Take(10)
+                .ToList();
+
+            var cityStats = orders
+                .GroupBy(o => o.Museum.City)
+                .Select(g => new CityStats
+                {
+                    City = g.Key,
+                    TicketsSold = g.Sum(o => o.OrderItems.Count),
+                    OrdersCount = g.Count()
+                })
+                .OrderByDescending(x => x.TicketsSold)
+                .ToList();
+
+            var countryStats = orders
+                .GroupBy(o => o.Museum.Country)
+                .Select(g => new CountryStats
+                {
+                    Country = g.Key,
+                    TicketsSold = g.Sum(o => o.OrderItems.Count),
+                    OrdersCount = g.Count()
+                })
+                .OrderByDescending(x => x.TicketsSold)
+                .ToList();
+
+            var model = new AnalyticsViewModel
+            {
+                TotalOrders = totalOrders,
+                TotalTickets = totalTickets,
+                TopMuseums = topMuseums,
+                CityStats = cityStats,
+                CountryStats = countryStats
+            };
+
+            return View(model);
         }
 
         [Authorize(Roles = Roles.Admin)]
@@ -555,6 +677,23 @@ namespace TestProj.Controllers
             }
 
             await _context.SaveChangesAsync();
+
+            if (newRole == Roles.Worker && museumId != null)
+            {
+                TempData["Success"] = "Worker successfully assigned to museum.";
+            }
+            else if (newRole == Roles.Worker && museumId == null)
+            {
+                TempData["Success"] = "Worker role assigned but no museum selected.";
+            }
+            else if (newRole != Roles.Worker)
+            {
+                TempData["Success"] = "User role updated successfully.";
+            }
+            else
+            {
+                TempData["Success"] = "Account updated.";
+            }
 
             return RedirectToAction(nameof(Accounts), new { search, roleFilter, museumFilter, page });
         }

@@ -12,7 +12,7 @@
          data-bs-ride="carousel">
 
         <div class="carousel-title">
-            <h1>The Museum Central</h1>
+            <h1 data-aos="fade-down">The Museum Central</h1>
         </div>
 
         <div class="carousel-indicators">
@@ -54,18 +54,28 @@
     </div>
 
     @*Title*@
-    <div class="page-index-card-title shadow-lg text-center">
+    <div class="page-index-card-title shadow-lg text-center"
+         data-aos="fade-up"
+         data-aos-delay="100">
+
         <hr class="hr-light" />
         <h1 style="color: #e4e2dd;">ABOUT</h1>
         <hr class="hr-light" />
+
     </div>
 
     @*First Card*@
-    <div class="page-index-card-first shadow-lg">
+    <div class="page-index-card-first shadow-lg"
+         data-aos="fade-up"
+         data-aos-delay="150">
+
         <div class="container">
             <div class="row align-items-center">
 
-                <div class="col-md-6 text-md-start text-center">
+                <div class="col-md-6 text-md-start text-center"
+                     data-aos="fade-right"
+                     data-aos-delay="200">
+
                     <hr class="hr-dark" />
 
                     <p class="lead">
@@ -85,30 +95,46 @@
                     </p>
 
                     <hr class="hr-dark" />
+
                 </div>
 
-                <div class="col-md-6 text-center">
+                <div class="col-md-6 text-center"
+                     data-aos="fade-left"
+                     data-aos-delay="300">
+
                     <img src="https://images.unsplash.com/photo-1597822099378-543481ac84a2?w=900&auto=format&fit=crop&q=60"
                          class="img-fluid rounded shadow"
                          alt="Louvre Museum">
+
                 </div>
 
             </div>
         </div>
+
     </div>
 
     @*Second Card*@
-    <div class="page-index-card-second shadow-lg">
+    <div class="page-index-card-second shadow-lg"
+         data-aos="fade-up"
+         data-aos-delay="200">
+
         <div class="container">
             <div class="row align-items-center">
 
-                <div class="col-md-6 text-center">
+                <div class="col-md-6 text-center"
+                     data-aos="fade-right"
+                     data-aos-delay="250">
+
                     <img src="https://images.unsplash.com/photo-1699791913036-97135d153a1a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                          class="img-fluid rounded shadow"
                          alt="Museum Gallery">
+
                 </div>
 
-                <div class="col-md-6 text-md-start text-center">
+                <div class="col-md-6 text-md-start text-center"
+                     data-aos="fade-left"
+                     data-aos-delay="350">
+
                     <hr class="hr-light" />
 
                     <p class="lead">
@@ -125,16 +151,26 @@
                     <hr class="hr-light" />
 
                 </div>
+
             </div>
 
             <br />
-            <div class="text-center pb-4">
-                <a asp-controller="Home"
+
+            <div class="text-center pb-4"
+                 data-aos="zoom-in"
+                 data-aos-delay="400">
+
+                <a asp-controller="Museum"
                    asp-action="Catalogue"
                    class="btn btn-red px-4 py-2">
                     Explore Catalogue
                 </a>
+
             </div>
+
         </div>
+
     </div>
+
 </body>
+

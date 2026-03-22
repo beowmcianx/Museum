@@ -5,6 +5,42 @@
     var imageUrl = Model.Images?.FirstOrDefault()?.ImageUrl ?? "";
 }
 
+@if (TempData["Success"] != null || TempData["Error"] != null || TempData["Info"] != null)
+{
+    string message = TempData["Success"] as string
+        ?? TempData["Error"] as string
+        ?? TempData["Info"] as string;
+
+    string type =
+        TempData["Success"] != null ? "success" :
+        TempData["Error"] != null ? "error" : "info";
+
+    <div id="ticketPopup" class="ticket-popup @type">
+
+        <div class="popup-content">
+
+            @if (type == "success")
+            {
+                <i class="fa-solid fa-circle-check me-2"></i>
+            }
+            else if (type == "error")
+            {
+                <i class="fa-solid fa-circle-xmark me-2"></i>
+            }
+            else
+            {
+                <i class="fa-solid fa-circle-info me-2"></i>
+            }
+
+            <span>@message</span>
+
+            <button class="popup-close" onclick="closePopup()">×</button>
+
+        </div>
+
+    </div>
+}
+
 <body class="page-catalogue">
 
     <div class="container mt-5">

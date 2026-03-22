@@ -5,22 +5,32 @@
 }
 
 <div class="container py-5">
+
     <div class="row justify-content-center">
-        <div class="col-lg-6 col-xl-5">
+
+        <!-- MAIN CARD ANIMATION -->
+        <div class="col-lg-6 col-xl-5"
+             data-aos="fade-up"
+             data-aos-duration="800">
 
             <div class="card shadow-lg border-0 rounded-4">
 
-                <!-- Card Header -->
-                <div class="card-header bg-dark text-white rounded-top-4 py-3">
+                <!-- HEADER (fade down) -->
+                <div class="card-header bg-dark text-white rounded-top-4 py-3"
+                     data-aos="fade-down"
+                     data-aos-duration="600">
+
                     <h4 class="mb-0">
-                        <i class="fa-solid fa-user-plus fa-lg"
-                           style="color: #db4a2a; margin-right: 20px"></i>
+                        <i class="fa-solid fa-user-plus fa-lg" style="color: #db4a2a; margin-right: 20px"></i>
                         Create Account
                     </h4>
+
                 </div>
 
-                <!-- Card Body -->
-                <div class="card-body p-4">
+                <!-- BODY -->
+                <div class="card-body p-4"
+                     data-aos="fade-up"
+                     data-aos-duration="700">
 
                     <form id="registerForm"
                           asp-route-returnUrl="@Model.ReturnUrl"
@@ -32,92 +42,70 @@
 
                         <div asp-validation-summary="ModelOnly"
                              class="text-danger small mb-3"
-                             role="alert"></div>
-
-                        <!-- Email -->
+                             role="alert">
+                        </div>
+                        <!-- EMAIL -->
                         <div class="mb-4">
-                            <label asp-for="Input.Email"
-                                   class="form-label small text-muted"></label>
-                            <input asp-for="Input.Email"
-                                   class="form-control form-control-lg"
-                                   autocomplete="username" />
-                            <span asp-validation-for="Input.Email"
-                                  class="text-danger small"></span>
+                            <label asp-for="Input.Email" class="form-label small text-muted">
+                                <i class="fa-solid fa-envelope fa-sm" style="color: #db4a2b; margin-right: 6px;"></i>
+                                Email
+                            </label>
+                            <input asp-for="Input.Email" class="form-control form-control-lg" autocomplete="username" />
+                            <span asp-validation-for="Input.Email" class="text-danger small"></span>
                         </div>
 
-                        <!-- Full Name -->
+                        <!-- FULL NAME -->
                         <div class="mb-4">
-                            <label asp-for="Input.FullName"
-                                   class="form-label small text-muted"></label>
-                            <input asp-for="Input.FullName"
-                                   class="form-control form-control-lg"
-                                   autocomplete="name" />
-                            <span asp-validation-for="Input.FullName"
-                                  class="text-danger small"></span>
+                            <label asp-for="Input.FullName" class="form-label small text-muted">
+                                <i class="fa-solid fa-user fa-sm" style="color: #db4a2b; margin-right: 6px;"></i>
+                                Full Name
+                            </label>
+                            <input asp-for="Input.FullName" class="form-control form-control-lg" autocomplete="name" />
+                            <span asp-validation-for="Input.FullName" class="text-danger small"></span>
                         </div>
 
-                        <!-- Password -->
+                        <!-- PASSWORD -->
                         <div class="mb-4">
-                            <label asp-for="Input.Password"
-                                   class="form-label small text-muted"></label>
-
+                            <label asp-for="Input.Password" class="form-label small text-muted">
+                                <i class="fa-solid fa-lock fa-sm" style="color: #db4a2b; margin-right: 6px;"></i>
+                                Password
+                            </label>
                             <div class="input-group">
-                                <input asp-for="Input.Password"
-                                       type="password"
-                                       class="form-control form-control-lg"
-                                       autocomplete="new-password"
-                                       id="registerPassword" />
-
-                                <button type="button"
-                                        class="btn bg-white border"
-                                        id="toggleRegisterPassword">
-                                    <i class="fa-solid fa-eye fa-lg"
-                                       style="color:#db4a2a;"></i>
+                                <input asp-for="Input.Password" type="password" class="form-control form-control-lg" autocomplete="new-password" id="registerPassword" />
+                                <button type="button" class="btn bg-white border" id="toggleRegisterPassword">
+                                    <i class="fa-solid fa-eye fa-lg" style="color:#db4a2b;"></i>
                                 </button>
                             </div>
-
-                            <span asp-validation-for="Input.Password"
-                                  class="text-danger small"></span>
+                            <span asp-validation-for="Input.Password" class="text-danger small"></span>
                         </div>
-                        <!-- Confirm Password -->
+
+                        <!-- CONFIRM PASSWORD -->
                         <div class="mb-4">
-                            <label asp-for="Input.ConfirmPassword"
-                                   class="form-label small text-muted"></label>
-
+                            <label asp-for="Input.ConfirmPassword" class="form-label small text-muted">
+                                <i class="fa-solid fa-lock fa-sm" style="color: #db4a2b; margin-right: 6px;"></i>
+                                Confirm Password
+                            </label>
                             <div class="input-group">
-                                <input asp-for="Input.ConfirmPassword"
-                                       type="password"
-                                       class="form-control form-control-lg"
-                                       autocomplete="new-password"
-                                       id="confirmPassword" />
-
-                                <button type="button"
-                                        class="btn bg-white border"
-                                        id="toggleConfirmPassword">
-                                    <i class="fa-solid fa-eye fa-lg"
-                                       style="color:#db4a2a;"></i>
+                                <input asp-for="Input.ConfirmPassword" type="password" class="form-control form-control-lg" autocomplete="new-password" id="confirmPassword" />
+                                <button type="button" class="btn bg-white border" id="toggleConfirmPassword">
+                                    <i class="fa-solid fa-eye fa-lg" style="color:#db4a2b;"></i>
                                 </button>
                             </div>
-
-                            <span asp-validation-for="Input.ConfirmPassword"
-                                  class="text-danger small"></span>
+                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
                         </div>
 
-                        <!-- Register Button -->
+                        <!-- BUTTON -->
                         <div class="d-grid mb-3">
-                            <button id="registerSubmit"
-                                    type="submit"
-                                    class="btn btn-red btn-lg">
+                            <button id="registerSubmit" type="submit" class="btn btn-red btn-lg">
                                 Register
                             </button>
                         </div>
 
                         <hr class="my-4" />
 
+                        <!-- LOGIN LINK -->
                         <div class="text-center small">
-                            <a asp-page="./Login"
-                               asp-route-returnUrl="@Model.ReturnUrl"
-                               class="text-decoration-none">
+                            <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="text-decoration-none">
                                 Already have an account? Log in
                             </a>
                         </div>
@@ -128,7 +116,9 @@
             </div>
 
         </div>
+
     </div>
+
 </div>
 
 <ul class='circles'>
@@ -156,7 +146,6 @@
             toggleButton.addEventListener("click", function () {
                 const type = passwordInput.type === "password" ? "text" : "password";
                 passwordInput.type = type;
-
                 icon.classList.toggle("fa-eye");
                 icon.classList.toggle("fa-eye-slash");
             });

@@ -1,40 +1,36 @@
 ﻿@model TestProj.Models.MuseumModel
 
 @{
-    ViewData["Title"] = $"{Model.Name}";
+    ViewData["Title"] = $"My Museum - {Model.Name}";
 }
 
-<!-- ===================== POPUP ALERT ===================== -->
 @if (TempData["Success"] != null || TempData["Error"] != null)
 {
     var isSuccess = TempData["Success"] != null;
     var message = isSuccess ? TempData["Success"] : TempData["Error"];
 
-    <div id="ticketPopup"
-         class="ticket-popup @(isSuccess ? "success" : "error")"
-         data-aos="fade-left">
-
+    <div id="ticketPopup" class="ticket-popup @(isSuccess ? "success" : "error")">
         <div class="popup-content">
             <span>@message</span>
             <button class="popup-close" onclick="closePopup()">×</button>
         </div>
-
     </div>
 }
 
-<div class="container mt-4">
-
+<div class="container mt-5">
     <div class="text-center mb-4">
-        <h1 class="display-4">@ViewData["Title"]</h1>
-        <h5 class="text-secondary text-muted">View & manage your museum's information</h5>
+        <h1 class="display-5">
+            <i class="fa-solid fa-landmark me-2" style="color:#db4a2a"></i>
+            @Model.Name
+        </h1>
+        <span class="text-secondary">View & manage your museum's information</span>
     </div>
 
-    <div class="row g-3 justify-content-center mb-5">
+    <hr class="hr-dark">
 
+    <div class="row g-3 justify-content-center">
         <div class="col-md-4">
-            <a class="btn btn-red page-dashboard-button w-100 text-center p-4 shadow-sm rounded-4"
-               asp-area=""
-               asp-controller="Worker"
+            <a class="btn btn-red w-100 py-4 shadow-sm rounded-4"
                asp-action="EditMuseum"
                asp-route-id="@Model.MuseumId">
                 <i class="fas fa-landmark fa-2x mb-2"></i><br />
@@ -43,21 +39,16 @@
         </div>
 
         <div class="col-md-4">
-            <a class="btn btn-red page-dashboard-button w-100 text-center p-4 shadow-sm rounded-4"
-               asp-area=""
-               asp-controller="Worker"
-               asp-action="EditMuseum"
+            <a class="btn btn-red w-100 py-4 shadow-sm rounded-4"
+               asp-action="MuseumOrders"
                asp-route-id="@Model.MuseumId">
                 <i class="fas fa-ticket fa-2x mb-2"></i><br />
-                Order Info
+                Orders
             </a>
         </div>
-
     </div>
-
 </div>
 
-<!-- ===================== STYLIZED BACKGROUND CIRCLES ===================== -->
 <ul class='circles'>
     <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
     <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
@@ -70,6 +61,8 @@
     <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
 </ul>
 
+<script src="~/js/site.js" asp-append-version="true"></script>
+
 @section Scripts {
     <script>
         function closePopup() {
@@ -77,13 +70,11 @@
             if (popup) popup.style.display = 'none';
         }
 
-        // Optional: auto-hide after 3 seconds
         document.addEventListener('DOMContentLoaded', function () {
             var popup = document.getElementById('ticketPopup');
             if (popup) {
-                setTimeout(function () {
-                    popup.style.display = 'none';
-                }, 3000);
+                setTimeout(function () { popup.style.display = 'none'; }, 3000);
             }
         });
     </script>
+}

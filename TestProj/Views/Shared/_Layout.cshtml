@@ -19,7 +19,11 @@
     <link rel="stylesheet" href="~/css/header.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/page-create.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TestProj.styles.css" asp-append-version="true" />
+
+    @*Awesome Fonts (for icons)*@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" asp-append-version="true" />
+    @*Aeon Animations (for animations)*@
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -65,24 +69,14 @@
 
                         @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Worker"))
                         {
-                            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                            var employee = await _context.MuseumEmployees
-                            .Include(e => e.Museum)
-                            .FirstOrDefaultAsync(e => e.UserId == int.Parse(userId));
-                            var museumId = employee?.MuseumId;
-
-                            if (museumId != null)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["Action"]?.ToString() == "Museum" ? "active" : "")"
-                                       asp-area=""
-                                       asp-controller="Worker"
-                                       asp-action="Museum"
-                                       asp-route-id="@museumId">
-                                        My Museum
-                                    </a>
-                                </li>
-                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark @(ViewContext.RouteData.Values["Action"]?.ToString() == "MyMuseum" ? "active" : "")"
+                                   asp-area=""
+                                   asp-controller="Worker"
+                                   asp-action="MyMuseum">
+                                    My Museum
+                                </a>
+                            </li>
                         }
 
                         @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
@@ -146,6 +140,18 @@
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @*Aeon Animations (for animations)*@
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

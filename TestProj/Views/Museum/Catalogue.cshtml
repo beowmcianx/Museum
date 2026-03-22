@@ -8,11 +8,12 @@
     <div class="text-center">
 
         <div class="text-center mb-4">
+
             <h1 class="display-5">
                 <i class="fa-solid fa-landmark me-2" style="color:#db4a2a"></i>
                 Discover The Right Museum
             </h1>
-            <h5 class="text-secondary mb-4">filter based on your interests</h5>
+            <h5 class="text-secondary mb-4">Filter based on your interests</h5>
         </div>
 
         <br />
@@ -99,54 +100,93 @@
             </form>
         </div>
 
+        <br />
+
         @*Museum Cards with improved styling only*@
         <div class="row g-4">
-            @foreach (var museum in Model)
+
+            @{
+                var delay = 0;
+            }
+
+            @if (Model == null || !Model.Any())
             {
-                var firstImageUrl = museum.Images?.FirstOrDefault()?.ImageUrl;
-                <div class="col-sm-12 col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm border-0 rounded-4 museum-card hover-scale">
+                <div class="col-12">
+                    <div class="card shadow-lg rounded-5 p-5 text-center">
 
-                        <!-- Card Header -->
-                        <div class="card-header bg-dark text-white rounded-top-4 py-3">
-                            <h5 class="mb-0">
-                                @museum.Name
-                            </h5>
-                        </div>
+                        <i class="fa-solid fa-magnifying-glass fa-2x mb-3 text-secondary"></i>
 
-                        <!-- Card Body -->
-                        <div class="card-body p-3">
-
-                            <img src="@(firstImageUrl ?? "/images/Image-not-found.png")"
-                                 alt="@museum.Name"
-                                 class="img-fluid rounded-3 mb-3 w-100 shadow-sm"
-                                 style="height: 200px; object-fit: cover;" />
-
-                            <p class="mb-1 text-muted fs-6">
-                                <i class="fa-solid fa-location-dot me-2 text-danger"></i>
-                                @museum.Country, @museum.City
+                        @if (!string.IsNullOrEmpty(ViewBag.SearchString)
+                                            || !string.IsNullOrEmpty(ViewBag.CountryFilter)
+                                            || !string.IsNullOrEmpty(ViewBag.CityFilter)
+                                            || !string.IsNullOrEmpty(ViewBag.TypeFilter))
+                        {
+                            <p class="text-muted mb-0">
+                                No museums found matching your filters.
                             </p>
-                            <p class="mb-2 text-muted fs-6">@museum.Address</p>
-
-                            <p class="mb-3 text-muted fs-6">
-                                <i class="fa-solid fa-clock me-2 text-danger"></i>
-                                @(DateTime.Today.Add(museum.OpeningTime).ToString("h:mm tt").ToLowerInvariant())
-                                -
-                                @(DateTime.Today.Add(museum.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">
+                                No museums available yet.
                             </p>
+                        }
 
-                            <div class="d-grid">
-                                <a class="btn btn-red shadow-sm"
-                                   asp-controller="Museum"
-                                   asp-action="Details"
-                                   asp-route-id="@museum.MuseumId">
-                                    View Details
-                                </a>
-                            </div>
-
-                        </div>
                     </div>
                 </div>
+            }
+            else
+            {
+                @foreach (var museum in Model)
+                {
+                    var firstImageUrl = museum.Images?.FirstOrDefault()?.ImageUrl;
+
+                    <div class="col-sm-12 col-md-6 col-lg-4"
+                         data-aos="zoom-in"
+                         data-aos-delay="@delay">
+
+                        <div class="card h-100 shadow-sm border-0 rounded-4 museum-card hover-scale">
+
+                            <div class="card-header bg-dark text-white rounded-top-4 py-3">
+                                <h5 class="mb-0">@museum.Name</h5>
+                            </div>
+
+                            <div class="card-body p-3">
+
+                                <img src="@(firstImageUrl ?? "/images/Image-not-found.png")"
+                                     alt="@museum.Name"
+                                     class="img-fluid rounded-3 mb-3 w-100 shadow-sm"
+                                     style="height: 200px; object-fit: cover;" />
+
+                                <p class="mb-1 text-muted fs-6">
+                                    <i class="fa-solid fa-location-dot me-2 text-danger"></i>
+                                    @museum.Country, @museum.City
+                                </p>
+
+                                <p class="mb-2 text-muted fs-6">@museum.Address</p>
+
+                                <p class="mb-3 text-muted fs-6">
+                                    <i class="fa-solid fa-clock me-2 text-danger"></i>
+                                    @(DateTime.Today.Add(museum.OpeningTime).ToString("h:mm tt").ToLowerInvariant())
+                                    -
+                                    @(DateTime.Today.Add(museum.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
+                                </p>
+
+                                <div class="d-grid">
+                                    <a class="btn btn-red shadow-sm"
+                                       asp-controller="Museum"
+                                       asp-action="Details"
+                                       asp-route-id="@museum.MuseumId">
+                                        View Details
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    delay += 50;
+                }
             }
         </div>
 
@@ -224,3 +264,10 @@
 </body>
 
 <script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+    document.querySelector('select[name="countryFilter"]')
+        .addEventListener('change', function () {
+            this.form.submit();
+        });
+</script>

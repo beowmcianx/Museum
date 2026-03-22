@@ -40,21 +40,27 @@ namespace TestProj.Controllers
             ViewBag.TypeFilter = typeFilter ?? string.Empty;
 
             // Provide lists for the filter dropdowns (distinct non-empty values)
-            ViewBag.Countries = await _context.Museums
-                .AsNoTracking()
-                .Where(m => !string.IsNullOrEmpty(m.Country))
-                .Select(m => m.Country!)
-                .Distinct()
-                .OrderBy(c => c)
-                .ToListAsync();
-
-            ViewBag.Cities = await _context.Museums
-                .AsNoTracking()
-                .Where(m => !string.IsNullOrEmpty(m.City))
-                .Select(m => m.City!)
-                .Distinct()
-                .OrderBy(c => c)
-                .ToListAsync();
+            // Cities (DEPENDENT on selected country)
+            if (!string.IsNullOrWhiteSpace(countryFilter))
+            {
+                ViewBag.Cities = await _context.Museums
+                    .AsNoTracking()
+                    .Where(m => m.Country == countryFilter && !string.IsNullOrEmpty(m.City))
+                    .Select(m => m.City!)
+                    .Distinct()
+                    .OrderBy(c => c)
+                    .ToListAsync();
+            }
+            else
+            {
+                ViewBag.Cities = await _context.Museums
+                    .AsNoTracking()
+                    .Where(m => !string.IsNullOrEmpty(m.City))
+                    .Select(m => m.City!)
+                    .Distinct()
+                    .OrderBy(c => c)
+                    .ToListAsync();
+            }
 
             ViewBag.Countries = await _context.Museums
                .AsNoTracking()
