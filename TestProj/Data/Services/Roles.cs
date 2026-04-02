@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace TestProj.Models
+namespace TestProj.Data.Services
 {
     public static class Roles
     {

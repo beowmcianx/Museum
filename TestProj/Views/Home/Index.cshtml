@@ -1,176 +1,146 @@
-﻿@model TestProj.Models.MuseumModel
-
-@{
+﻿@{
     ViewData["Title"] = "The Museum Central";
 }
 
-<body class="page-index">
-
-    @*Carousel*@
-    <div id="museumCarousel"
-         class="carousel slide hero-carousel"
-         data-bs-ride="carousel">
-
-        <div class="carousel-title">
-            <h1 data-aos="fade-down">The Museum Central</h1>
-        </div>
-
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#museumCarousel" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#museumCarousel" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#museumCarousel" data-bs-slide-to="2"></button>
-        </div>
-
-        <div class="carousel-inner">
-
-            <div class="carousel-item active">
-                <img src="https://images.unsplash.com/photo-1564399580075-5dfe19c205f3"
-                     class="d-block w-100"
-                     alt="Museum Interior">
+<div class="home-page">
+    <!-- Hero Carousel Section -->
+    <div class="home-hero-section">
+        <div id="museumCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
+            <div class="carousel-title" data-aos="fade-down">
+                <div class="title-icon-wrapper">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <h1>The Museum Central</h1>
+                <p class="title-subtitle">Discover the world's cultural treasures</p>
             </div>
 
-            <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1491156855053-9cdff72c7f85?q=80&w=1228&auto=format&fit=crop"
-                     class="d-block w-100"
-                     alt="Art Gallery">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#museumCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#museumCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#museumCarousel" data-bs-slide-to="2"></button>
             </div>
 
-            <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1572953109213-3be62398eb95?q=80&w=1170&auto=format&fit=crop"
-                     class="d-block w-100"
-                     alt="Museum Hall">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://images.unsplash.com/photo-1564399580075-5dfe19c205f3" class="d-block w-100" alt="Museum Interior">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1491156855053-9cdff72c7f85?q=80&w=1228&auto=format&fit=crop" class="d-block w-100" alt="Art Gallery">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1572953109213-3be62398eb95?q=80&w=1170&auto=format&fit=crop" class="d-block w-100" alt="Museum Hall">
+                </div>
             </div>
 
+            <button class="carousel-control-prev" type="button" data-bs-target="#museumCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#museumCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
         </div>
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#museumCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-
-        <button class="carousel-control-next" type="button" data-bs-target="#museumCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
-
     </div>
 
-    @*Title*@
-    <div class="page-index-card-title shadow-lg text-center"
-         data-aos="fade-up"
-         data-aos-delay="100">
-
-        <hr class="hr-light" />
-        <h1 style="color: #e4e2dd;">ABOUT</h1>
-        <hr class="hr-light" />
-
+    <!-- About Section Title -->
+    <div class="about-title-section" data-aos="fade-up" data-aos-delay="100">
+        <div class="container">
+            <div class="title-decoration">
+                <div class="line-left"></div>
+                <div class="title-content">
+                    <i class="fas fa-info-circle"></i>
+                    <h2>ABOUT</h2>
+                </div>
+                <div class="line-right"></div>
+            </div>
+        </div>
     </div>
 
-    @*First Card*@
-    <div class="page-index-card-first shadow-lg"
-         data-aos="fade-up"
-         data-aos-delay="150">
-
+    <!-- First Content Card -->
+    <div class="content-card content-card-light" data-aos="fade-up" data-aos-delay="150">
         <div class="container">
             <div class="row align-items-center">
-
-                <div class="col-md-6 text-md-start text-center"
-                     data-aos="fade-right"
-                     data-aos-delay="200">
-
-                    <hr class="hr-dark" />
-
-                    <p class="lead">
-                        Museum Central is your complete guide to discovering museums, galleries, and cultural spaces
-                        around the world. Our platform brings together detailed information about exhibitions,
-                        opening hours, ticket prices, locations, and visitor services — all in one easy-to-use place.
-                    </p>
-
-                    <p>
-                        Whether you're a passionate art lover, a history enthusiast, a student working on a research
-                        project, or a family planning a meaningful day out, Museum Central helps you explore with
-                        confidence.
-                    </p>
-
-                    <p>
-                        Start your journey today and experience the world of museums — all from one central hub.
-                    </p>
-
-                    <hr class="hr-dark" />
-
+                <div class="col-lg-6 text-content" data-aos="fade-right" data-aos-delay="200">
+                    <div class="content-inner">
+                        <div class="content-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <p class="lead-text">
+                            Museum Central is your complete guide to discovering museums, galleries, and cultural spaces
+                            around the world. Our platform brings together detailed information about exhibitions,
+                            opening hours, ticket prices, locations, and visitor services — all in one easy-to-use place.
+                        </p>
+                        <p>
+                            Whether you're a passionate art lover, a history enthusiast, a student working on a research
+                            project, or a family planning a meaningful day out, Museum Central helps you explore with
+                            confidence.
+                        </p>
+                        <p class="highlight-text">
+                            Start your journey today and experience the world of museums — all from one central hub.
+                        </p>
+                    </div>
                 </div>
-
-                <div class="col-md-6 text-center"
-                     data-aos="fade-left"
-                     data-aos-delay="300">
-
-                    <img src="https://images.unsplash.com/photo-1597822099378-543481ac84a2?w=900&auto=format&fit=crop&q=60"
-                         class="img-fluid rounded shadow"
-                         alt="Louvre Museum">
-
+                <div class="col-lg-6 image-content" data-aos="fade-left" data-aos-delay="300">
+                    <div class="image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1597822099378-543481ac84a2?w=900&auto=format&fit=crop&q=60"
+                             alt="Louvre Museum">
+                        <div class="image-caption">
+                            <i class="fas fa-camera"></i> Louvre Museum, Paris
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
-
     </div>
 
-    @*Second Card*@
-    <div class="page-index-card-second shadow-lg"
-         data-aos="fade-up"
-         data-aos-delay="200">
-
+    <!-- Second Content Card -->
+    <div class="content-card content-card-dark" data-aos="fade-up" data-aos-delay="200">
         <div class="container">
             <div class="row align-items-center">
-
-                <div class="col-md-6 text-center"
-                     data-aos="fade-right"
-                     data-aos-delay="250">
-
-                    <img src="https://images.unsplash.com/photo-1699791913036-97135d153a1a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                         class="img-fluid rounded shadow"
-                         alt="Museum Gallery">
-
+                <div class="col-lg-6 image-content order-lg-1 order-2" data-aos="fade-right" data-aos-delay="250">
+                    <div class="image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1699791913036-97135d153a1a?q=80&w=1170&auto=format&fit=crop"
+                             alt="Museum Gallery">
+                        <div class="image-caption">
+                            <i class="fas fa-camera"></i> Modern Art Gallery
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col-md-6 text-md-start text-center"
-                     data-aos="fade-left"
-                     data-aos-delay="350">
-
-                    <hr class="hr-light" />
-
-                    <p class="lead">
-                        From contemporary art spaces to historic institutions, discover detailed
-                        insights about current exhibitions, permanent collections, and upcoming events.
-                        Plan your visits with ease, compare destinations, and create your own cultural
-                        journey — whether you're traveling abroad or exploring your local city.
-                    </p>
-
-                    <p>
-                        Let Museum Central be your starting point for unforgettable cultural experiences.
-                    </p>
-
-                    <hr class="hr-light" />
-
+                <div class="col-lg-6 text-content order-lg-2 order-1" data-aos="fade-left" data-aos-delay="250">
+                    <div class="content-inner">
+                        <div class="content-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <p class="lead-text">
+                            From contemporary art spaces to historic institutions, discover detailed
+                            insights about current exhibitions, permanent collections, and upcoming events.
+                            Plan your visits with ease, compare destinations, and create your own cultural
+                            journey — whether you're traveling abroad or exploring your local city.
+                        </p>
+                        <p class="highlight-text">
+                            Let Museum Central be your starting point for unforgettable cultural experiences.
+                        </p>
+                        <div class="cta-button">
+                            <a asp-controller="Museum" asp-action="Catalogue" class="btn-explore">
+                                <span>Explore Catalogue</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-
             </div>
-
-            <br />
-
-            <div class="text-center pb-4"
-                 data-aos="zoom-in"
-                 data-aos-delay="400">
-
-                <a asp-controller="Museum"
-                   asp-action="Catalogue"
-                   class="btn btn-red px-4 py-2">
-                    Explore Catalogue
-                </a>
-
-            </div>
-
         </div>
-
     </div>
 
-</body>
-
+    <!-- Decorative Circles -->
+    <ul class="circles">
+        <li><i class="fa-solid fa-landmark"></i></li>
+        <li><i class="fa-solid fa-building-columns"></i></li>
+        <li><i class="fa-solid fa-monument"></i></li>
+        <li><i class="fa-solid fa-gem"></i></li>
+        <li><i class="fa-solid fa-scroll"></i></li>
+        <li><i class="fa-solid fa-paint-roller"></i></li>
+        <li><i class="fa-solid fa-palette"></i></li>
+        <li><i class="fa-solid fa-book"></i></li>
+        <li><i class="fa-solid fa-masks-theater"></i></li>
+    </ul>
+</div>

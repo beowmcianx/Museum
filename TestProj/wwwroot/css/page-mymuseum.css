@@ -1,0 +1,527 @@
+/* My Museum Page Styles */
+
+/* Page Container */
+.my-museum-page {
+    min-height: 100vh;
+    background-color: #e4e2dd;
+    position: relative;
+    margin-top: -50px;
+    border-radius: 40px;
+}
+
+/* Hero Section */
+.museum-hero-section {
+    position: relative;
+    background: linear-gradient(135deg, #4a3e26 0%, #5c4e32 100%);
+    border-radius: 0 0 60px 60px;
+    overflow: hidden;
+    margin-bottom: 60px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(219, 74, 43, 0.1), transparent 70%);
+    pointer-events: none;
+}
+
+.hero-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.hero-container {
+    position: relative;
+    padding: 60px 20px 80px;
+    text-align: center;
+    z-index: 2;
+}
+
+/* Welcome Card */
+.welcome-card {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.welcome-greeting {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 100px;
+    padding: 10px 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+    .welcome-greeting i {
+        font-size: 18px;
+        color: #db4a2b;
+    }
+
+    .welcome-greeting span {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .welcome-greeting strong {
+        color: white;
+        font-weight: 600;
+    }
+
+/* Museum Header */
+.museum-header {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.museum-icon {
+    width: 90px;
+    height: 90px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+    .museum-icon i {
+        font-size: 45px;
+        color: white;
+    }
+
+.museum-title {
+    font-size: 52px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: -0.02em;
+    font-family: Alfran, Rostov, sans-serif;
+}
+
+.museum-badges {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.badge-custom {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    font-size: 14px;
+    color: white;
+    font-weight: 500;
+}
+
+    .badge-custom i {
+        font-size: 12px;
+        color: #db4a2b;
+    }
+
+.museum-subtitle {
+    max-width: 600px;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+    line-height: 1.6;
+    font-family: Aileron, Helvetica, sans-serif;
+}
+
+/* Dashboard Section */
+.dashboard-section {
+    padding: 20px 0 80px;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+    .section-header h2 {
+        font-size: 36px;
+        font-weight: 700;
+        color: #4a3e26;
+        margin-bottom: 12px;
+        font-family: Alfran, Rostov, sans-serif;
+    }
+
+    .section-header p {
+        font-size: 16px;
+        color: #6c757d;
+        font-family: Aileron, Helvetica, sans-serif;
+    }
+
+/* Actions Wrapper */
+.actions-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Action Cards */
+.action-card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    text-decoration: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+    .action-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #db4a2b, #f08c5c);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+        transform-origin: left;
+    }
+
+    .action-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        text-decoration: none;
+    }
+
+        .action-card:hover::before {
+            transform: scaleX(1);
+        }
+
+/* Card Icon */
+.card-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.action-card:hover .card-icon {
+    transform: scale(1.05);
+}
+
+.museum-icon-bg {
+    background: linear-gradient(135deg, rgba(219, 74, 43, 0.1), rgba(219, 74, 43, 0.05));
+    color: #db4a2b;
+}
+
+.orders-icon-bg {
+    background: linear-gradient(135deg, rgba(219, 74, 43, 0.1), rgba(219, 74, 43, 0.05));
+    color: #db4a2b;
+}
+
+/* Card Content */
+.card-content {
+    flex: 1;
+}
+
+    .card-content h3 {
+        font-size: 22px;
+        font-weight: 700;
+        margin: 0 0 12px 0;
+        color: #4a3e26;
+        font-family: Alfran, Rostov, sans-serif;
+        transition: color 0.2s ease;
+    }
+
+.action-card:hover .card-content h3 {
+    color: #db4a2b;
+}
+
+.card-content p {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+    font-family: Aileron, Helvetica, sans-serif;
+}
+
+.card-footer {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #db4a2b;
+    transition: all 0.3s ease;
+}
+
+    .card-footer span {
+        font-family: Aileron, Helvetica, sans-serif;
+    }
+
+    .card-footer i {
+        font-size: 12px;
+        transition: transform 0.3s ease;
+    }
+
+.action-card:hover .card-footer i {
+    transform: translateX(5px);
+}
+
+/* Stats Section (Hidden by default, ready for future use) */
+.stats-section {
+    padding: 40px 0 80px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card i {
+        font-size: 40px;
+        color: #db4a2b;
+        margin-bottom: 15px;
+    }
+
+    .stat-card h3 {
+        font-size: 32px;
+        font-weight: 800;
+        color: #4a3e26;
+        margin-bottom: 8px;
+        font-family: Alfran, Rostov, sans-serif;
+    }
+
+    .stat-card p {
+        font-size: 14px;
+        color: #6c757d;
+        margin: 0;
+        font-family: Aileron, Helvetica, sans-serif;
+    }
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .museum-title {
+        font-size: 32px;
+    }
+
+    .museum-badges {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .badge-custom {
+        width: fit-content;
+    }
+
+    .museum-subtitle {
+        font-size: 14px;
+        padding: 0 20px;
+    }
+
+    .hero-container {
+        padding: 40px 20px 60px;
+    }
+
+    .welcome-greeting {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+
+        .welcome-greeting i {
+            font-size: 16px;
+        }
+
+    .section-header h2 {
+        font-size: 28px;
+    }
+
+    .section-header p {
+        font-size: 14px;
+        padding: 0 20px;
+    }
+
+    .actions-wrapper {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 0 20px;
+    }
+
+    .action-card {
+        padding: 24px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .card-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 36px;
+    }
+
+    .card-content h3 {
+        font-size: 20px;
+    }
+
+    .card-content p {
+        font-size: 13px;
+    }
+
+    .card-footer {
+        justify-content: center;
+    }
+
+    .museum-hero-section {
+        border-radius: 0 0 30px 30px;
+    }
+}
+
+/* Tablet Optimization */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .actions-wrapper {
+        gap: 24px;
+        padding: 0 20px;
+    }
+
+    .museum-title {
+        font-size: 42px;
+    }
+
+    .section-header h2 {
+        font-size: 32px;
+    }
+}
+
+/* Dark Mode Support (if needed) */
+@media (prefers-color-scheme: dark) {
+    .my-museum-page {
+        background-color: #2d2d2d;
+    }
+
+    .action-card,
+    .stat-card {
+        background: #3a3a3a;
+    }
+
+        .card-content h3,
+        .stat-card h3,
+        .section-header h2 {
+            color: #e4e2dd;
+        }
+
+        .card-content p,
+        .stat-card p,
+        .section-header p {
+            color: #b0b0b0;
+        }
+}
+
+/* Fix for centering Museum Management section */
+.dashboard-section {
+    padding: 20px 0 80px;
+    width: 100%;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px;
+}
+
+    .section-header h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        font-family: Alfran, Rostov, sans-serif;
+        text-align: center;
+    }
+
+    .section-header p {
+        font-size: 16px;
+        font-family: Aileron, Helvetica, sans-serif;
+        text-align: center;
+    }
+
+/* Ensure the container is properly centered */
+.dashboard-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* If you're not using a container div, add one or fix the actions wrapper */
+.actions-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}

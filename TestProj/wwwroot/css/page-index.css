@@ -1,0 +1,609 @@
+/* Home Page Styles */
+
+/* Page Container */
+.home-page {
+    min-height: 100vh;
+    background-color: #e4e2dd;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Hero Section */
+.home-hero-section {
+    position: relative;
+    height: 100vh;
+    min-height: 400px;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 0;
+    border-radius: 20px;
+}
+
+/* Hero Carousel */
+.hero-carousel {
+    height: 100%;
+    width: 100%;
+}
+
+    .hero-carousel .carousel-inner {
+        height: 100%;
+        width: 100%;
+    }
+
+    .hero-carousel .carousel-item {
+        height: 100%;
+        width: 100%;
+    }
+
+        .hero-carousel .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+.carousel-title {
+    position: absolute;
+    top: 30%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 15;
+    width: 90%;
+    max-width: 800px;
+    padding: 30px 40px;
+    pointer-events: none;
+    background: rgba(74, 62, 38, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(74, 62, 38, 0.7);
+}
+
+.title-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+    .title-icon-wrapper i {
+        font-size: 40px;
+        color: #db4a2b;
+    }
+
+.carousel-title h1 {
+    font-size: 64px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    text-shadow: 1px 12px 200px rgba(0, 0, 0, 1);
+    font-family: Alfran, Rostov, sans-serif;
+    letter-spacing: 2px;
+    color: #db4a2b; 
+    line-height: 1.2;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.title-subtitle {
+    font-size: 20px;
+    opacity: 0.95;
+    font-family: Aileron, Helvetica, sans-serif;
+    color: white;
+    word-wrap: break-word;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+    z-index: 15;
+    bottom: 30px;
+}
+
+    .carousel-indicators button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin: 0 6px;
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+        .carousel-indicators button.active {
+            background-color: #db4a2b;
+        }
+
+/* Carousel Controls */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 15;
+}
+
+.home-hero-section:hover .carousel-control-prev,
+.home-hero-section:hover .carousel-control-next {
+    opacity: 1;
+}
+
+.carousel-control-prev {
+    left: 30px;
+}
+
+.carousel-control-next {
+    right: 30px;
+}
+
+/* About Title Section */
+.about-title-section {
+    padding: 60px 0 40px;
+    background-color: #e4e2dd;
+    position: relative;
+    z-index: 2;
+}
+
+.title-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.line-left,
+.line-right {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #4a3e26, transparent);
+    max-width: 150px;
+}
+
+.title-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .title-content i {
+        font-size: 32px;
+        color: #db4a2b;
+    }
+
+    .title-content h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin: 0;
+        color: #4a3e26;
+        font-family: Alfran, Rostov, sans-serif;
+        letter-spacing: 2px;
+    }
+
+/* Content Cards */
+.content-card {
+    padding: 80px 0;
+    position: relative;
+    z-index: 2;
+    border-radius: 20px;
+}
+
+.content-card-light {
+    background-color: #e4e2dd;
+}
+
+.content-card-dark {
+    background: linear-gradient(135deg, #4a3e26 0%, #5c4e32 100%);
+    color: white;
+}
+
+    .content-card-dark .text-content p {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .content-card-dark .highlight-text {
+        color: #db4a2b;
+    }
+
+/* Text Content */
+.text-content {
+    padding: 40px;
+}
+
+.content-inner {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.content-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(219, 74, 43, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+    .content-icon i {
+        font-size: 28px;
+        color: #db4a2b;
+    }
+
+.lead-text {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 24px;
+    font-family: Aileron, Helvetica, sans-serif;
+}
+
+.content-card-dark .content-icon {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+    .content-card-dark .content-icon i {
+        color: #db4a2b;
+    }
+
+.highlight-text {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 2px solid rgba(0, 0, 0, 0.1);
+    font-family: Alfran, Rostov, sans-serif;
+}
+
+.content-card-dark .highlight-text {
+    border-top-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Image Content */
+.image-content {
+    padding: 40px;
+}
+
+.image-wrapper {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .image-wrapper:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .image-wrapper img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.5s ease;
+    }
+
+    .image-wrapper:hover img {
+        transform: scale(1.05);
+    }
+
+.image-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    font-family: Aileron, Helvetica, sans-serif;
+}
+
+    .image-caption i {
+        margin-right: 8px;
+        color: #db4a2b;
+    }
+
+/* CTA Button */
+.cta-button {
+    margin-top: 32px;
+}
+
+.btn-explore {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 32px;
+    background: #db4a2b;
+    color: white;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    font-family: Aileron, Helvetica, sans-serif;
+}
+
+    .btn-explore:hover {
+        background: #c93e20;
+        transform: translateX(5px);
+        text-decoration: none;
+        color: white;
+        box-shadow: 0 10px 25px rgba(219, 74, 43, 0.3);
+    }
+
+    .btn-explore i {
+        transition: transform 0.3s ease;
+    }
+
+    .btn-explore:hover i {
+        transform: translateX(5px);
+    }
+
+/* Floating Circles */
+.circles {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+}
+
+    .circles li {
+        position: absolute;
+        list-style: none;
+        animation: floatCircle 25s linear infinite;
+        bottom: -150px;
+        opacity: 0.08;
+        font-size: 24px;
+    }
+
+        .circles li:nth-child(1) {
+            left: 5%;
+            animation-duration: 18s;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(2) {
+            left: 15%;
+            animation-duration: 22s;
+            animation-delay: 2s;
+        }
+
+        .circles li:nth-child(3) {
+            left: 25%;
+            animation-duration: 20s;
+            animation-delay: 4s;
+        }
+
+        .circles li:nth-child(4) {
+            left: 35%;
+            animation-duration: 25s;
+            animation-delay: 1s;
+        }
+
+        .circles li:nth-child(5) {
+            left: 45%;
+            animation-duration: 19s;
+            animation-delay: 3s;
+        }
+
+        .circles li:nth-child(6) {
+            left: 55%;
+            animation-duration: 23s;
+            animation-delay: 5s;
+        }
+
+        .circles li:nth-child(7) {
+            left: 65%;
+            animation-duration: 21s;
+            animation-delay: 2s;
+        }
+
+        .circles li:nth-child(8) {
+            left: 75%;
+            animation-duration: 24s;
+            animation-delay: 4s;
+        }
+
+        .circles li:nth-child(9) {
+            left: 85%;
+            animation-duration: 17s;
+            animation-delay: 1s;
+        }
+
+        .circles li:nth-child(10) {
+            left: 95%;
+            animation-duration: 26s;
+            animation-delay: 3s;
+        }
+
+/* Animations */
+@keyframes floatCircle {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.08;
+    }
+
+    90% {
+        opacity: 0.08;
+    }
+
+    100% {
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .carousel-title {
+        width: 95%;
+        padding: 0 15px;
+    }
+
+        .carousel-title h1 {
+            font-size: 32px;
+            letter-spacing: 1px;
+        }
+
+    .title-subtitle {
+        font-size: 14px;
+    }
+
+    .title-icon-wrapper {
+        width: 60px;
+        height: 60px;
+    }
+
+        .title-icon-wrapper i {
+            font-size: 30px;
+        }
+
+    .title-content h2 {
+        font-size: 28px;
+    }
+
+    .title-decoration {
+        gap: 10px;
+    }
+
+    .line-left,
+    .line-right {
+        max-width: 60px;
+    }
+
+    .content-card {
+        padding: 50px 0;
+    }
+
+    .text-content,
+    .image-content {
+        padding: 20px;
+    }
+
+    .lead-text {
+        font-size: 16px;
+    }
+
+    .btn-explore {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        opacity: 1;
+        width: 40px;
+        height: 40px;
+    }
+
+    .carousel-control-prev {
+        left: 15px;
+    }
+
+    .carousel-control-next {
+        right: 15px;
+    }
+
+    .about-title-section {
+        padding: 40px 0 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-title h1 {
+        font-size: 28px;
+    }
+
+    .title-subtitle {
+        font-size: 12px;
+    }
+
+    .title-icon-wrapper {
+        width: 50px;
+        height: 50px;
+    }
+
+        .title-icon-wrapper i {
+            font-size: 24px;
+        }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .carousel-title h1 {
+        font-size: 52px;
+    }
+
+    .text-content,
+    .image-content {
+        padding: 30px;
+    }
+}
+
+/* Complete scrollbar prevention for animations */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.home-page::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.home-page {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Fix for circles causing overflow */
+.circles {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    overflow: hidden;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+}
+
+    /* Ensure circles elements don't cause overflow */
+    .circles li {
+        position: absolute;
+        list-style: none;
+        animation: floatCircle 25s linear infinite;
+        bottom: -150px;
+        left: auto;
+        right: auto;
+        opacity: 0.08;
+        font-size: 24px;
+        width: auto;
+        height: auto;
+    }
+
+/* Page container fix */
+.home-page {
+    overflow-x: hidden;
+    position: relative;
+}
+

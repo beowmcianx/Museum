@@ -4,264 +4,257 @@
 @{
     ViewData["Title"] = "My Cart";
 }
-<div class="text-center mb-4">
-    <h1 class="display-5"
-        data-aos="fade-down"
-        data-aos-duration="800">
-        <i class="fa-solid fa-cart-shopping me-2" style="color:#db4a2a"></i>
-        @ViewData["Title"]
-    </h1>
-    <h5 class="text-secondary mb-4">View Your Tickets And Orders</h5>
-</div>
 
-<br />
-
+<!-- Popup Alert -->
 @if (TempData["Success"] != null || TempData["Error"] != null)
 {
     var isSuccess = TempData["Success"] != null;
     var message = isSuccess ? TempData["Success"] : TempData["Error"];
 
-    <div id="ticketPopup"   
-         class="ticket-popup @(isSuccess ? "success" : "error")"
-         data-aos="fade-left"
-         data-aos-duration="600">
-
+    <div id="ticketPopup" class="ticket-popup @(isSuccess ? "success" : "error")" data-aos="fade-left">
         <div class="popup-content">
             <span>@message</span>
             <button class="popup-close" onclick="closePopup()">×</button>
         </div>
-
     </div>
 }
 
-<!-- No Orders -->
-@if (Model?.Orders == null || !Model.Orders.Any())
-{
-    <div class="alert alert-info shadow-sm rounded-3" data-aos="fade-up">
-        You have no orders yet.
-    </div>
-}
-else
-{ 
-    bool firstOrder = true;
+<div class="cart-page">
+    <!-- Hero Section -->
+    <div class="cart-hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-pattern"></div>
 
-    @foreach (var order in Model.Orders.OrderByDescending(o => o.CreatedAt))
-    {
-        var items = order.OrderItems ?? new List<TestProj.Models.OrderItemModel>();
-        decimal orderTotal = items.Sum(i => i.PriceAtPurchase * i.Quantity);
-
-        string badgeClass = order.Status switch
-        {
-            OrderStatus.New => "bg-primary",
-            OrderStatus.Confirmed => "bg-success",
-            OrderStatus.Cancelled => "bg-secondary",
-            OrderStatus.Used => "bg-dark",
-            _ => "bg-light"
-        };
-
-        <div class="card shadow-lg mb-4 rounded-4 cart-order-card"
-             data-aos="fade-up"
-             data-aos-duration="800">
-
-            <!-- Card Header -->
-            <div class="card-header d-flex justify-content-between align-items-center text-white order-card-header"
-                 data-bs-toggle="collapse"
-                 data-bs-target="#order-@order.OrderId"
-                 aria-expanded="@(firstOrder ? "true" : "false")"
-                 aria-controls="order-@order.OrderId"
-                 style="cursor:pointer">
-
-                <span>
-                    <i class="fa-solid fa-ticket fa-lg me-2"></i>
-                    <strong>@order.OrderCode</strong>
-                </span>
-
-                <span class="d-flex align-items-center">
-                    <span class="badge @badgeClass fs-6 me-2">@order.Status</span>
-                    <i class="fa-solid fa-chevron-down toggle-icon @(firstOrder ? "rotate" : "")"></i>
-                </span>
+        <div class="container hero-container">
+            <div class="cart-header" data-aos="fade-up">
+                <div class="cart-icon-wrapper">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h1 class="cart-title">My Cart</h1>
+                <p class="cart-subtitle">View your tickets and orders</p>
             </div>
+        </div>
+    </div>
 
-            <!-- Card Body -->
-            <div class="collapse @(firstOrder ? "show" : "")" id="order-@order.OrderId">
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            @{
-                                var museumText = order.Museum?.Name ?? "—";
-                                if (!string.IsNullOrEmpty(order.Museum?.City))
-                                {
-                                    museumText += $" ({order.Museum.Country}, {order.Museum.City})";
-                                }
-                            }
-                            <span class="d-block museum-info">@museumText</span>
+    <!-- Orders Section -->
+    <div class="cart-content-section">
+        <div class="container">
+            @if (Model?.Orders == null || !Model.Orders.Any())
+            {
+                <div class="empty-state" data-aos="fade-up">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3>Your cart is empty</h3>
+                    <p>You have no orders yet. Start exploring museums and book your tickets!</p>
+                    <a asp-controller="Museum" asp-action="Catalogue" class="btn-explore-cart">
+                        <i class="fas fa-landmark"></i>
+                        Browse Museums
+                    </a>
+                </div>
+            }
+            else
+            {
+                bool firstOrder = true;
+
+                @foreach (var order in Model.Orders.OrderByDescending(o => o.CreatedAt))
+                {
+                    var items = order.OrderItems ?? new List<TestProj.Models.OrderItemModel>();
+                    decimal orderTotal = items.Sum(i => i.PriceAtPurchase * i.Quantity);
+
+                    string badgeClass = order.Status switch
+                    {
+                        OrderStatus.New => "status-new",
+                        OrderStatus.Confirmed => "status-confirmed",
+                        OrderStatus.Cancelled => "status-cancelled",
+                        OrderStatus.Used => "status-used",
+                        _ => "status-default"
+                    };
+
+                    <div class="order-card" data-aos="fade-up" data-aos-delay="@(firstOrder ? 100 : 200)">
+                        <!-- Card Header (Collapsible) -->
+                        <div class="order-card-header" data-bs-toggle="collapse" data-bs-target="#order-@order.OrderId" aria-expanded="@(firstOrder ? "true" : "false")">
+                            <div class="order-header-left">
+                                <i class="fas fa-ticket-alt"></i>
+                                <strong>@order.OrderCode</strong>
+                            </div>
+                            <div class="order-header-right">
+                                <span class="status-badge @badgeClass">@order.Status</span>
+                                <i class="fas fa-chevron-down toggle-icon @(firstOrder ? "rotate" : "")"></i>
+                            </div>
                         </div>
-                        <div class="col-md-6 text-md-end">
-                            <span class="d-block p-2">
-                                Visit Date: @order.VisitDate.ToString("yyyy-MM-dd")
-                            </span>
-                            <span class="d-block text-muted p-2">
-                                Ordered: @order.CreatedAt.ToString("yyyy-MM-dd")
-                            </span>
+
+                        <!-- Collapsible Body -->
+                        <div class="collapse @(firstOrder ? "show" : "")" id="order-@order.OrderId">
+                            <div class="order-card-body">
+                                <div class="order-info-row">
+                                    <div class="order-museum">
+                                        <i class="fas fa-landmark"></i>
+                                        <span>
+                                            @(order.Museum?.Name ?? "—")
+                                            @if (!string.IsNullOrEmpty(order.Museum?.City))
+                                            {
+                                                <span class="text-muted">(@order.Museum.Country, @order.Museum.City)</span>
+                                            }
+                                        </span>
+                                    </div>
+                                    <div class="order-dates">
+                                        <div class="order-visit-date">
+                                            <i class="fas fa-calendar-day"></i>
+                                            <span>Visit: @order.VisitDate.ToString("yyyy-MM-dd")</span>
+                                        </div>
+                                        <div class="order-created-date">
+                                            <i class="fas fa-clock"></i>
+                                            <span>Ordered: @order.CreatedAt.ToString("yyyy-MM-dd")</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="divider-light"></div>
+
+                                @if (!items.Any())
+                                {
+                                    <p class="text-muted text-center py-3">No tickets in this order.</p>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="order-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ticket</th>
+                                                    <th>Unit Price</th>
+                                                    <th>Quantity</th>
+                                                    <th class="text-end">Subtotal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in items)
+                                                {
+                                                    var ticketName = item.TicketType?.Name ?? "(ticket type removed)";
+                                                    <tr>
+                                                        <td>@ticketName</td>
+                                                        <td>@item.PriceAtPurchase.ToString("C")</td>
+                                                        <td>@item.Quantity</td>
+                                                        <td class="text-end">@((item.PriceAtPurchase * item.Quantity).ToString("C"))</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="order-card-footer">
+                                <div class="order-total">
+                                    <strong>Total:</strong>
+                                    <span class="total-amount">@orderTotal.ToString("C")</span>
+                                </div>
+
+                                @if (order.Status == OrderStatus.New && order.VisitDate > DateTime.Today)
+                                {
+                                    <form asp-controller="Client" asp-action="CancelOrder" method="post" class="cancel-form">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="orderId" value="@order.OrderId" />
+                                        <button type="submit" class="btn-cancel-order">
+                                            <i class="fas fa-times-circle"></i> Cancel Order
+                                        </button>
+                                    </form>
+                                }
+                            </div>
                         </div>
                     </div>
 
-                    <hr class="hr-dark" />
+                    firstOrder = false;
+                }
+            }
+        </div>
+    </div>
 
-                    @if (!items.Any())
-                    {
-                        <p class="text-muted">No tickets in this order.</p>
-                    }
-                    else
-                    {
-                        <div class="table-responsive">
-                            <table class="table table-hover table-sm align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Ticket</th>
-                                        <th>Unit Price</th>
-                                        <th>Quantity</th>
-                                        <th class="text-end">Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in items)
-                                    {
-                                        var ticketName = item.TicketType?.Name ?? "(ticket type removed)";
-                                        <tr>
-                                            <td>@ticketName</td>
-                                            <td>@item.PriceAtPurchase.ToString("C")</td>
-                                            <td>@item.Quantity</td>
-                                            <td class="text-end">@((item.PriceAtPurchase * item.Quantity).ToString("C"))</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
+    <!-- Cancel Confirmation Modal -->
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content-custom">
+                <div class="modal-header-custom">
+                    <h5 class="modal-title" id="cancelModalLabel">
+                        <i class="fas fa-exclamation-triangle" style="color: #db4a2b;"></i>
+                        Cancel Order
+                    </h5>
+                    <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">×</button>
                 </div>
-
-                <!-- Card Footer -->
-                <div class="card-footer d-flex justify-content-between align-items-center bg-light">
-                    <strong>Total: @orderTotal.ToString("C")</strong>
-
-                    @if (order.Status == OrderStatus.New && order.VisitDate > DateTime.Today)
-                    {
-                        <form asp-controller="Client"
-                              asp-action="CancelOrder"
-                              method="post"
-                              class="m-0 cancel-form">
-
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="orderId" value="@order.OrderId" />
-
-                            <button type="submit" class="btn btn-sm btn-danger">
-                                Cancel Order
-                            </button>
-                        </form>
-                    }
+                <div class="modal-body-custom">
+                    <p>Are you sure you want to cancel this order?</p>
+                    <ul class="cancel-warnings">
+                        <li>This action cannot be undone</li>
+                        <li>Refunds follow the cancellation policy</li>
+                    </ul>
+                </div>
+                <div class="modal-footer-custom">
+                    <button type="button" class="btn-secondary-custom" data-bs-dismiss="modal">Keep Order</button>
+                    <button type="button" class="btn-primary-custom btn-danger-custom" id="confirmCancelBtn">Yes, Cancel</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        firstOrder = false;
-    }
-}
-
-<ul class='circles'>
-    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
-</ul>
-
-<script src="~/js/site.js" asp-append-version="true"></script>
-
-<style>
-    .order-card-header {
-        background: linear-gradient(90deg, #db4a2a, #ff6b61);
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem;
-    }
-
-    .museum-info {
-        font-weight: 500;
-        color: #333;
-    }
-
-    .hr-dark {
-        border-top: 2px solid #db4a2a;
-        margin: 1rem 0;
-    }
-
-    .cart-order-card {
-        transition: transform 0.2s;
-    }
-
-        .cart-order-card:hover {
-            transform: translateY(-3px);
-            transition: transform 0.2s;
-        }
-
-    .badge {
-        font-size: 0.9rem;
-    }
-
-    .cart-order-card .order-card-header {
-        cursor: pointer;
-    }
-
-    .order-card-header {
-        background: linear-gradient(90deg, #db4a2a, #ff6b61);
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem;
-        cursor: pointer;
-    }
-
-        .order-card-header:hover {
-            background: linear-gradient(90deg, #ff6b61, #db4a2a);
-        }
-
-    .toggle-icon {
-        transition: transform 0.3s ease;
-    }
-
-    .rotate {
-        transform: rotate(180deg);
-    }
-</style>
+    <!-- Decorative Circles -->
+    <ul class="circles">
+        <li><i class="fa-solid fa-landmark"></i></li>
+        <li><i class="fa-solid fa-building-columns"></i></li>
+        <li><i class="fa-solid fa-monument"></i></li>
+        <li><i class="fa-solid fa-gem"></i></li>
+        <li><i class="fa-solid fa-scroll"></i></li>
+        <li><i class="fa-solid fa-paint-roller"></i></li>
+        <li><i class="fa-solid fa-palette"></i></li>
+        <li><i class="fa-solid fa-book"></i></li>
+        <li><i class="fa-solid fa-masks-theater"></i></li>
+    </ul>
+</div>
 
 @section Scripts {
     <script>
         function closePopup() {
-            var popup = document.getElementById("ticketPopup");
-            if (!popup) return;
-            popup.classList.add("popup-hide");
-            setTimeout(function () {
-                popup.remove();
-            }, 400);
+            var popup = document.getElementById('ticketPopup');
+            if (popup) {
+                popup.classList.add('popup-hide');
+                setTimeout(function() {
+                    popup.style.display = 'none';
+                }, 400);
+            }
         }
 
-        document.querySelectorAll('.cancel-form').forEach(function (form) {
-            form.addEventListener('submit', function (e) {
-                var confirmed = confirm(
-                    "Are you sure you want to cancel this order?\n\n" +
-                    "• This action cannot be undone.\n" +
-                    "• Refunds follow the cancellation policy.\n\n" +
-                    "Do you want to continue?"
-                );
-                if (!confirmed) e.preventDefault();
+                // Cancel order modal handling
+        let formToSubmit = null;
+
+        document.querySelectorAll('.cancel-form').forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                formToSubmit = form;
+                // Initialize and show the modal
+                var modalElement = document.getElementById('cancelModal');
+                var modal = new bootstrap.Modal(modalElement);
+                modal.show();
             });
         });
 
-                document.querySelectorAll('.order-card-header').forEach(header => {
-            header.addEventListener('click', function () {
-                const collapseEl = document.querySelector(this.dataset.bsTarget);
+        // Handle confirm button click
+        var confirmBtn = document.getElementById('confirmCancelBtn');
+        if (confirmBtn) {
+            // Remove any existing listeners to avoid duplicates
+            var newConfirmBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+            newConfirmBtn.addEventListener('click', function() {
+                if (formToSubmit) {
+                    formToSubmit.submit();
+                }
+            });
+        }
+
+        // Toggle icon rotation for collapsible headers
+        document.querySelectorAll('.order-card-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-bs-target');
+                const collapseEl = document.querySelector(targetId);
                 const icon = this.querySelector('.toggle-icon');
 
                 setTimeout(() => {
@@ -270,7 +263,7 @@ else
                     } else {
                         icon.classList.remove('rotate');
                     }
-                }, 10); 
+                }, 10);
             });
         });
     </script>

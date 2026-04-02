@@ -51,6 +51,15 @@ h1, h2, h3, h4, h5, h6, span {
     border-width: 2px;
 }
 
+.date-input:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+input[type="date"]:hover {
+    cursor: pointer;
+}
+
 .layout-logo {
     height: 50px;
     width: 50px;
@@ -166,24 +175,6 @@ a {
         box-shadow: 0 0 0 0.25rem rgba(219, 74, 43, 0.4) !important;
     }
 
-
-/* Museums Cards */
-.museum-card {
-    border-radius: 15px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* smooth transitions */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background-color: #fff; /* optional for better hover visibility */
-}
-
-    .museum-card:hover {
-        transform: translateY(-10px) scale(1.01); /* lifts and slightly enlarges the card */
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
-    }
-
-
-
-
 /*Catalogue Page*/
 .page-catalogue {
 }
@@ -197,92 +188,6 @@ a {
 
 .page-catalogue-search-bar {
     border-radius: 20px;
-}
-    
-
-/*Title*/
-.page-index {
-    margin-bottom: 0px;
-    background-color: #4a3e26;
-}
-
-.page-index-card-title {
-    margin-top: 0px;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    background: #4a3e26;
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-/*First Card*/
-.page-index-card-first {
-    margin-top: 0px;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    background: #e4e2dd;
-    padding-top: 60px;
-    padding-bottom: 60px;
-}
-
-    .page-index-card-first p {
-        padding: 6px 25px;
-        font-size: 24px;
-        line-height: 2.5rem;
-        letter-spacing: 0.1rem;
-    }
-
-    .page-index-card-first img {
-        margin-left: 30px;
-        max-height: 550px;
-        width: 100%;
-        object-fit: cover;
-    }
-
-/*Second Card*/
-.page-index-card-second {
-    margin-top: 0px;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    background: #4a3e26;
-    padding-top: 60px;
-    padding-bottom: 60px;
-}
-
-    .page-index-card-second h1 {
-        margin-bottom: 40px;
-    }
-
-    .page-index-card-second p {
-        padding: 6px 25px;
-        font-size: 24px;
-        line-height: 2.5rem;
-        letter-spacing: 0.1rem;
-        color: white;
-    }
-
-    .page-index-card-second img {
-        margin-right: 40px; 
-        max-height: 550px;
-        width: 100%;
-        object-fit: cover;
-    }
-
-    .page-index-card-second .hr-light {
-        height: 3px;
-        opacity: 1;
-        margin: 25px 0;
-    }
-
-/*Image*/
-.page-index-card-image {
-    margin-top: 0px;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    background: #e4e2dd;
-    color: #e4e2dd;
-    padding-top: 20px;
-    padding-bottom: 20px;
 }
 
 /*Horizontal Lines*/

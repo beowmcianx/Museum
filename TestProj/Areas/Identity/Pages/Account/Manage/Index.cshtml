@@ -5,119 +5,122 @@
     ViewData["Title"] = "Profile";
 }
 
-<div class="container py-5">
+<div class="profile-page">
+    <!-- Hero Section -->
+    <div class="profile-hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-pattern"></div>
 
-    <div class="row justify-content-center">
-
-        <!-- MAIN CARD ANIMATION -->
-        <div class="col-lg-8 col-xl-6"
-             data-aos="fade-up"
-             data-aos-duration="800">
-
-            <div class="card shadow-lg border-0 rounded-4">
-
-                <!-- HEADER (subtle) -->
-                <div class="card-header bg-dark text-white rounded-top-4 py-3"
-                     data-aos="fade-down"
-                     data-aos-duration="600">
-
-                    <h4 class="mb-0">
-                        <i class="fa-solid fa-user fa-lg" style="color: #db4a2a; margin-right: 12px"></i>
-                        My Profile
-                    </h4>
-
+        <div class="container hero-container">
+            <div class="profile-header" data-aos="fade-up">
+                <div class="profile-icon-wrapper">
+                    <i class="fas fa-user-circle"></i>
                 </div>
-
-                <div class="card-body p-4">
-
-                    <!-- ACCOUNT INFO (no animation spam) -->
-                    <h6 class="text-muted mb-3 text-uppercase fw-bold">
-                        Account Information
-                    </h6>
-
-                    <div class="row g-3 mb-4">
-
-                        <div class="col-md-6">
-                            <label class="form-label small text-muted">
-                                <i class="fa-solid fa-user fa-sm" style="color: #db4a2b; margin-right: 6px;"></i>
-                                Username
-                            </label>
-                            <input value="@Model.Username" class="form-control" disabled />
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label small text-muted">
-                                <i class="fa-solid fa-shield-halved fa-sm" style="color: #db4a2b; margin-right: 6px;"></i>
-                                Role
-                            </label>
-                            <input value="@Model.Role" class="form-control" disabled />
-                        </div>
-
-                        <div class="col-12">
-                            <label class="form-label small text-muted">
-                                <i class="fa-solid fa-id-badge fa-sm" style="color: #db4a2b; margin-right: 6px;"></i>
-                                Full Name
-                            </label>
-                            <input value="@Model.FullName" class="form-control" disabled />
-                        </div>
-
-                        <div class="col-12">
-                            <label class="form-label small text-muted">
-                                <i class="fa-solid fa-envelope fa-sm" style="color: #db4a2b; margin-right: 6px;"></i>
-                                Email
-                            </label>
-                            <input value="@Model.Email" class="form-control" disabled />
-                        </div>
-
-                    </div>
-
-                    <hr class="my-4" />
-
-                    <form method="post"
-                          data-aos="fade-up"
-                          data-aos-duration="700">
-
-                        <h6 class="text-muted mb-3 text-uppercase fw-bold">
-                            Contact Information
-                        </h6>
-
-                        <div class="mb-4">
-                            <label asp-for="Input.PhoneNumber" class="form-label small text-muted">
-                                <i class="fa-solid fa-phone fa-sm" style="color: #db4a2b; margin-right: 6px;"></i>
-                                Phone Number
-                            </label>
-                            <input asp-for="Input.PhoneNumber" class="form-control form-control-lg" />
-                            <span asp-validation-for="Input.PhoneNumber" class="text-danger small"></span>
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-red">
-                                Save Changes
-                            </button>
-                        </div>
-
-                    </form>
-
-                </div>
-
+                <h1 class="profile-title">My Profile</h1>
+                <p class="profile-subtitle">Manage your personal information and preferences</p>
             </div>
-
         </div>
-
     </div>
 
+    <!-- Profile Content Section -->
+    <div class="profile-content-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10" data-aos="fade-up" data-aos-delay="100">
+                    <div class="profile-card">
+                        <div class="profile-card-body">
+                            <!-- Account Information Section -->
+                            <div class="info-section">
+                                <div class="section-header">
+                                    <i class="fas fa-id-card"></i>
+                                    <h3>Account Information</h3>
+                                </div>
+
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-user"></i>
+                                            Username
+                                        </label>
+                                        <input value="@Model.Username" class="info-input" disabled />
+                                    </div>
+
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-shield-alt"></i>
+                                            Role
+                                        </label>
+                                        <input value="@Model.Role" class="info-input" disabled />
+                                    </div>
+
+                                    <div class="info-item full-width">
+                                        <label class="info-label">
+                                            <i class="fas fa-id-badge"></i>
+                                            Full Name
+                                        </label>
+                                        <input value="@Model.FullName" class="info-input" disabled />
+                                    </div>
+
+                                    <div class="info-item full-width">
+                                        <label class="info-label">
+                                            <i class="fas fa-envelope"></i>
+                                            Email Address
+                                        </label>
+                                        <input value="@Model.Email" class="info-input" disabled />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <!-- Contact Information Form -->
+                            <div class="form-section">
+                                <div class="section-header">
+                                    <i class="fas fa-address-card"></i>
+                                    <h3>Contact Information</h3>
+                                </div>
+
+                                <form method="post">
+                                    <div class="form-group">
+                                        <label asp-for="Input.PhoneNumber" class="form-label">
+                                            <i class="fas fa-phone"></i>
+                                            Phone Number
+                                        </label>
+                                        <input asp-for="Input.PhoneNumber"
+                                               class="form-control-custom"
+                                               placeholder="Enter your phone number" />
+                                        <span asp-validation-for="Input.PhoneNumber" class="text-danger small"></span>
+                                    </div>
+
+                                    <button type="submit" class="btn-save">
+                                        <i class="fas fa-save"></i>
+                                        Save Changes
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decorative Circles -->
+    <ul class="circles">
+        <li><i class="fa-solid fa-landmark"></i></li>
+        <li><i class="fa-solid fa-building-columns"></i></li>
+        <li><i class="fa-solid fa-monument"></i></li>
+        <li><i class="fa-solid fa-gem"></i></li>
+        <li><i class="fa-solid fa-scroll"></i></li>
+        <li><i class="fa-solid fa-paint-roller"></i></li>
+        <li><i class="fa-solid fa-palette"></i></li>
+        <li><i class="fa-solid fa-book"></i></li>
+        <li><i class="fa-solid fa-masks-theater"></i></li>
+    </ul>
 </div>
 
-<ul class='circles'>
-    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
-</ul>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 
-<script src="~/js/site.js" asp-append-version="true"></script>
+<link rel="stylesheet" href="~/css/page-account.css" asp-append-version="true" />

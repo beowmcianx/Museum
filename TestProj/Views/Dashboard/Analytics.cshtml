@@ -3,9 +3,17 @@
     ViewData["Title"] = "Analytics";
 }
 
+<div class="ocean">
+    <div class="wave"></div>
+    <div class="wave"></div>
+</div>
+
 <div class="container mt-5">
 
-    
+    <div class="ocean">
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
 
     <!-- HEADER -->
     <div class="text-center mb-4">
@@ -13,7 +21,7 @@
             <i class="fa-solid fa-chart-simple me-2" style="color:#db4a2a"></i>
             Museum Analytics
         </h1>
-        <span class="text-secondary">Overview of purchases and visits</span>
+        <span class="text-secondary">Overview of purchases and visits by date</span>
     </div>
 
     <br />
@@ -34,10 +42,10 @@
         <form method="get" class="row g-2 align-items-center">
 
             <!-- FROM -->
-            <div class="col-md-3">
+            <div class="col-md-3 date-input">
                 <div class="input-group">
                     <span class="input-group-text bg-white fw-semibold text-nowrap px-3">
-                         From
+                         FROM
                     </span>
                     <input type="date"
                            id="startDate"
@@ -48,8 +56,11 @@
             </div>
 
             <!-- TO -->
-            <div class="col-md-3">
-                <div class="input-group">
+            <div class="col-md-3 date-input">
+                <div class="input-group ">
+                    <span class="input-group-text bg-white fw-semibold text-nowrap px-3">
+                        TO
+                    </span>
                     <input type="date"
                            id="endDate"
                            name="endDate"
@@ -61,7 +72,8 @@
             <!-- FILTER -->
             <div class="col-md-4 d-grid">
                 <button class="btn btn-red h-100">
-                    <i class="fas fa-filter me-2"></i> Filter
+                    <i class="fas fa-filter me-2"></i> 
+                    <span>Filter</span>
                 </button>
             </div>
 
@@ -70,7 +82,8 @@
             <div class="col-md-2 d-grid">
                 <a class="btn btn-dark h-100 d-flex align-items-center justify-content-center"
                    href="@Url.Action("Analytics", "Dashboard")">
-                    All Time
+                    <i class="fa-solid fa-calendar me-2" style="color: white;"></i>
+                    <span>All Time</span>
                 </a>
             </div>
 
@@ -82,14 +95,15 @@
     @if (ViewBag.IsAllTime == true)
     {
         <p class="text-muted">
-            Showing All Results
+            Showing Results of All Time
         </p>
     }
     else
     {
         <p class="text-muted">
-            Showing results from @DateTime.Parse(ViewBag.StartDate).ToString("dd MMM yyyy")
-            to @DateTime.Parse(ViewBag.EndDate).ToString("dd MMM yyyy")
+            Showing Results 
+            From [@DateTime.Parse(ViewBag.StartDate).ToString("dd/MM/yy")]
+            To [@DateTime.Parse(ViewBag.EndDate).ToString("dd/MM/yy")]
         </p>
     }
 
@@ -111,86 +125,130 @@
 
     <!-- TOP MUSEUMS -->
     <div class="card mb-4 shadow rounded-5">
-        <div class="card-header bg-red text-white rounded-top-5">
-            <h5 class="mb-0"><i class="fa-solid fa-landmark me-2"></i>Top Museums by Tickets Sold</h5>
+
+        <!-- HEADER (clickable) -->
+        <div class="card-header bg-red text-white rounded-top-5 d-flex justify-content-between align-items-center"
+             data-bs-toggle="collapse"
+             data-bs-target="#topMuseumsTable"
+             style="cursor:pointer">
+
+            <h5 class="mb-0">
+                <i class="fa-solid fa-landmark me-2"></i>
+                Top Museums by Tickets Sold
+            </h5>
+
+            <i class="fa-solid fa-chevron-down toggle-icon rotate"></i>
         </div>
-        <div class="card-body">
-            <table class="table table-striped table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th><i class="fa-solid fa-landmark me-1"></i>Museum</th>
-                        <th><i class="fa-solid fa-ticket me-1"></i>Tickets Sold</th>
-                        <th><i class="fa-solid fa-cart-shopping me-1"></i>Orders</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var m in Model.TopMuseums)
-                    {
+
+        <!-- COLLAPSIBLE BODY -->
+        <div id="topMuseumsTable" class="collapse show">
+            <div class="card-body">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <td>@m.Museum.Name</td>
-                            <td>@m.TicketsSold</td>
-                            <td>@m.OrdersCount</td>
+                            <th>Museum</th>
+                            <th>Tickets Sold</th>
+                            <th>Orders</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in Model.TopMuseums)
+                        {
+                            <tr>
+                                <td>@m.Museum.Name</td>
+                                <td>@m.TicketsSold</td>
+                                <td>@m.OrdersCount</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
+
     </div>
 
     <!-- CITY -->
     <div class="card mb-4 shadow rounded-5">
-        <div class="card-header bg-red text-white rounded-top-5">
-            <h5 class="mb-0"><i class="fa-solid fa-city me-2"></i>Purchases by City</h5>
+
+        <div class="card-header bg-red text-white rounded-top-5 d-flex justify-content-between align-items-center"
+             data-bs-toggle="collapse"
+             data-bs-target="#cityTable"
+             style="cursor:pointer">
+
+            <h5 class="mb-0">
+                <i class="fa-solid fa-city me-2"></i>
+                Purchases by City
+            </h5>
+
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
         </div>
-        <div class="card-body">
-            <table class="table table-striped table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th><i class="fa-solid fa-city me-1"></i>City</th>
-                        <th><i class="fa-solid fa-ticket me-1"></i>Tickets Sold</th>
-                        <th><i class="fa-solid fa-cart-shopping me-1"></i>Orders</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var c in Model.CityStats)
-                    {
+
+        <div id="cityTable" class="collapse">
+            <div class="card-body">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <td>@c.City</td>
-                            <td>@c.TicketsSold</td>
-                            <td>@c.OrdersCount</td>
+                            <th>City</th>
+                            <th>Tickets Sold</th>
+                            <th>Orders</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in Model.CityStats)
+                        {
+                            <tr>
+                                <td>@c.City</td>
+                                <td>@c.TicketsSold</td>
+                                <td>@c.OrdersCount</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
+
     </div>
 
     <!-- COUNTRY -->
     <div class="card mb-4 shadow rounded-5">
-        <div class="card-header bg-red text-white rounded-top-5">
-            <h5 class="mb-0"><i class="fa-solid fa-flag me-2"></i>Purchases by Country</h5>
+
+        <div class="card-header bg-red text-white rounded-top-5 d-flex justify-content-between align-items-center"
+             data-bs-toggle="collapse"
+             data-bs-target="#countryTable"
+             style="cursor:pointer">
+
+            <h5 class="mb-0">
+                <i class="fa-solid fa-flag me-2"></i>
+                Purchases by Country
+            </h5>
+
+            <i class="fa-solid fa-chevron-down toggle-icon"></i>
         </div>
-        <div class="card-body">
-            <table class="table table-striped table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th><i class="fa-solid fa-flag me-1"></i>Country</th>
-                        <th><i class="fa-solid fa-ticket me-1"></i>Tickets Sold</th>
-                        <th><i class="fa-solid fa-cart-shopping me-1"></i>Orders</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var c in Model.CountryStats)
-                    {
+
+        <div id="countryTable" class="collapse">
+            <div class="card-body">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <td>@c.Country</td>
-                            <td>@c.TicketsSold</td>
-                            <td>@c.OrdersCount</td>
+                            <th>Country</th>
+                            <th>Tickets Sold</th>
+                            <th>Orders</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in Model.CountryStats)
+                        {
+                            <tr>
+                                <td>@c.Country</td>
+                                <td>@c.TicketsSold</td>
+                                <td>@c.OrdersCount</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
+
     </div>
 
 </div>
@@ -227,4 +285,30 @@
         startInput.addEventListener("change", updateLimits);
         endInput.addEventListener("change", updateLimits);
     });
+
+        document.querySelectorAll('.card-header[data-bs-toggle="collapse"]').forEach(header => {
+        header.addEventListener('click', function () {
+
+            const target = document.querySelector(this.dataset.bsTarget);
+            const icon = this.querySelector('.toggle-icon');
+
+            setTimeout(() => {
+                if (target.classList.contains('show')) {
+                    icon.classList.add('rotate');
+                } else {
+                    icon.classList.remove('rotate');
+                }
+            }, 200);
+        });
+    });
 </script>
+
+<style>
+    .toggle-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .rotate {
+        transform: rotate(180deg);
+    }
+</style>

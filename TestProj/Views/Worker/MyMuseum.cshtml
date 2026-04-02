@@ -17,34 +17,92 @@
     </div>
 }
 
-<div class="container mt-5">
-    <div class="text-center mb-4">
-        <h1 class="display-5">
-            <i class="fa-solid fa-landmark me-2" style="color:#db4a2a"></i>
-            @Model.Name
-        </h1>
-        <span class="text-secondary">View & manage your museum's information</span>
+<div class="my-museum-page">
+    <!-- Hero Section -->
+    <div class="museum-hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-pattern"></div>
+
+        <div class="container hero-container">
+            <div class="welcome-card" data-aos="fade-down">
+                <div class="welcome-greeting">
+                    <i class="fas fa-hand-peace"></i>
+                    <span>Welcome back, 
+                        @(User.Identity?.Name ?? "Guest")
+                    </span>
+                </div>
+            </div>
+
+            <div class="museum-header" data-aos="fade-up" data-aos-delay="100">
+                <h1 class="museum-title">@Model.Name</h1>
+                <div class="museum-badges">
+                    <span class="badge-custom">
+                        <i class="fas fa-map-marker-alt"></i> @Model.Type
+                    </span>
+                </div>
+                <p class="museum-subtitle">
+                    Manage your exhibitions, track visitor orders, and curate cultural experiences
+                </p>
+            </div>
+        </div>
     </div>
 
-    <hr class="hr-dark">
-
-    <div class="row g-3 justify-content-center">
-        <div class="col-md-4">
-            <a class="btn btn-red w-100 py-4 shadow-sm rounded-4"
-               asp-action="EditMuseum"
-               asp-route-id="@Model.MuseumId">
-                <i class="fas fa-landmark fa-2x mb-2"></i><br />
-                Museum Info
-            </a>
+    <!-- Dashboard Actions -->
+    <div class="dashboard-section container">
+        <div class="section-header" data-aos="fade-right">
+            <h2>Museum Management</h2>
+            <p>Control panel for your cultural institution</p>
         </div>
 
-        <div class="col-md-4">
-            <a class="btn btn-red w-100 py-4 shadow-sm rounded-4"
-               asp-action="MuseumOrders"
-               asp-route-id="@Model.MuseumId">
-                <i class="fas fa-ticket fa-2x mb-2"></i><br />
-                Orders
+        <div class="actions-wrapper">
+            <a class="action-card" asp-action="EditMuseum" asp-route-id="@Model.MuseumId" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-icon museum-icon-bg">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Museum Profile</h3>
+                    <p>Edit museum details, update information, and manage settings</p>
+                    <div class="card-footer">
+                        <span>Manage Profile</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
             </a>
+
+            <a class="action-card" asp-action="MuseumOrders" asp-route-id="@Model.MuseumId" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-icon orders-icon-bg">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Ticket Orders</h3>
+                    <p>View and manage visitor bookings, track sales, and analyze attendance</p>
+                    <div class="card-footer">
+                        <span>View Orders</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Stats Section (Optional - if you want to add stats later) -->
+    <div class="stats-section container" style="display: none;">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <h3>0</h3>
+                <p>Total Visitors</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-ticket"></i>
+                <h3>0</h3>
+                <p>Tickets Sold</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>0</h3>
+                <p>Revenue</p>
+            </div>
         </div>
     </div>
 </div>
@@ -67,13 +125,23 @@
     <script>
         function closePopup() {
             var popup = document.getElementById('ticketPopup');
-            if (popup) popup.style.display = 'none';
+            if (popup) {
+                popup.classList.add('popup-hide');
+                setTimeout(function() {
+                    popup.style.display = 'none';
+                }, 400);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
             var popup = document.getElementById('ticketPopup');
             if (popup) {
-                setTimeout(function () { popup.style.display = 'none'; }, 3000);
+                setTimeout(function() {
+                    popup.classList.add('popup-hide');
+                    setTimeout(function() {
+                        popup.style.display = 'none';
+                    }, 400);
+                }, 3000);
             }
         });
     </script>

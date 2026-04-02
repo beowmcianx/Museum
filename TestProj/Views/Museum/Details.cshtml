@@ -5,262 +5,253 @@
     var isClient = User.Identity?.IsAuthenticated == true && User.IsInRole("Client");
 }
 
-<!-- ===================== POPUP ALERT ===================== -->
+<!-- Popup Alert -->
 @if (TempData["Success"] != null || TempData["Error"] != null)
 {
     var isSuccess = TempData["Success"] != null;
     var message = isSuccess ? TempData["Success"] : TempData["Error"];
 
-    <div id="ticketPopup"
-         class="ticket-popup @(isSuccess ? "success" : "error")"
-         data-aos="fade-left">
-
+    <div id="ticketPopup" class="ticket-popup @(isSuccess ? "success" : "error")" data-aos="fade-left">
         <div class="popup-content">
             <span>@message</span>
             <button class="popup-close" onclick="closePopup()">×</button>
         </div>
-
     </div>
 }
 
-<div class="position-relative" style="margin: 0;">
-
-    <!-- ===================== BACK BUTTON ===================== -->
-    <form asp-controller="Museum"
-          asp-action="Catalogue"
-          method="post"
-          class="mb-3">
-
-        <button class="btn btn-outline-dark">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Back
-        </button>
-
-    </form>
-
-    <!-- ===================== IMAGE CAROUSEL ===================== -->
+<div class="museum-details-page">
+    <!-- Hero Section with Carousel -->
     @if (Model.Images != null && Model.Images.Any())
     {
-        <div id="museumHeroCarousel"
-        class="carousel slide carousel-fade position-relative"
-        data-bs-ride="carousel"
-        data-bs-interval="5000">
+        <div class="details-hero-section">
+            <div class="hero-overlay"></div>
+            <div class="hero-pattern"></div>
 
-            <!-- Carousel Images -->
-            <div class="carousel-inner">
-
-                @{
-                    var first = true;
-                    foreach (var image in Model.Images)
-                    {
-                        <div class="carousel-item @(first ? "active" : "")">
-                            <div class="vh-100 d-flex align-items-center justify-content-center"
-                                 style="background-image: url('@image.ImageUrl');
-                                                    background-size: cover;
-                                                    background-position: center;
-                                                    position: relative;">
-
-                                <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
-
-                                <div class="container position-relative text-white text-center">
-                                    <h1 class="display-3 fw-bold text-red"
-                                        data-aos="fade-down"
-                                        data-aos-duration="800">
-                                        @Model.Name
-                                    </h1>
-
-                                    <p class="lead"
-                                       data-aos="fade-down"
-                                       data-aos-duration="800">@Model.Country, @Model.City
-                                    </p>
-
-                                    <hr class="border-light w-50 mx-auto" />
-
-                                    <p>
-                                        @(DateTime.Today.Add(Model.OpeningTime).ToString("h:mm tt").ToLowerInvariant())
-                                        -
-                                        @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
-                                    </p>
-
-                                    @if (isClient)
-                                    {
-                                        <button type="button"
-                                                class="btn btn-red btn-lg mt-3"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#buyTicketsModal">
-                                            Tickets
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <a asp-area="Identity"
-                                           asp-page="/Account/Login"
-                                           class="btn btn-secondary btn-lg mt-3">
-                                            Login as Client to Buy Tickets
-                                        </a>
-                                    }
-
-                                </div>
-                            </div>
-                        </div>
-
-                        first = false;
-                    }
-                }
-
+            <!-- Back Button - Top Left of Carousel -->
+            <div class="back-button-overlay">
+                <a asp-controller="Museum" asp-action="Catalogue" class="btn-back-custom">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Catalogue
+                </a>
             </div>
 
-            <!-- Controls -->
-            <button class="carousel-control-prev"
-            type="button"
-            data-bs-target="#museumHeroCarousel"
-            data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
+            <div id="museumHeroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+                <div class="carousel-inner">
+                    @{
+                        var first = true;
+                        foreach (var image in Model.Images)
+                        {
+                            <div class="carousel-item @(first ? "active" : "")">
+                                <div class="carousel-image-wrapper" style="background-image: url('@image.ImageUrl');">
+                                    <div class="carousel-overlay"></div>
+                                    <div class="carousel-content container">
+                                        <div class="museum-title-wrapper" data-aos="fade-up">
+                                            <div class="title-icon">
+                                                <i class="fas fa-landmark"></i>
+                                            </div>
+                                            <h1 class="museum-title">@Model.Name</h1>
+                                            <div class="title-location">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <span>@Model.Country, @Model.City</span>
+                                            </div>
+                                            <div class="title-hours">
+                                                <i class="far fa-clock"></i>
+                                                <span>
+                                                    @(DateTime.Today.Add(Model.OpeningTime).ToString("h:mm tt").ToLowerInvariant()) -
+                                                    @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
+                                                </span>
+                                            </div>
+                                            @if (isClient)
+                                            {
+                                                <button type="button" class="btn-tickets" data-bs-toggle="modal" data-bs-target="#buyTicketsModal">
+                                                    <i class="fas fa-ticket-alt"></i>
+                                                    Buy Tickets
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <a asp-area="Identity" asp-page="/Account/Login" class="btn-tickets btn-outline">
+                                                    <i class="fas fa-sign-in-alt"></i>
+                                                    Login to Buy Tickets
+                                                </a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            first = false;
+                        }
+                    }
+                </div>
 
-            <button class="carousel-control-next"
-            type="button"
-            data-bs-target="#museumHeroCarousel"
-            data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
-
+                <!-- Carousel Controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#museumHeroCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#museumHeroCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
         </div>
     }
 
-    <hr class="hr-dark" />
+    <!-- Content Section -->
+    <div class="details-content container">
+        <div class="content-grid">
+            <!-- Left Column - Museum Info -->
+            <div class="info-column" data-aos="fade-right">
+                <!-- About Section -->
+                <div class="info-card">
+                    <div class="card-header-custom">
+                        <i class="fas fa-circle-info"></i>
+                        <h3>About the Museum</h3>
+                    </div>
+                    <div class="card-body-custom">
+                        <p class="description-text">@Model.Description</p>
+                        <div class="info-row">
+                            <span class="info-label">Type:</span>
+                            <span class="info-value">@Model.Type</span>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- ===================== MUSEUM INFO ===================== -->
-    <div class="row">
-        <div class="col-md-4">
-            <div class="container">
+                <!-- Working Hours Section -->
+                <div class="info-card">
+                    <div class="card-header-custom">
+                        <i class="far fa-clock"></i>
+                        <h3>Working Hours</h3>
+                    </div>
+                    <div class="card-body-custom">
+                        <div class="hours-display">
+                            <i class="fas fa-door-open"></i>
+                            <span>
+                                @(DateTime.Today.Add(Model.OpeningTime).ToString("h:mm tt").ToLowerInvariant()) -
+                                @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
-                <h4>
-                    <i class="fa-solid fa-circle-info" style="margin-right: 12px;"></i> 
-                    About
-                </h4>
-                <p>@Model.Description</p>
-                <p><strong>Type - </strong> @Model.Type</p>
-                <hr class="hr-dark" />
-
-                <h4>
-                    <i class="fa-regular fa-clock" style="margin-right: 12px;"></i> 
-                    Working Hours
-                </h4>
-
-                <p class="fs-5">
-                    @(DateTime.Today.Add(Model.OpeningTime).ToString("h:mm tt").ToLowerInvariant()) -
-                    @(DateTime.Today.Add(Model.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
-                </p>
-                <hr class="hr-dark" />
-
-                <h4>
-                    <i class="fa-solid fa-ticket" style="margin-right: 12px;"></i> 
-                    Tickets
-                </h4>
-
-                @if (Model.TicketTypes != null && Model.TicketTypes.Any())
-                {
-                    <ul class="list-unstyled">
-                        @for (var i = 0; i < Model.TicketTypes.Count; i++)
+                <!-- Tickets Section -->
+                <div class="info-card">
+                    <div class="card-header-custom">
+                        <i class="fas fa-ticket-alt"></i>
+                        <h3>Ticket Prices</h3>
+                    </div>
+                    <div class="card-body-custom">
+                        @if (Model.TicketTypes != null && Model.TicketTypes.Any())
                         {
-                            var tt = Model.TicketTypes.ElementAt(i);
-                                
-                            <li class="mb-2">
-                                <p>@tt.Name — @tt.Price.ToString("F2") $</p>
-                            </li>
+                            <div class="tickets-list">
+                                @foreach (var tt in Model.TicketTypes)
+                                {
+                                    <div class="ticket-item">
+                                        <span class="ticket-name">@tt.Name</span>
+                                        <span class="ticket-price">@tt.Price.ToString("F2") $</span>
+                                    </div>
+                                }
+                            </div>
                         }
-                    </ul>
-                }
-                <hr class="hr-dark" />
+                        else
+                        {
+                            <p class="text-muted">No ticket information available.</p>
+                        }
+                    </div>
+                </div>
+            </div>
 
+            <!-- Right Column - Map -->
+            <div class="map-column" data-aos="fade-left">
+                @if (!string.IsNullOrWhiteSpace(Model.Address))
+                {
+                    <div class="map-card">
+                        <div class="card-header-custom">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <h3>Location</h3>
+                        </div>
+                        <div class="card-body-custom">
+                            <div class="address-display">
+                                <i class="fas fa-location-dot"></i>
+                                <span>@Model.Country, @Model.City, @Model.Address</span>
+                            </div>
+                            <div class="map-container">
+                                <iframe width="100%"
+                                        height="400"
+                                        frameborder="0"
+                                        style="border: 0; border-radius: 12px;"
+                                        src="https://www.google.com/maps?q=@Uri.EscapeDataString($"{Model.Country}, {Model.Address}, {Model.City}")&output=embed"
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
-
-        <!-- ===================== MAP ===================== -->
-        <div class="col-md-6 offset-md-2">
-
-            @if (!string.IsNullOrWhiteSpace(Model.Address))
-            {
-                <h4>
-                    <i class="fa-solid fa-map" style="margin-right: 12px;"></i> 
-                    @Model.Country, @Model.City,
-                    <br>
-                    <span class="text-muted" style="margin-left: 48px;">@Model.Address</span>
-                </h4>
-
-                <iframe width="100%"
-                        height="450"
-                        frameborder="0"
-                        style="border: 2px solid #ccc; border-radius: 8px;"
-                        src="https://www.google.com/maps?q=@Uri.EscapeDataString($"{Model.Country}, {Model.Address}, {Model.City}")&output=embed"
-                        allowfullscreen>
-                </iframe>
-            }
-        </div>
     </div>
-    <hr class="hr-dark" />
 
-    <!-- ===================== BUY TICKETS MODAL ===================== -->
-    <div class="modal fade" id="buyTicketsModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-scrollable">
+    <!-- Buy Tickets Modal -->
+    <!-- Buy Tickets Modal - Using standard Bootstrap classes -->
+    <div class="modal fade" id="buyTicketsModal" tabindex="-1" aria-labelledby="buyTicketsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
             <div class="modal-content">
-
+                <!-- Changed to standard class -->
                 <form asp-controller="Museum" asp-action="BuyTickets" method="post">
                     @Html.AntiForgeryToken()
 
-                    <div class="modal-header">
-                        <h5 class="modal-title">Buy Tickets - @Model.Name</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header" style="background: linear-gradient(135deg, #4a3e26, #5c4e32); color: white; border-bottom: none;">
+                        <h5 class="modal-title" id="buyTicketsModalLabel">
+                            <i class="fas fa-ticket-alt" style="color: #db4a2b; margin-right: 10px;"></i>
+                            Buy Tickets - @Model.Name
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
-
                         <input type="hidden" name="MuseumId" value="@Model.MuseumId" />
 
                         <div class="mb-3">
-                            <label class="form-label"><strong>Visit date</strong></label>
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-calendar-day" style="color: #db4a2b;"></i> Visit Date
+                            </label>
                             <input name="VisitDate"
-                                   type="date" 
+                                   type="date"
                                    id="visitDate"
                                    class="form-control"
                                    value="@DateTime.Today.ToString("yyyy-MM-dd")"
                                    min="@DateTime.Today.ToString("yyyy-MM-dd")"
                                    @(isClient ? "" : "disabled") />
-
-                            <small id="sameDayWarning" class="text-red d-none">
-                                Tickets purchased at the day of visit cannot be cancelled.
+                            <small id="sameDayWarning" class="text-danger d-none">
+                                <i class="fas fa-exclamation-triangle"></i> Tickets purchased on the day of visit cannot be cancelled.
                             </small>
                         </div>
 
                         <hr />
 
-                        <h5>Ticket types</h5>
+                        <h5 class="fw-semibold">Select Tickets</h5>
 
                         @if (Model.TicketTypes != null && Model.TicketTypes.Any())
                         {
-                            for (var i = 0; i < Model.TicketTypes.Count; i++)
-                            {
-                                var tt = Model.TicketTypes.ElementAt(i);
-
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="flex-grow-1">
-                                        <strong>@tt.Name</strong> — @tt.Price.ToString("F2") $
+                            <div class="mb-3">
+                                @for (var i = 0; i < Model.TicketTypes.Count; i++)
+                                {
+                                    var tt = Model.TicketTypes.ElementAt(i);
+                                    <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                                        <div>
+                                            <strong>@tt.Name</strong> — @tt.Price.ToString("F2") $
+                                        </div>
+                                        <input type="hidden" name="Items[@i].TicketTypeId" value="@tt.TicketTypeId" />
+                                        <input type="number"
+                                               name="Items[@i].Quantity"
+                                               class="form-control quantity-input"
+                                               style="width: 100px;"
+                                               min="0"
+                                               max="20"
+                                               value="0"
+                                               data-price="@tt.Price"
+                                               @(isClient ? "" : "disabled") />
                                     </div>
-
-                                    <input type="hidden" name="Items[@i].TicketTypeId" value="@tt.TicketTypeId" />
-
-                                    <input type="number"
-                                           name="Items[@i].Quantity"
-                                           class="form-control qty"
-                                           style="width:100px;"
-                                           min="0"
-                                           max="20"
-                                           value="0"
-                                           data-price="@tt.Price"
-                                           @(isClient ? "" : "disabled") />
-                                </div>
-                            }
+                                }
+                            </div>
                         }
 
                         <hr />
@@ -268,136 +259,105 @@
                         @if (isClient)
                         {
                             <div class="form-check mb-3">
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       id="acceptRules"
-                                       name="AcceptRules"
-                                       value="true" />
-
+                                <input class="form-check-input" type="checkbox" id="acceptRules" name="AcceptRules" value="true" />
                                 <label class="form-check-label" for="acceptRules">
-                                    I agree to the
-                                    <a asp-controller="Home"
-                                       asp-action="Rules"
-                                       target="_blank">
-                                        Rules & Terms
-                                    </a>.
+                                    I agree to the <a asp-controller="Home" asp-action="Rules" target="_blank">Rules & Terms</a>.
                                 </label>
                             </div>
                         }
 
-                        <div class="d-flex justify-content-between">
-                            <strong>Total:</strong>
-                            <span><span id="totalAmount">0.00</span> $</span>
+                        <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded">
+                            <strong class="fs-5">Total Amount:</strong>
+                            <span class="fs-3 fw-bold text-red">
+                                <span id="totalAmount">0.00</span> $
+                            </span>
                         </div>
-
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button"
-                                class="btn btn-secondary"
-                                data-bs-dismiss="modal">
-                            Close
-                        </button>
-
-                        <button type="submit"
-                                id="buyButton"
-                                class="btn btn-red"
-                                @(isClient ? "disabled" : "disabled")>
-                            Buy
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" id="buyButton" class="btn btn-red" @(isClient ? "disabled" : "disabled")>
+                            <i class="fas fa-check"></i> Confirm Purchase
                         </button>
                     </div>
-
                 </form>
             </div>
         </div>
-
     </div>
-</div>
 
-<!-- ===================== STYLIZED BACKGROUND CIRCLES ===================== -->
-<ul class='circles'>
-    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
-</ul>
+    <!-- Decorative Circles -->
+    <ul class="circles">
+        <li><i class="fa-solid fa-landmark"></i></li>
+        <li><i class="fa-solid fa-building-columns"></i></li>
+        <li><i class="fa-solid fa-monument"></i></li>
+        <li><i class="fa-solid fa-gem"></i></li>
+        <li><i class="fa-solid fa-scroll"></i></li>
+        <li><i class="fa-solid fa-paint-roller"></i></li>
+        <li><i class="fa-solid fa-palette"></i></li>
+        <li><i class="fa-solid fa-book"></i></li>
+        <li><i class="fa-solid fa-masks-theater"></i></li>
+    </ul>
+</div>
 
 @section Scripts {
     <script>
-        // ===================== TICKET TOTAL UPDATE =====================
-        (function () {
+        function closePopup() {
+            var popup = document.getElementById('ticketPopup');
+            if (popup) {
+                popup.classList.add('popup-hide');
+                setTimeout(function() {
+                    popup.style.display = 'none';
+                }, 400);
+            }
+        }
+
+        // Ticket total update
+        (function() {
             function updateTotal() {
                 var total = 0.0;
-
-                document.querySelectorAll('.qty').forEach(function (el) {
+                document.querySelectorAll('.quantity-input').forEach(function(el) {
                     var qty = parseInt(el.value || '0', 10);
                     var price = parseFloat(el.getAttribute('data-price') || '0');
-
                     if (!isNaN(qty) && !isNaN(price)) {
                         total += qty * price;
                     }
                 });
-
                 document.getElementById('totalAmount').textContent = total.toFixed(2);
             }
 
-            document.addEventListener('input', function (e) {
-                if (e.target && e.target.classList.contains('qty')) {
+            document.addEventListener('input', function(e) {
+                if (e.target && e.target.classList.contains('quantity-input')) {
                     updateTotal();
                 }
             });
 
             var acceptCheckbox = document.getElementById('acceptRules');
             var buyButton = document.getElementById('buyButton');
-
             if (acceptCheckbox && buyButton) {
                 buyButton.disabled = true;
-
-                acceptCheckbox.addEventListener('change', function () {
+                acceptCheckbox.addEventListener('change', function() {
                     buyButton.disabled = !this.checked;
                 });
             }
-
             updateTotal();
         })();
 
-        // ===================== SAME-DAY WARNING =====================
+        // Same-day warning
         var visitDateInput = document.getElementById("visitDate");
         var sameDayWarning = document.getElementById("sameDayWarning");
-
         function checkVisitDate() {
             if (!visitDateInput) return;
-
             var selected = visitDateInput.value;
             var today = new Date().toISOString().split('T')[0];
-
             if (selected === today) {
                 sameDayWarning.classList.remove("d-none");
             } else {
                 sameDayWarning.classList.add("d-none");
             }
         }
-
         if (visitDateInput) {
             visitDateInput.addEventListener("change", checkVisitDate);
             checkVisitDate();
         }
-    </script>
-
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
-    <!-- ===================== AOS INIT ===================== -->
-    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
-    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-    <script>
-        AOS.init({
-            duration: 600,
-            once: true
-        });
     </script>
 }
