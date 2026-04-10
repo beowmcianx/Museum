@@ -1,40 +1,185 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿/* ==================== HEADER / NAVBAR STYLES ==================== */
 
-a.navbar-brand { 
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+body:not(.page-index) header {
+    border: none;
+    margin-bottom: 50px;
 }
 
-a {
-  color: #0077cc;
+/* Navbar background */
+header .navbar {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+    border: none;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    height: 80px;
+    padding: 0 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+/* Navbar brand / logo */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    .navbar-brand:hover {
+        transform: scale(1.02);
+    }
+
+.layout-logo {
+    height: 55px;
+    width: 55px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: white;
+    padding: 3px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+.navbar-brand:hover .layout-logo {
+    transform: rotate(5deg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+/* Navbar links container */
+.navbar-nav {
+    gap: 8px;
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+/* Navbar links */
+.navbar .nav-link {
+    color: #e4e2dd !important;
+    position: relative;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 10px 18px !important;
+    transition: all 0.3s ease;
+    font-family: Aileron, Helvetica, sans-serif;
+    letter-spacing: 0.3px;
+}
+
+    /* Underline animation */
+    .navbar .nav-link::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: 4px;
+        width: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #db4a2b, #f08c5c);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 3px;
+        transform: translateX(-50%);
+    }
+
+    .navbar .nav-link:hover::after {
+        width: 70%;
+    }
+
+    .navbar .nav-link.active::after {
+        width: 70%;
+    }
+
+    .navbar .nav-link:hover {
+        color: #db4a2b !important;
+        transform: translateY(-2px);
+    }
+
+    .navbar .nav-link.active {
+        color: #db4a2b !important;
+    }
+
+/* Icons (Font Awesome) */
+.navbar .fa-solid,
+.navbar .fa-regular {
+    color: #e4e2dd !important;
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-link:hover .fa-solid,
+.navbar .nav-link:hover .fa-regular,
+.navbar .nav-link.active .fa-solid,
+.navbar .nav-link.active .fa-regular {
+    color: #db4a2b !important;
+}
+
+/* Navbar toggler (mobile) */
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.3);
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+}
+
+    .navbar-toggler:hover {
+        border-color: #db4a2b;
+        background: rgba(219, 74, 43, 0.1);
+    }
+
+.navbar-toggler-icon {
+    filter: invert(1);
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler:hover .navbar-toggler-icon {
+    filter: invert(0.6) sepia(1) hue-rotate(320deg);
+}
+
+/* Dropdown menu (if any) */
+.dropdown-menu {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+}
+
+.dropdown-item {
+    color: #e4e2dd;
+    transition: all 0.2s ease;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+    .dropdown-item:hover {
+        background: linear-gradient(90deg, #db4a2b, #f08c5c);
+        color: white;
+        transform: translateX(5px);
+    }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    header .navbar {
+        height: auto;
+        min-height: 70px;
+        padding: 10px 15px;
+    }
+
+    .navbar-nav {
+        padding: 15px 0;
+        gap: 5px;
+    }
+
+    .navbar .nav-link {
+        padding: 8px 15px !important;
+        text-align: center;
+    }
+
+        .navbar .nav-link::after {
+            bottom: 0;
+        }
+
+    .layout-logo {
+        height: 45px;
+        width: 45px;
+    }
+}
+
+/* Desktop hover effect for navbar */
+@media (min-width: 769px) {
+    .navbar-nav {
+        margin-left: 20px;
+    }
 }

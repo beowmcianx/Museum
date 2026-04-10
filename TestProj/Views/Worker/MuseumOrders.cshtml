@@ -2,237 +2,249 @@
 @using TestProj.Models
 
 @{
-    ViewData["Title"] = $"Orders {Model.Name}";
-
+    ViewData["Title"] = $"Orders - {Model.Name}";
     var groupedOrders = Model.Orders
         ?.OrderBy(o => o.VisitDate)
         .GroupBy(o => o.VisitDate.Date);
 }
 
-<body class="page-catalogue">
-    <div class="ocean">
-        <div class="wave"></div>
-        <div class="wave"></div>
+<!-- Popup Alert -->
+@if (TempData["Success"] != null || TempData["Error"] != null)
+{
+    var isSuccess = TempData["Success"] != null;
+    var message = isSuccess ? TempData["Success"] : TempData["Error"];
+
+    <div id="ticketPopup" class="ticket-popup @(isSuccess ? "success" : "error")" data-aos="fade-left">
+        <div class="popup-content">
+            <span>@message</span>
+            <button class="popup-close" onclick="closePopup()">×</button>
+        </div>
+    </div>
+}
+
+<div class="orders-page">
+    <!-- Hero Section -->
+    <div class="orders-hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-pattern"></div>
+
+        <div class="container hero-container">
+            <div class="orders-header" data-aos="fade-up">
+                <div class="orders-icon-wrapper">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <h1 class="orders-title">Orders Dashboard</h1>
+                <p class="orders-subtitle">View and manage reservations for @Model.Name</p>
+            </div>
+        </div>
     </div>
 
-    <div class="container mt-5">
-
-        <!-- HEADER -->
-        <div class="text-center mb-4">
-            <h1 class="display-5">
-                <i class="fa-solid fa-receipt me-2" style="color:#db4a2a"></i>
-                Orders Dashboard
-            </h1>
-            <span class="text-secondary">
-                View reservations and purchases for @Model.Name
-            </span>
-        </div>
-
-        <!-- BACK BUTTON -->
-        <div class="mb-3">
-            <form asp-controller="Worker"
-                  asp-action="MyMuseum"
-                  asp-route-id="@Model.MuseumId"
-                  method="post">
-                <button type="submit" class="btn btn-outline-dark">
-                    <i class="fa-solid fa-arrow-left me-2"></i> Back
-                </button>
-            </form>
-        </div>
-
-        <!-- FILTER -->
-        <div class="card mx-auto shadow-sm p-4 mb-5 rounded-5 page-catalogue-search-bar">
-            <form asp-action="MuseumOrders" method="get" class="row g-2 align-items-stretch">
-
-                <div class="col-md-4 d-flex">
-                    <a asp-action="MuseumOrders"
-                       class="btn btn-dark w-100 h-100 d-flex align-items-center justify-content-center">
-                        <i class="fa-solid fa-list me-2"></i>
-                        Show All
-                    </a>
-                </div>
-
-                <div class="col-md-4 d-flex">
-                    <div class="input-group w-100 h-100">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-calendar"></i>
-                        </span>
-
-                        <input type="date"
-                               name="selectedDate"
-                               value="@(ViewBag.SelectedDate != null ? ((DateTime)ViewBag.SelectedDate).ToString("yyyy-MM-dd") : "")"
-                               class="form-control h-100" />
-                    </div>
-                </div>
-
-                <div class="col-md-4 d-flex">
-                    <button class="btn btn-red w-100 h-100 d-flex align-items-center justify-content-center" type="submit">
-                        <i class="fas fa-filter me-2"></i> Filter
-                    </button>
-                </div>
-
-            </form>
-        </div>
-
-        @if (groupedOrders == null || !groupedOrders.Any())
-        {
-            <div class="card shadow-lg rounded-5 p-4 text-center">
-                <i class="fa-solid fa-calendar-xmark fa-2x mb-3 text-secondary"></i>
-
-                @if (ViewBag.SelectedDate != null)
-                {
-                    <p class="text-muted mb-0">
-                        No orders found for
-                        <strong>@(((DateTime)ViewBag.SelectedDate).ToString("dd MMM yyyy"))</strong>
-                    </p>
-                }
-                else
-                {
-                    <p class="text-muted mb-0">
-                        No reservations or purchases yet.
-                    </p>
-                }
+    <!-- Orders Content Section -->
+    <div class="orders-content-section">
+        <div class="container">
+            <!-- Back Button -->
+            <div class="back-button-wrapper" data-aos="fade-right">
+                <a asp-controller="Worker" asp-action="MyMuseum" asp-route-id="@Model.MuseumId" class="btn-back-custom">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Museum
+                </a>
             </div>
-        }
-        else
-        {
-            @foreach (var group in groupedOrders)
-            {
-                <div class="card shadow-lg rounded-5 p-4 mb-4">
 
-                    <h4 class="mb-3">
-                        <i class="fa-solid fa-calendar-day me-2 text-danger"></i>
-                        @group.Key.ToString("dd MMM yyyy")
-                    </h4>
-
-                    <hr class="hr-dark" />
-
-                    <table class="table align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Order Code</th>
-                                <th>Tickets</th>
-                                <th>User</th>
-                                <th>Created</th>
-                                <th>Status</th>
-                                <th>Status Actions</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach (var order in group)
-                            {
-                                <tr class="order-row">
-
-                                    <td><strong>@order.OrderCode</strong></td>
-
-                                    <td>
-                                        <span class="badge bg-dark">
-                                            @order.OrderItems?.Count()
-                                        </span>
-                                    </td>
-
-                                    <td>@order.User?.UserName</td>
-
-                                    <td class="text-muted">
-                                        @order.CreatedAt.ToString("dd.MM.yyyy HH:mm")
-                                    </td>
-
-                                    <!-- STATUS COLUMN -->
-                                    <td>
-                                        <span class="badge
-                                                    @(order.Status == OrderStatus.Confirmed ? "bg-success"
-                                                                                      : order.Status == OrderStatus.Cancelled ? "bg-danger"
-                                                                                      : order.Status == OrderStatus.Used ? "bg-secondary"
-                                                                                      : "bg-warning text-dark")">
-                                @order.Status
-                            </span>
-                        </td>
-
-                                    <!-- ACTION BUTTONS COLUMN -->
-                                    <td>
-                                        <div class="d-flex flex-column gap-1">
-
-                                            <!-- ACCEPT -->
-                                            <form asp-action="UpdateOrderStatus" method="post">
-                                                @Html.AntiForgeryToken()
-                                                <input type="hidden" name="orderId" value="@order.OrderId" />
-                                                <input type="hidden" name="status" value="@OrderStatus.Confirmed" />
-                                                <button class="btn btn-sm btn-success"
-                                                        disabled="@(order.Status != OrderStatus.New)">
-                                                    Accept
-                                                </button>
-                                            </form>
-
-                                            <!-- CANCEL -->
-                                            <form asp-action="UpdateOrderStatus" method="post">
-                                                @Html.AntiForgeryToken()
-                                                <input type="hidden" name="orderId" value="@order.OrderId" />
-                                                <input type="hidden" name="status" value="@OrderStatus.Cancelled" />
-                                                <button class="btn btn-sm btn-danger"
-                                                        disabled="@(order.Status == OrderStatus.Used || order.Status == OrderStatus.Cancelled)">
-                                                    Cancel
-                                                </button>
-                                            </form>
-
-                                            <!-- USED -->
-                                            <form asp-action="UpdateOrderStatus" method="post">
-                                                @Html.AntiForgeryToken()
-                                                <input type="hidden" name="orderId" value="@order.OrderId" />
-                                                <input type="hidden" name="status" value="@OrderStatus.Used" />
-                                                <button class="btn btn-sm btn-secondary"
-                                                        disabled="@(order.Status != OrderStatus.Confirmed)">
-                                                    Used
-                                                </button>
-                                            </form>
-
-                                        </div>
-                                    </td>
-
-                                </tr>
-                                        }
-                        </tbody>
-                    </table>
-
+            <!-- Filter Card -->
+            <div class="filter-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="filter-header">
+                    <i class="fas fa-sliders-h"></i>
+                    <h3>Filter Orders</h3>
                 </div>
+
+                <form asp-action="MuseumOrders" method="get" class="filter-form">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <i class="fas fa-calendar-day"></i>
+                                Select Date
+                            </label>
+                            <input type="date"
+                                   name="selectedDate"
+                                   value="@(ViewBag.SelectedDate != null ? ((DateTime)ViewBag.SelectedDate).ToString("yyyy-MM-dd") : "")"
+                                   class="filter-input" />
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-label">&nbsp;</label>
+                            <button type="submit" class="btn-filter">
+                                <i class="fas fa-filter"></i> Apply Filter
+                            </button>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-label">&nbsp;</label>
+                            <a asp-action="MuseumOrders" class="btn-reset-filter">
+                                <i class="fas fa-list"></i> Show All
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Orders List -->
+            @if (groupedOrders == null || !groupedOrders.Any())
+            {
+                <div class="empty-state" data-aos="fade-up">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-calendar-xmark"></i>
+                    </div>
+                    @if (ViewBag.SelectedDate != null)
+                    {
+                        <h3>No Orders Found</h3>
+                        <p>No orders found for <strong>@(((DateTime)ViewBag.SelectedDate).ToString("dd MMM yyyy"))</strong></p>
+                        <a asp-action="MuseumOrders" class="btn-explore-orders">
+                            <i class="fas fa-list"></i>
+                            View All Orders
+                        </a>
+                    }
+                    else
+                    {
+                        <h3>No Orders Yet</h3>
+                        <p>No reservations or purchases have been made for this museum.</p>
+                    }
+                </div>
+            }
+            else
+            {
+                foreach (var group in groupedOrders)
+                {
+                    <div class="orders-group-card" data-aos="fade-up">
+                        <div class="group-header">
+                            <i class="fas fa-calendar-day"></i>
+                            <h3>@group.Key.ToString("dd MMM yyyy")</h3>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order Code</th>
+                                        <th>Tickets</th>
+                                        <th>Customer</th>
+                                        <th>Created</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in group)
+                                    {
+                                        <tr class="order-row">
+                                            <td class="order-code">
+                                                <i class="fas fa-ticket-alt"></i>
+                                                <strong>@order.OrderCode</strong>
+                                            </td>
+                                            <td>
+                                                <span class="ticket-count-badge">
+                                                    @order.OrderItems?.Count() tickets
+                                                </span>
+                                            </td>
+                                            <td class="customer-name">
+                                                <i class="fas fa-user-circle"></i>
+                                                @order.User?.UserName
+                                            </td>
+                                            <td class="created-date">
+                                                <i class="fas fa-clock"></i>
+                                                @order.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                                            </td>
+                                            <td>
+                                                <span class="status-badge @(order.Status == OrderStatus.Confirmed ? "status-confirmed" : order.Status == OrderStatus.Cancelled ? "status-cancelled" : order.Status == OrderStatus.Used ? "status-used" : "status-new")">
+                                                    @order.Status
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <!-- Accept -->
+                                                    <form asp-action="UpdateOrderStatus" method="post" class="action-form">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="orderId" value="@order.OrderId" />
+                                                        <input type="hidden" name="status" value="@OrderStatus.Confirmed" />
+                                                        <button class="btn-action btn-accept"
+                                                                disabled="@(order.Status != OrderStatus.New)"
+                                                                title="Accept Order">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <!-- Cancel -->
+                                                    <form asp-action="UpdateOrderStatus" method="post" class="action-form">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="orderId" value="@order.OrderId" />
+                                                        <input type="hidden" name="status" value="@OrderStatus.Cancelled" />
+                                                        <button class="btn-action btn-cancel"
+                                                                disabled="@(order.Status == OrderStatus.Used || order.Status == OrderStatus.Cancelled)"
+                                                                title="Cancel Order">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <!-- Mark as Used -->
+                                                    <form asp-action="UpdateOrderStatus" method="post" class="action-form">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="orderId" value="@order.OrderId" />
+                                                        <input type="hidden" name="status" value="@OrderStatus.Used" />
+                                                        <button class="btn-action btn-used"
+                                                                disabled="@(order.Status != OrderStatus.Confirmed)"
+                                                                title="Mark as Used">
+                                                            <i class="fas fa-stamp"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Decorative Circles -->
+    <ul class="circles">
+        <li><i class="fa-solid fa-landmark"></i></li>
+        <li><i class="fa-solid fa-building-columns"></i></li>
+        <li><i class="fa-solid fa-monument"></i></li>
+        <li><i class="fa-solid fa-gem"></i></li>
+        <li><i class="fa-solid fa-scroll"></i></li>
+        <li><i class="fa-solid fa-paint-roller"></i></li>
+        <li><i class="fa-solid fa-palette"></i></li>
+        <li><i class="fa-solid fa-book"></i></li>
+        <li><i class="fa-solid fa-masks-theater"></i></li>
+    </ul>
+</div>
+
+@section Scripts {
+    <script>
+        function closePopup() {
+            var popup = document.getElementById('ticketPopup');
+            if (popup) {
+                popup.classList.add('popup-hide');
+                setTimeout(function() {
+                    popup.style.display = 'none';
+                }, 400);
             }
         }
 
-    </div>
-
-</body>
-
-<style>
-    .order-row {
-        transition: all 0.2s ease-in-out;
-    }
-
-        .order-row:hover {
-            background-color: #f8f9fa;
-            transform: scale(1.01);
-        }
-
-    .badge {
-        padding: 6px 10px;
-        font-size: 0.85rem;
-    }
-
-    td > div.d-flex.flex-column > form > button {
-        width: 100%;
-    }
-</style>
-
-<ul class='circles'>
-    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
-</ul>
-
-<script src="~/js/site.js" asp-append-version="true"></script>
-
+        // Auto-hide popup after 3 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            var popup = document.getElementById('ticketPopup');
+            if (popup) {
+                setTimeout(function() {
+                    popup.classList.add('popup-hide');
+                    setTimeout(function() {
+                        popup.style.display = 'none';
+                    }, 400);
+                }, 3000);
+            }
+        });
+    </script>
+}
