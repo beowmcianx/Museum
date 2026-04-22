@@ -1,16 +1,15 @@
-/* Profile Page Styles */
+/* Edit Museum Page (Dashboard) Styles */
 
 /* Page Container */
-.profile-page {
+.edit-museum-page {
     min-height: 100vh;
     background-color: #e4e2dd;
     position: relative;
     overflow-x: hidden;
-    margin-top: -50px;
 }
 
 /* Hero Section */
-.profile-hero-section {
+.edit-hero-section {
     position: relative;
     background: linear-gradient(135deg, #4a3e26 0%, #5c4e32 100%);
     border-radius: 0 0 60px 60px;
@@ -47,12 +46,12 @@
     z-index: 2;
 }
 
-/* Profile Header */
-.profile-header {
+/* Edit Header */
+.edit-header {
     animation: fadeInUp 0.6s ease-out;
 }
 
-.profile-icon-wrapper {
+.edit-icon-wrapper {
     width: 80px;
     height: 80px;
     background: rgba(255, 255, 255, 0.15);
@@ -64,12 +63,12 @@
     border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-    .profile-icon-wrapper i {
+    .edit-icon-wrapper i {
         font-size: 40px;
         color: #db4a2b;
     }
 
-.profile-title {
+.edit-title {
     font-size: 48px;
     font-weight: 800;
     color: white;
@@ -78,43 +77,61 @@
     font-family: Alfran, Rostov, sans-serif;
 }
 
-.profile-subtitle {
+.edit-subtitle {
     font-size: 18px;
     color: rgba(255, 255, 255, 0.9);
     font-family: Aileron, Helvetica, sans-serif;
 }
 
-/* Profile Content Section */
-.profile-content-section {
+/* Form Section */
+.edit-form-section {
     padding: 20px 0 80px;
     position: relative;
     z-index: 2;
 }
 
-/* Profile Card */
-.profile-card {
-    background: white;
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-    .profile-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-    }
-
-.profile-card-body {
-    padding: 40px;
-}
-
-/* Info Section */
-.info-section {
+/* Back Button */
+.back-button-wrapper {
     margin-bottom: 30px;
 }
 
-.section-header {
+.btn-back-custom {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: white;
+    color: #4a3e26;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    font-family: Aileron, Helvetica, sans-serif;
+}
+
+    .btn-back-custom:hover {
+        background: #db4a2b;
+        color: white;
+        transform: translateX(-5px);
+        text-decoration: none;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+/* Edit Card */
+.edit-card {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 30px;
+}
+
+.section-header-custom {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -123,12 +140,12 @@
     border-bottom: 2px solid #f0f0f0;
 }
 
-    .section-header i {
+    .section-header-custom i {
         font-size: 24px;
         color: #db4a2b;
     }
 
-    .section-header h3 {
+    .section-header-custom h3 {
         font-size: 20px;
         font-weight: 600;
         margin: 0;
@@ -136,79 +153,41 @@
         font-family: Alfran, Rostov, sans-serif;
     }
 
-/* Info Grid */
-.info-grid {
+.section-description {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 20px;
+    font-family: Aileron, Helvetica, sans-serif;
+}
+
+/* Form Grid */
+.form-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
-.info-item {
+.form-group {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-    .info-item.full-width {
+    .form-group.full-width {
         grid-column: span 2;
     }
 
-.info-label {
+.form-label-custom {
     display: flex;
     align-items: center;
     gap: 8px;
     font-weight: 600;
-    font-size: 13px;
-    color: #6c757d;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-family: Aileron, Helvetica, sans-serif;
-}
-
-    .info-label i {
-        color: #db4a2b;
-        font-size: 12px;
-    }
-
-.info-input {
-    padding: 12px 16px;
-    background: #f8f9fa;
-    border: 2px solid #e0e0e0;
-    border-radius: 12px;
-    font-size: 15px;
-    color: #4a3e26;
-    font-family: Aileron, Helvetica, sans-serif;
-    cursor: not-allowed;
-}
-
-/* Divider */
-.divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
-    margin: 30px 0;
-}
-
-/* Form Section */
-.form-section {
-    margin-top: 10px;
-}
-
-.form-group {
-    margin-bottom: 24px;
-}
-
-.form-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #4a3e26;
     font-size: 14px;
+    color: #4a3e26;
     font-family: Aileron, Helvetica, sans-serif;
 }
 
-    .form-label i {
+    .form-label-custom i {
         color: #db4a2b;
         font-size: 14px;
     }
@@ -218,7 +197,7 @@
     padding: 12px 16px;
     border: 2px solid #e0e0e0;
     border-radius: 12px;
-    font-size: 15px;
+    font-size: 14px;
     transition: all 0.2s ease;
     font-family: Aileron, Helvetica, sans-serif;
 }
@@ -229,8 +208,128 @@
         box-shadow: 0 0 0 3px rgba(219, 74, 43, 0.1);
     }
 
-/* Save Button */
-.btn-save {
+textarea.form-control-custom {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Image Preview */
+.image-preview-container {
+    margin-top: 15px;
+    text-align: center;
+}
+
+    .image-preview-container img {
+        max-height: 200px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+.form-hint {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 8px;
+}
+
+/* Divider */
+.divider-custom {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
+    margin: 30px 0;
+}
+
+/* Add Ticket Button */
+.btn-add-ticket {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 24px;
+    background: #db4a2b;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: Aileron, Helvetica, sans-serif;
+    margin-bottom: 20px;
+}
+
+    .btn-add-ticket:hover {
+        background: #c93e20;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(219, 74, 43, 0.3);
+    }
+
+/* Tickets Container */
+.tickets-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ticket-row {
+    background: #f8f9fa;
+    border-radius: 16px;
+    padding: 16px;
+    transition: all 0.2s ease;
+}
+
+    .ticket-row:hover {
+        background: #f0f0f0;
+    }
+
+.ticket-row-content {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.ticket-field {
+    flex: 1;
+    min-width: 180px;
+}
+
+.ticket-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4a3e26;
+    margin-bottom: 6px;
+    font-family: Aileron, Helvetica, sans-serif;
+}
+
+.ticket-actions {
+    display: flex;
+    align-items: center;
+}
+
+.btn-remove-ticket {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .btn-remove-ticket:hover {
+        background: #bb2d3b;
+        transform: translateY(-2px);
+    }
+
+/* Form Actions */
+.form-actions {
+    margin-top: 30px;
+}
+
+.btn-save-changes {
     width: 100%;
     padding: 14px 24px;
     background: #db4a2b;
@@ -248,22 +347,23 @@
     font-family: Aileron, Helvetica, sans-serif;
 }
 
-    .btn-save:hover {
+    .btn-save-changes:hover {
         background: #c93e20;
         transform: translateY(-2px);
         box-shadow: 0 10px 20px rgba(219, 74, 43, 0.3);
     }
 
-    .btn-save:active {
-        transform: translateY(0);
-    }
+/* Alert Styles */
+.alert {
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
 
-/* Validation Styles */
-.text-danger {
-    color: #dc3545;
-    font-size: 12px;
-    margin-top: 5px;
-    display: block;
+.alert-danger {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
 }
 
 /* Floating Circles */
@@ -384,28 +484,24 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .profile-title {
+    .edit-title {
         font-size: 32px;
     }
 
-    .profile-subtitle {
+    .edit-subtitle {
         font-size: 16px;
     }
 
-    .profile-icon-wrapper {
+    .edit-icon-wrapper {
         width: 60px;
         height: 60px;
     }
 
-        .profile-icon-wrapper i {
+        .edit-icon-wrapper i {
             font-size: 30px;
         }
 
-    .profile-card-body {
-        padding: 30px 24px;
-    }
-
-    .profile-hero-section {
+    .edit-hero-section {
         border-radius: 0 0 30px 30px;
     }
 
@@ -413,60 +509,57 @@
         padding: 40px 20px 50px;
     }
 
-    .info-grid {
+    .edit-card {
+        padding: 24px;
+    }
+
+    .form-grid {
         grid-template-columns: 1fr;
         gap: 16px;
     }
 
-    .info-item.full-width {
+    .form-group.full-width {
         grid-column: span 1;
     }
 
-    .section-header h3 {
+    .ticket-row-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ticket-field {
+        width: 100%;
+    }
+
+    .ticket-actions {
+        justify-content: flex-end;
+    }
+
+    .btn-remove-ticket {
+        padding: 10px 16px;
+    }
+
+    .section-header-custom h3 {
         font-size: 18px;
     }
 
-    .section-header i {
+    .section-header-custom i {
         font-size: 20px;
-    }
-
-    .form-control-custom,
-    .info-input {
-        font-size: 14px;
-        padding: 10px 14px;
-    }
-
-    .btn-save {
-        padding: 12px 20px;
-        font-size: 14px;
     }
 }
 
 @media (max-width: 480px) {
-    .profile-title {
+    .edit-title {
         font-size: 28px;
     }
 
-    .profile-card-body {
-        padding: 24px 20px;
+    .edit-card {
+        padding: 20px;
     }
-
-    .info-label {
-        font-size: 12px;
-    }
-}
-
-.profile-page::-webkit-scrollbar {
-    display: none;
-}
-
-.profile-page {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
 }
 
 @media (max-width: 769px) {
-    .profile-hero-section {
+    .edit-hero-section {
         position: relative;
         background: linear-gradient(135deg, #4a3e26 0%, #5c4e32 100%);
         border-radius: 30px 30px 60px 60px;

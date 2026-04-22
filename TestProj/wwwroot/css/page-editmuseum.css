@@ -548,3 +548,14 @@ textarea.form-control-custom {
         font-size: 20px;
     }
 }
+
+@media (max-width: 769px) {
+    .edit-hero-section {
+        position: relative;
+        background: linear-gradient(135deg, #4a3e26 0%, #5c4e32 100%);
+        border-radius: 30px 30px 60px 60px;
+        overflow: hidden;
+        margin-bottom: 50px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+}

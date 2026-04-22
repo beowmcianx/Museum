@@ -4,388 +4,353 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<!-- ===================== POPUP ALERT ===================== -->
+<!-- Popup Alert -->
 @if (TempData["Success"] != null || TempData["Error"] != null)
 {
     var isSuccess = TempData["Success"] != null;
     var message = isSuccess ? TempData["Success"] : TempData["Error"];
 
-    <div id="ticketPopup"
-         class="ticket-popup @(isSuccess ? "success" : "error")">
-
+    <div id="ticketPopup" class="ticket-popup @(isSuccess ? "success" : "error")" data-aos="fade-left">
         <div class="popup-content">
             <span>@message</span>
             <button class="popup-close" onclick="closePopup()">×</button>
         </div>
-
     </div>
 }
 
-<div class="ocean">
-    <div class="wave"></div>
-    <div class="wave"></div>
-</div>
+<div class="dashboard-page">
+    <!-- Hero Section -->
+    <div class="dashboard-hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-pattern"></div>
 
-<body class="page-catalogue">
-
-    <div class="container mt-4">
-
-        <div class="text-center mb-4">
-            <h1 class="display-5">
-                <i class="fa-solid fa-gauge-high me-2" style="color:#db4a2a"></i>
-                Dashboard
-            </h1>
-
-            <h5 class="text-secondary">
-                View, create and manage museums & accounts
-            </h5>
-        </div>
-
-        <hr />
-
-        <!-- Dashboard actions -->
-        <h3 class="text-center mb-4">
-            <i class="fa-solid fa-sliders me-2 text-danger"></i>
-            Administration
-        </h3>
-
-        <div class="row g-3 mb-5">
-
-            <div class="col-md-4">
-                <a class="btn btn-red page-dashboard-button w-100 text-center p-4"
-                   asp-controller="Dashboard"
-                   asp-action="Create">
-
-                    <i class="fas fa-landmark fa-2x mb-2"></i><br />
-                    Create Museum
-
-                </a>
+        <div class="container hero-container">
+            <div class="dashboard-header" data-aos="fade-up">
+                <div class="dashboard-icon-wrapper">
+                    <i class="fas fa-gauge-high"></i>
+                </div>
+                <h1 class="dashboard-title">Dashboard</h1>
+                <p class="dashboard-subtitle">View, create and manage museums & accounts</p>
             </div>
-
-            <div class="col-md-4">
-                <a class="btn btn-red page-dashboard-button w-100 text-center p-4"
-                   asp-controller="Dashboard"
-                   asp-action="Accounts">
-
-                    <i class="fa-solid fa-users fa-2x mb-2"></i><br />
-                    Manage Accounts
-
-                </a>
-            </div>
-
-            <div class="col-md-4">
-                <a class="btn btn-red page-dashboard-button w-100 text-center p-4"
-                   asp-controller="Dashboard"
-                   asp-action="Analytics">
-
-                    <i class="fa-solid fa-chart-simple fa-2x mb-2"></i><br />
-                    Analytics
-
-                </a>
-            </div>
-
         </div>
-
-        <hr />
-
-        <!-- Museums Section -->
-        <h3 class="text-center mb-4">
-            <i class="fa-solid fa-landmark text-danger me-2"></i>
-            Museums
-        </h3>
-
-        <!-- Search card -->
-        <div class="card mx-auto shadow-sm p-4 mb-4 rounded-5 page-catalogue-search-bar">
-
-            <form asp-controller="Dashboard"
-                  asp-action="Dashboard"
-                  method="get"
-                  class="row g-2 align-items-center">
-
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-search"></i>
-                        </span>
-
-                        <input class="form-control"
-                               type="search"
-                               name="searchString"
-                               value="@ViewBag.SearchString"
-                               placeholder="Search anything..." />
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-flag"></i>
-                        </span>
-
-                        <select class="form-select" name="countryFilter">
-                            <option value="">All Countries</option>
-
-                            @foreach (var country in ViewBag.Countries)
-                            {
-                                <option value="@country"
-                                        selected="@(country == ViewBag.CountryFilter)">
-                                    @country
-                                </option>
-                            }
-
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-city"></i>
-                        </span>
-
-                        <select class="form-select" name="cityFilter">
-                            <option value="">All Cities</option>
-
-                            @foreach (var city in ViewBag.Cities)
-                            {
-                                <option value="@city"
-                                        selected="@(city == ViewBag.CityFilter)">
-                                    @city
-                                </option>
-                            }
-
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-landmark"></i>
-                        </span>
-
-                        <select class="form-select" name="typeFilter">
-                            <option value="">All Types</option>
-
-                            @foreach (var type in ViewBag.Types)
-                            {
-                                <option value="@type"
-                                        selected="@(type == ViewBag.TypeFilter)">
-                                    @type
-                                </option>
-                            }
-
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <button class="btn btn-red w-100">
-                        <i class="fas fa-filter me-2"></i> Filter
-                    </button>
-                </div>
-
-            </form>
-
-        </div>
-
-        <!-- Museums Table -->
-        <div class="card shadow-lg rounded-5 p-3">
-
-            <div class="card-body">
-
-                <table class="table table-hover align-middle">
-
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Type</th>
-                            <th>Working Hours</th>
-                            <th>Active</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        @foreach (var museum in Model)
-                        {
-                            <tr>
-
-                                <td>@museum.MuseumId</td>
-
-                                <td>
-                                    <strong>@museum.Name</strong>
-                                </td>
-
-                                <td>
-                                    @museum.Country, @museum.City
-                                    <br />
-                                    <small class="text-muted">@museum.Address</small>
-                                </td>
-
-                                <td>@museum.Type</td>
-
-                                <td>
-                                    @(DateTime.Today.Add(museum.OpeningTime).ToString("h:mm tt").ToLowerInvariant())
-                                    -
-                                    @(DateTime.Today.Add(museum.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
-                                </td>
-
-                                <td>
-                                    @if (museum.IsActive)
-                                    {
-                                        <span class="badge bg-success">Active</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-secondary">Inactive</span>
-                                    }
-                                </td>
-
-                                <td>
-
-                                    <div class="d-flex gap-2">
-
-                                        <a class="btn btn-sm btn-red"
-                                           asp-controller="Dashboard"
-                                           asp-action="Edit"
-                                           asp-route-id="@museum.MuseumId">
-
-                                            <i class="fa-solid fa-pen"></i>
-                                        </a>
-
-                                        <form asp-controller="Dashboard"
-                                              asp-action="Delete"
-                                              asp-route-id="@museum.MuseumId"
-                                              method="post">
-
-                                            @Html.AntiForgeryToken()
-
-                                            <button class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Delete this museum?');">
-
-                                                <i class="fa-solid fa-trash"></i>
-
-                                            </button>
-
-                                        </form>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-        <hr />
-
-        <h5 class="text-center">
-            Showing page @ViewBag.CurrentPage of @ViewBag.TotalPages
-        </h5>
-
-        <!-- Pagination -->
-        <nav>
-
-            <ul class="pagination justify-content-center">
-
-                @if (ViewBag.CurrentPage > 1)
-                {
-                    <li class="page-item">
-                        <a class="page-link"
-                           asp-action="Dashboard"
-                           asp-route-page="@(ViewBag.CurrentPage - 1)"
-                           asp-route-searchString="@ViewBag.SearchString"
-                           asp-route-countryFilter="@ViewBag.CountryFilter"
-                           asp-route-cityFilter="@ViewBag.CityFilter"
-                           asp-route-typeFilter="@ViewBag.TypeFilter">
-                            Previous
-                        </a>
-                    </li>
-                }
-
-                @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                {
-                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-
-                        <a class="page-link"
-                           asp-action="Dashboard"
-                           asp-route-page="@i"
-                           asp-route-searchString="@ViewBag.SearchString"
-                           asp-route-countryFilter="@ViewBag.CountryFilter"
-                           asp-route-cityFilter="@ViewBag.CityFilter"
-                           asp-route-typeFilter="@ViewBag.TypeFilter">
-
-                            @i
-
-                        </a>
-
-                    </li>
-                }
-
-                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                {
-                    <li class="page-item">
-                        <a class="page-link"
-                           asp-action="Dashboard"
-                           asp-route-page="@(ViewBag.CurrentPage + 1)"
-                           asp-route-searchString="@ViewBag.SearchString"
-                           asp-route-countryFilter="@ViewBag.CountryFilter"
-                           asp-route-cityFilter="@ViewBag.CityFilter"
-                           asp-route-typeFilter="@ViewBag.TypeFilter">
-                            Next
-                        </a>
-                    </li>
-                }
-
-            </ul>
-
-        </nav>
-
     </div>
 
-</body>
+    <!-- Admin Actions Section -->
+    <div class="dashboard-content-section">
+        <div class="container">
+            <!-- Admin Actions Cards -->
+            <div class="section-header" data-aos="fade-right">
+                <div class="section-icon">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
+                <h2>Administration</h2>
+            </div>
 
-<ul class='circles'>
-    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
-</ul>
+            <div class="actions-grid" data-aos="fade-up" data-aos-delay="100">
+                <a class="admin-card" asp-controller="Dashboard" asp-action="Create">
+                    <div class="admin-card-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <div class="admin-card-content">
+                        <h3>Create Museum</h3>
+                        <p>Add a new museum to the catalogue</p>
+                    </div>
+                    <div class="admin-card-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
 
-<script src="~/js/site.js" asp-append-version="true"></script>
+                <a class="admin-card" asp-controller="Dashboard" asp-action="Accounts">
+                    <div class="admin-card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="admin-card-content">
+                        <h3>Manage Accounts</h3>
+                        <p>View and manage user accounts and roles</p>
+                    </div>
+                    <div class="admin-card-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
 
-<script>
-        document.addEventListener("DOMContentLoaded", function () {
+                <a class="admin-card" asp-controller="Dashboard" asp-action="Analytics">
+                    <div class="admin-card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="admin-card-content">
+                        <h3>Analytics</h3>
+                        <p>View platform statistics and insights</p>
+                    </div>
+                    <div class="admin-card-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+            </div>
 
-        const deleteButtons = document.querySelectorAll(".btn-danger");
+            <div class="divider-custom"></div>
 
-        deleteButtons.forEach(button => {
+            <!-- Museums Management Section -->
+            <div class="section-header" data-aos="fade-right">
+                <div class="section-icon">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <h2>Museums Management</h2>
+            </div>
 
-            button.addEventListener("click", function (e) {
+            <!-- Filter Card -->
+            <div class="filter-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="filter-header">
+                    <i class="fas fa-filter"></i>
+                    <h3>Filter Museums</h3>
+                </div>
 
-                if (!confirm("Are you sure you want to delete this museum?")) {
-                    e.preventDefault();
-                }
+                <form asp-controller="Dashboard" asp-action="Dashboard" method="get" class="filter-form">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <i class="fas fa-search"></i> Search
+                            </label>
+                            <input type="text"
+                                   name="searchString"
+                                   class="filter-input"
+                                   value="@ViewBag.SearchString"
+                                   placeholder="Search by name, location..." />
+                        </div>
 
-            });
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <i class="fas fa-flag"></i> Country
+                            </label>
+                            <select name="countryFilter" class="filter-select">
+                                <option value="">All Countries</option>
+                                @foreach (var country in ViewBag.Countries)
+                                {
+                                    <option value="@country" selected="@(country == ViewBag.CountryFilter)">@country</option>
+                                }
+                            </select>
+                        </div>
 
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <i class="fas fa-city"></i> City
+                            </label>
+                            <select name="cityFilter" class="filter-select">
+                                <option value="">All Cities</option>
+                                @foreach (var city in ViewBag.Cities)
+                                {
+                                    <option value="@city" selected="@(city == ViewBag.CityFilter)">@city</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <i class="fas fa-tag"></i> Type
+                            </label>
+                            <select name="typeFilter" class="filter-select">
+                                <option value="">All Types</option>
+                                @foreach (var type in ViewBag.Types)
+                                {
+                                    <option value="@type" selected="@(type == ViewBag.TypeFilter)">@type</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="filter-group filter-actions-group">
+                            <label class="filter-label">&nbsp;</label>
+                            <button type="submit" class="btn-filter">
+                                <i class="fas fa-filter"></i> Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Museums Table -->
+            <div class="table-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="table-responsive">
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Museum Name</th>
+                                <th>Location</th>
+                                <th>Type</th>
+                                <th>Working Hours</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var museum in Model)
+                            {
+                                <tr>
+                                    <td class="museum-id">@museum.MuseumId</td>
+                                    <td class="museum-name">
+                                        <strong>@museum.Name</strong>
+                                    </td>
+                                    <td>
+                                        <div class="location-info">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>@museum.Country, @museum.City</span>
+                                        </div>
+                                        <small class="address-text">@museum.Address</small>
+                                    </td>
+                                    <td>
+                                        <span class="type-badge">@museum.Type</span>
+                                    </td>
+                                    <td class="hours-text">
+                                        <i class="fas fa-clock"></i>
+                                        @(DateTime.Today.Add(museum.OpeningTime).ToString("h:mm tt").ToLowerInvariant()) -
+                                        @(DateTime.Today.Add(museum.ClosingTime).ToString("h:mm tt").ToLowerInvariant())
+                                    </td>
+                                    <td>
+                                        @if (museum.IsActive)
+                                        {
+                                            <span class="status-badge status-active">
+                                                <i class="fas fa-check-circle"></i> Active
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge status-inactive">
+                                                <i class="fas fa-minus-circle"></i> Inactive
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a class="btn-edit" asp-controller="Dashboard" asp-action="Edit" asp-route-id="@museum.MuseumId" title="Edit Museum">
+                                                <i class="fas fa-pen"></i>
+                                            </a>
+                                            <form asp-controller="Dashboard" asp-action="Delete" asp-route-id="@museum.MuseumId" method="post" class="delete-form">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn-delete" title="Delete Museum" onclick="return confirmDelete(event, this)">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            @if (ViewBag.TotalPages > 1)
+            {
+                <div class="pagination-section" data-aos="fade-up">
+                    <div class="pagination-info">
+                        <i class="fas fa-chart-simple"></i>
+                        <span>Showing page @ViewBag.CurrentPage of @ViewBag.TotalPages</span>
+                    </div>
+
+                    <ul class="pagination-custom">
+                        @if (ViewBag.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Dashboard" asp-route-page="@(ViewBag.CurrentPage - 1)" asp-route-searchString="@ViewBag.SearchString" asp-route-countryFilter="@ViewBag.CountryFilter" asp-route-cityFilter="@ViewBag.CityFilter" asp-route-typeFilter="@ViewBag.TypeFilter">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </a>
+                            </li>
+                        }
+
+                        @{
+                            int startPage = Math.Max(1, ViewBag.CurrentPage - 2);
+                            int endPage = Math.Min(ViewBag.TotalPages, ViewBag.CurrentPage + 2);
+
+                            if (startPage > 1)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" asp-action="Dashboard" asp-route-page="1" asp-route-searchString="@ViewBag.SearchString" asp-route-countryFilter="@ViewBag.CountryFilter" asp-route-cityFilter="@ViewBag.CityFilter" asp-route-typeFilter="@ViewBag.TypeFilter">1</a>
+                                </li>
+                                if (startPage > 2)
+                                {
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                }
+                            }
+
+                            for (int i = startPage; i <= endPage; i++)
+                            {
+                                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                    <a class="page-link" asp-action="Dashboard" asp-route-page="@i" asp-route-searchString="@ViewBag.SearchString" asp-route-countryFilter="@ViewBag.CountryFilter" asp-route-cityFilter="@ViewBag.CityFilter" asp-route-typeFilter="@ViewBag.TypeFilter">@i</a>
+                                </li>
+                            }
+
+                            if (endPage < ViewBag.TotalPages)
+                            {
+                                if (endPage < ViewBag.TotalPages - 1)
+                                {
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                }
+                                <li class="page-item">
+                                    <a class="page-link" asp-action="Dashboard" asp-route-page="@ViewBag.TotalPages" asp-route-searchString="@ViewBag.SearchString" asp-route-countryFilter="@ViewBag.CountryFilter" asp-route-cityFilter="@ViewBag.CityFilter" asp-route-typeFilter="@ViewBag.TypeFilter">@ViewBag.TotalPages</a>
+                                </li>
+                            }
+                        }
+
+                        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Dashboard" asp-route-page="@(ViewBag.CurrentPage + 1)" asp-route-searchString="@ViewBag.SearchString" asp-route-countryFilter="@ViewBag.CountryFilter" asp-route-cityFilter="@ViewBag.CityFilter" asp-route-typeFilter="@ViewBag.TypeFilter">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Decorative Circles -->
+    <ul class="circles">
+        <li><i class="fa-solid fa-landmark"></i></li>
+        <li><i class="fa-solid fa-building-columns"></i></li>
+        <li><i class="fa-solid fa-monument"></i></li>
+        <li><i class="fa-solid fa-gem"></i></li>
+        <li><i class="fa-solid fa-scroll"></i></li>
+        <li><i class="fa-solid fa-paint-roller"></i></li>
+        <li><i class="fa-solid fa-palette"></i></li>
+        <li><i class="fa-solid fa-book"></i></li>
+        <li><i class="fa-solid fa-masks-theater"></i></li>
+    </ul>
+</div>
+
+@section Scripts {
+    <script>
+        function closePopup() {
+            var popup = document.getElementById('ticketPopup');
+            if (popup) {
+                popup.classList.add('popup-hide');
+                setTimeout(function() {
+                    popup.style.display = 'none';
+                }, 400);
+            }
+        }
+
+        // Auto-hide popup after 3 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            var popup = document.getElementById('ticketPopup');
+            if (popup) {
+                setTimeout(function() {
+                    popup.classList.add('popup-hide');
+                    setTimeout(function() {
+                        popup.style.display = 'none';
+                    }, 400);
+                }, 3000);
+            }
         });
 
-    });
-</script>
+        // Delete confirmation
+        function confirmDelete(event, button) {
+            if (!confirm('Are you sure you want to delete this museum? This action cannot be undone.')) {
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+    </script>
+}

@@ -2,123 +2,125 @@
 
 /* Page Container */
 .home-page {
-    min-height: 100vh;
+    min-height: calc(100vh - var(--navbar-height));
     background-color: #e4e2dd;
     position: relative;
     overflow-x: hidden;
+    -ms-overflow-style: auto;
+    scrollbar-width: auto;
 }
 
 /* Hero Section */
 .home-hero-section {
     position: relative;
-    height: 100vh;
     min-height: 400px;
+    height: min(100vh, 1200px);
     width: 100%;
     overflow: hidden;
     margin-bottom: 0;
     border-radius: 20px;
+    isolation: isolate;
 }
 
 /* Hero Carousel */
 .hero-carousel {
     height: 100%;
     width: 100%;
+    position: relative;
 }
 
-    .hero-carousel .carousel-inner {
-        height: 100%;
-        width: 100%;
-    }
+.hero-carousel .carousel-inner,
+.hero-carousel .carousel-item {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
 
-    .hero-carousel .carousel-item {
-        height: 100%;
-        width: 100%;
-    }
+.hero-carousel .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
 
-        .hero-carousel .carousel-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
-
+/* Carousel Title - Perfectly Centered */
 .carousel-title {
     position: absolute;
-    top: 30%;
-    left: 20%;
-    transform: translate(-50%, -50%);
+    top: 35%;
+    transform: translateX(-50%);
     text-align: center;
-    color: white;
+    color: #fff;
     z-index: 15;
-    width: 90%;
-    max-width: 800px;
-    padding: 30px 40px;
-    pointer-events: none;
-    background: rgba(74, 62, 38, 0.7);
+    width: clamp(280px, 90%, 800px);
+    padding: 1.875rem 2.5rem;
+    background: linear-gradient(180deg, rgba(74, 62, 38, 0.72), rgba(74,62,38,0.68));
     backdrop-filter: blur(10px);
-    border-radius: 20px;
+    border-radius: 1.25rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(74, 62, 38, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0px 15%;
+    box-sizing: border-box;
 }
 
+/* Icon wrapper */
 .title-icon-wrapper {
-    width: 80px;
-    height: 80px;
+    width: 5rem;
+    height: 5rem;
     background: rgba(255, 255, 255, 0.15);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 24px;
+    margin: 0 auto 1.5rem;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
 }
 
-    .title-icon-wrapper i {
-        font-size: 40px;
-        color: #db4a2b;
-    }
+.title-icon-wrapper i {
+    font-size: 2.5rem;
+    color: #db4a2b;
+}
 
+/* Title text */
 .carousel-title h1 {
-    font-size: 64px;
+    font-size: clamp(1.75rem, 4.0vw, 4rem);
     font-weight: 800;
-    margin-bottom: 16px;
-    text-shadow: 1px 12px 200px rgba(0, 0, 0, 1);
-    font-family: Alfran, Rostov, sans-serif;
-    letter-spacing: 2px;
-    color: #db4a2b; 
-    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    text-shadow: 1px 12px 80px rgba(0, 0, 0, 0.6);
+    font-family: Alfran, Rostov, Aileron, Helvetica, sans-serif;
+    letter-spacing: 0.06em;
+    color: #db4a2b;
+    line-height: 1.15;
     word-wrap: break-word;
-    white-space: normal;
 }
 
 .title-subtitle {
-    font-size: 20px;
+    font-size: clamp(0.875rem, 1.6vw, 1.125rem);
     opacity: 0.95;
     font-family: Aileron, Helvetica, sans-serif;
-    color: white;
-    word-wrap: break-word;
+    color: #fff;
 }
 
-/* Carousel Indicators */
+/* Carousel indicators & controls */
 .carousel-indicators {
     z-index: 15;
     bottom: 30px;
 }
 
-    .carousel-indicators button {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        margin: 0 6px;
-        background-color: rgba(255, 255, 255, 0.5);
-    }
+.carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 0 6px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
 
-        .carousel-indicators button.active {
-            background-color: #db4a2b;
-        }
+.carousel-indicators button.active {
+    background-color: #db4a2b;
+}
 
-/* Carousel Controls */
+/* Controls */
 .carousel-control-prev,
 .carousel-control-next {
     width: 50px;
@@ -128,7 +130,7 @@
     top: 50%;
     transform: translateY(-50%);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.25s ease;
     z-index: 15;
 }
 
@@ -137,17 +139,37 @@
     opacity: 1;
 }
 
-.carousel-control-prev {
-    left: 30px;
-}
+.carousel-control-prev { left: 30px; }
+.carousel-control-next { right: 30px; }
 
-.carousel-control-next {
-    right: 30px;
+/* small screens: make controls always visible */
+@media (max-width: 768px) {
+    .carousel-control-prev,
+    .carousel-control-next {
+        opacity: 1;
+        width: 40px;
+        height: 40px;
+    }
+
+    .carousel-control-prev { left: 15px; }
+    .carousel-control-next { right: 15px; }
+    
+    .carousel-title { 
+        padding: 0.75rem 0.9375rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 85%;
+    }
+    .carousel-title h1 { 
+        font-size: 2rem; 
+        letter-spacing: 0.02em; 
+    }
 }
 
 /* About Title Section */
 .about-title-section {
-    padding: 60px 0 40px;
+    padding: 3.75rem 0 2.5rem;
     background-color: #e4e2dd;
     position: relative;
     z-index: 2;
@@ -157,11 +179,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 1.25rem;
 }
 
-.line-left,
-.line-right {
+.line-left, .line-right {
     flex: 1;
     height: 2px;
     background: linear-gradient(90deg, transparent, #4a3e26, transparent);
@@ -171,192 +192,255 @@
 .title-content {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 0.75rem;
 }
 
-    .title-content i {
-        font-size: 32px;
-        color: #db4a2b;
-    }
+.title-content i {
+    font-size: 2rem;
+    color: #db4a2b;
+}
 
-    .title-content h2 {
-        font-size: 36px;
-        font-weight: 700;
-        margin: 0;
-        color: #4a3e26;
-        font-family: Alfran, Rostov, sans-serif;
-        letter-spacing: 2px;
-    }
+.title-content h2 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: #4a3e26;
+    font-family: Alfran, Rostov, Aileron, Helvetica, sans-serif;
+    letter-spacing: 0.06em;
+}
 
 /* Content Cards */
 .content-card {
-    padding: 80px 0;
+    padding: 5rem 0;
     position: relative;
     z-index: 2;
-    border-radius: 20px;
+    border-radius: 1.25rem;
 }
 
-.content-card-light {
-    background-color: #e4e2dd;
+.content-card-light { 
+    background-color: #e4e2dd; 
 }
 
 .content-card-dark {
     background: linear-gradient(135deg, #4a3e26 0%, #5c4e32 100%);
-    color: white;
+    color: #fff;
 }
 
-    .content-card-dark .text-content p {
-        color: rgba(255, 255, 255, 0.9);
-    }
-
-    .content-card-dark .highlight-text {
-        color: #db4a2b;
-    }
-
-/* Text Content */
-.text-content {
-    padding: 40px;
+.content-card-dark .text-content p {
+    color: rgba(255,255,255,0.95);
 }
 
-.content-inner {
-    max-width: 600px;
-    margin: 0 auto;
+.content-card-dark .highlight-text {
+    color: #db4a2b;
+}
+
+/* Text & images */
+.text-content, .image-content { 
+    padding: 2.5rem; 
+}
+
+.content-inner { 
+    max-width: 37.5rem; 
+    margin: 0 auto; 
 }
 
 .content-icon {
-    width: 60px;
-    height: 60px;
-    background: rgba(219, 74, 43, 0.1);
+    width: 3.75rem;
+    height: 3.75rem;
+    background: rgba(219, 74, 43, 0.08);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 24px;
+    margin-bottom: 1.5rem;
 }
 
-    .content-icon i {
-        font-size: 28px;
-        color: #db4a2b;
-    }
+.content-icon i { 
+    font-size: 1.75rem; 
+    color: #db4a2b; 
+}
 
 .lead-text {
-    font-size: 18px;
+    font-size: 1.125rem;
     line-height: 1.8;
-    margin-bottom: 24px;
+    margin-bottom: 1.5rem;
     font-family: Aileron, Helvetica, sans-serif;
 }
 
-.content-card-dark .content-icon {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-    .content-card-dark .content-icon i {
-        color: #db4a2b;
-    }
-
 .highlight-text {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 2px solid rgba(0, 0, 0, 0.1);
-    font-family: Alfran, Rostov, sans-serif;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 2px solid rgba(0,0,0,0.08);
+    font-family: Alfran, Rostov, Aileron, Helvetica, sans-serif;
 }
 
-.content-card-dark .highlight-text {
-    border-top-color: rgba(255, 255, 255, 0.2);
+.content-card-dark .highlight-text { 
+    border-top-color: rgba(255,255,255,0.18); 
 }
 
-/* Image Content */
-.image-content {
-    padding: 40px;
-}
-
+/* Image wrapper */
 .image-wrapper {
     position: relative;
-    border-radius: 20px;
+    border-radius: 1.25rem;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-    .image-wrapper:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2);
-    }
+.image-wrapper:hover { 
+    transform: translateY(-10px); 
+    box-shadow: 0 30px 50px rgba(0,0,0,0.18); 
+}
 
-    .image-wrapper img {
-        width: 100%;
-        height: auto;
-        display: block;
-        transition: transform 0.5s ease;
-    }
+.image-wrapper img { 
+    width: 100%; 
+    height: auto; 
+    display: block; 
+    transition: transform 0.5s ease; 
+}
 
-    .image-wrapper:hover img {
-        transform: scale(1.05);
-    }
+.image-wrapper:hover img { 
+    transform: scale(1.05); 
+}
 
 .image-caption {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 12px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-    color: white;
-    font-size: 14px;
+    padding: 0.75rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: #fff;
+    font-size: 0.875rem;
     text-align: center;
     font-family: Aileron, Helvetica, sans-serif;
 }
 
-    .image-caption i {
-        margin-right: 8px;
-        color: #db4a2b;
-    }
+.image-caption i { 
+    margin-right: 0.5rem; 
+    color: #db4a2b; 
+}
 
-/* CTA Button */
-.cta-button {
-    margin-top: 32px;
+/* CTA */
+.cta-button { 
+    margin-top: 2rem; 
 }
 
 .btn-explore {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 32px;
+    gap: 0.75rem;
+    padding: 0.875rem 2rem;
     background: #db4a2b;
-    color: white;
+    color: #fff;
     border-radius: 50px;
     text-decoration: none;
     font-weight: 600;
-    font-size: 16px;
-    transition: all 0.3s ease;
+    font-size: 1rem;
+    transition: all 0.25s ease;
     font-family: Aileron, Helvetica, sans-serif;
 }
 
-    .btn-explore:hover {
-        background: #c93e20;
-        transform: translateX(5px);
-        text-decoration: none;
-        color: white;
-        box-shadow: 0 10px 25px rgba(219, 74, 43, 0.3);
-    }
+.btn-explore:hover { 
+    background: #c93e20; 
+    transform: translateX(5px); 
+    box-shadow: 0 10px 25px rgba(219,74,43,0.2); 
+    text-decoration: none;
+    color: white;
+}
 
-    .btn-explore i {
-        transition: transform 0.3s ease;
-    }
+.btn-explore i { 
+    transition: transform 0.25s ease; 
+}
 
-    .btn-explore:hover i {
-        transform: translateX(5px);
-    }
+.btn-explore:hover i { 
+    transform: translateX(5px); 
+}
 
-/* Floating Circles */
+/* Bear Mascot Showcase Section */
+.mascot-showcase {
+    padding: 40px 0 80px;
+    position: relative;
+    z-index: 2;
+}
+
+.mascot-image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.mascot-circle-bg {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, rgba(219, 74, 43, 0.1), rgba(219, 74, 43, 0.05));
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.mascot-bear {
+    position: relative;
+    width: 180px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+    transition: transform 0.3s ease;
+    z-index: 2;
+}
+
+.mascot-image-container:hover .mascot-bear {
+    transform: scale(1.05);
+}
+
+/* Message bubble */
+.mascot-message {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.message-bubble {
+    display: inline-block;
+    background: linear-gradient(135deg, #4a3e26, #5c4e32);
+    border-radius: 30px;
+    padding: 12px 25px;
+    color: white;
+    position: relative;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+.message-bubble::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 10px 15px 10px;
+    border-style: solid;
+    border-color: transparent transparent #5c4e32 transparent;
+}
+
+.message-bubble p {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: Alfran, Rostov, Aileron, Helvetica, sans-serif;
+}
+
+.message-bubble small {
+    font-size: 12px;
+    opacity: 0.9;
+    font-family: Aileron, Helvetica, sans-serif;
+}
+
+/* Floating circles */
 .circles {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     overflow: hidden;
     pointer-events: none;
     margin: 0;
@@ -364,208 +448,175 @@
     z-index: 1;
 }
 
-    .circles li {
-        position: absolute;
-        list-style: none;
-        animation: floatCircle 25s linear infinite;
-        bottom: -150px;
-        opacity: 0.08;
-        font-size: 24px;
-    }
+.circles li {
+    position: absolute;
+    list-style: none;
+    animation: floatCircle 25s linear infinite;
+    bottom: -150px;
+    opacity: 0.06;
+    font-size: clamp(16px, 1.5vw, 28px);
+    transform: translateX(-50%);
+}
 
-        .circles li:nth-child(1) {
-            left: 5%;
-            animation-duration: 18s;
-            animation-delay: 0s;
-        }
+.circles li:nth-child(1)  { left: clamp(3vw, 5%, 5%);  animation-duration: 18s; animation-delay: 0s;  }
+.circles li:nth-child(2)  { left: clamp(10vw, 15%, 15%); animation-duration: 22s; animation-delay: 2s; }
+.circles li:nth-child(3)  { left: clamp(18vw, 25%, 25%); animation-duration: 20s; animation-delay: 4s; }
+.circles li:nth-child(4)  { left: clamp(28vw, 35%, 35%); animation-duration: 25s; animation-delay: 1s; }
+.circles li:nth-child(5)  { left: clamp(38vw, 45%, 45%); animation-duration: 19s; animation-delay: 3s; }
+.circles li:nth-child(6)  { left: clamp(48vw, 55%, 55%); animation-duration: 23s; animation-delay: 5s; }
+.circles li:nth-child(7)  { left: clamp(58vw, 65%, 65%); animation-duration: 21s; animation-delay: 2s; }
+.circles li:nth-child(8)  { left: clamp(68vw, 75%, 75%); animation-duration: 24s; animation-delay: 4s; }
+.circles li:nth-child(9)  { left: clamp(78vw, 85%, 85%); animation-duration: 17s; animation-delay: 1s; }
+.circles li:nth-child(10) { left: 92vw; animation-duration: 26s; animation-delay: 3s; } /* Adjusted */
 
-        .circles li:nth-child(2) {
-            left: 15%;
-            animation-duration: 22s;
-            animation-delay: 2s;
-        }
-
-        .circles li:nth-child(3) {
-            left: 25%;
-            animation-duration: 20s;
-            animation-delay: 4s;
-        }
-
-        .circles li:nth-child(4) {
-            left: 35%;
-            animation-duration: 25s;
-            animation-delay: 1s;
-        }
-
-        .circles li:nth-child(5) {
-            left: 45%;
-            animation-duration: 19s;
-            animation-delay: 3s;
-        }
-
-        .circles li:nth-child(6) {
-            left: 55%;
-            animation-duration: 23s;
-            animation-delay: 5s;
-        }
-
-        .circles li:nth-child(7) {
-            left: 65%;
-            animation-duration: 21s;
-            animation-delay: 2s;
-        }
-
-        .circles li:nth-child(8) {
-            left: 75%;
-            animation-duration: 24s;
-            animation-delay: 4s;
-        }
-
-        .circles li:nth-child(9) {
-            left: 85%;
-            animation-duration: 17s;
-            animation-delay: 1s;
-        }
-
-        .circles li:nth-child(10) {
-            left: 95%;
-            animation-duration: 26s;
-            animation-delay: 3s;
-        }
+/* Constrain floating circles so they don't push the page width */
+.circles { overflow: hidden; pointer-events: none; }
+.circles li { max-width: 8rem; box-sizing: border-box; }
+/* Prevent extreme left values from placing the element outside viewport */
+.circles li:nth-child(10) { left: 92vw; }
 
 /* Animations */
 @keyframes floatCircle {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0;
-    }
+    0% { transform: translateY(0) rotate(0deg) translateX(-50%); opacity: 0; }
+    10% { opacity: 0.06; }
+    90% { opacity: 0.06; }
+    100% { transform: translateY(-1000px) rotate(720deg) translateX(-50%); opacity: 0; }
+}
 
-    10% {
-        opacity: 0.08;
-    }
+@keyframes pulse { 
+    0%,100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
 
-    90% {
-        opacity: 0.08;
-    }
-
-    100% {
-        transform: translateY(-1000px) rotate(720deg);
-        opacity: 0;
-    }
+@keyframes bounce { 
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .carousel-title {
-        width: 95%;
-        padding: 0 15px;
+    .title-subtitle { 
+        font-size: 0.875rem; 
     }
-
-        .carousel-title h1 {
-            font-size: 32px;
-            letter-spacing: 1px;
-        }
-
-    .title-subtitle {
+    .title-icon-wrapper { 
+        width: 3.75rem; 
+        height: 3.75rem; 
+    }
+    .title-icon-wrapper i { 
+        font-size: 1.875rem; 
+    }
+    .title-content h2 { 
+        font-size: 1.75rem; 
+    }
+    .title-decoration { 
+        gap: 0.625rem; 
+    }
+    .line-left, .line-right { 
+        max-width: 60px; 
+    }
+    .content-card { 
+        padding: 3.125rem 0; 
+    }
+    .text-content, .image-content { 
+        padding: 1.25rem; 
+    }
+    .lead-text { 
+        font-size: 1rem; 
+    }
+    .btn-explore { 
+        padding: 0.75rem 1.5rem; 
+        font-size: 0.875rem; 
+    }
+    .mascot-circle-bg { 
+        width: 150px; 
+        height: 150px; 
+    }
+    .mascot-bear { 
+        width: 130px; 
+    }
+    .message-bubble p {
         font-size: 14px;
     }
-
-    .title-icon-wrapper {
-        width: 60px;
-        height: 60px;
-    }
-
-        .title-icon-wrapper i {
-            font-size: 30px;
-        }
-
-    .title-content h2 {
-        font-size: 28px;
-    }
-
-    .title-decoration {
-        gap: 10px;
-    }
-
-    .line-left,
-    .line-right {
-        max-width: 60px;
-    }
-
-    .content-card {
-        padding: 50px 0;
-    }
-
-    .text-content,
-    .image-content {
-        padding: 20px;
-    }
-
-    .lead-text {
-        font-size: 16px;
-    }
-
-    .btn-explore {
-        padding: 12px 24px;
-        font-size: 14px;
-    }
-
-    .carousel-control-prev,
-    .carousel-control-next {
-        opacity: 1;
-        width: 40px;
-        height: 40px;
-    }
-
-    .carousel-control-prev {
-        left: 15px;
-    }
-
-    .carousel-control-next {
-        right: 15px;
-    }
-
-    .about-title-section {
-        padding: 40px 0 30px;
+    .message-bubble small {
+        font-size: 10px;
     }
 }
 
+/* Small phones */
 @media (max-width: 480px) {
-    .carousel-title h1 {
-        font-size: 28px;
+    .carousel-title h1 { 
+        font-size: 1.75rem; 
     }
-
-    .title-subtitle {
-        font-size: 12px;
+    .title-subtitle { 
+        font-size: 0.75rem; 
     }
-
-    .title-icon-wrapper {
-        width: 50px;
-        height: 50px;
+    .title-icon-wrapper { 
+        width: 3.125rem; 
+        height: 3.125rem; 
     }
+    .title-icon-wrapper i { 
+        font-size: 1.5rem; 
+    }
+    .mascot-circle-bg { 
+        width: 120px; 
+        height: 120px; 
+    }
+    .mascot-bear { 
+        width: 100px; 
+    }
+}
 
-        .title-icon-wrapper i {
-            font-size: 24px;
-        }
+@media (min-width: 1024px) {
+    .carousel-title {
+        margin: 0px 19%;
+    }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-    .carousel-title h1 {
-        font-size: 52px;
+    .carousel-title h1 { 
+        font-size: 3.25rem; 
+    }
+    .text-content, .image-content { 
+        padding: 1.875rem; 
     }
 
-    .text-content,
-    .image-content {
-        padding: 30px;
+    .carousel-title {
+        margin: 0px 5%;
     }
 }
 
-/* Complete scrollbar prevention for animations */
+@media (max-width: 769px) {
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.home-page::-webkit-scrollbar {
-    display: none;
+    .home-page::-webkit-scrollbar {
+        display: none;
+    }
+
+    .home-page {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 }
+
+@media (max-width: 1200px) {
+    .carousel-title {
+        margin: 0px 7%;
+    }
+}
+
+@media (max-width: 767px) {
+    .carousel-title {
+        margin: 0px -42%;
+    }
+}
+
+.home-page {
+    overflow-x: hidden;
+    position: relative;
+}
+
+    .home-page::-webkit-scrollbar {
+        display: none;
+    }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .home-page {
@@ -573,37 +624,51 @@
     scrollbar-width: none; /* Firefox */
 }
 
-/* Fix for circles causing overflow */
-.circles {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    overflow: hidden;
-    pointer-events: none;
-    margin: 0;
-    padding: 0;
-    z-index: 1;
-}
-
-    /* Ensure circles elements don't cause overflow */
-    .circles li {
-        position: absolute;
-        list-style: none;
-        animation: floatCircle 25s linear infinite;
-        bottom: -150px;
-        left: auto;
-        right: auto;
-        opacity: 0.08;
-        font-size: 24px;
-        width: auto;
-        height: auto;
+/* TEMPORARY SITE-WIDE HORIZONTAL SCROLL GUARD (mobile)
+   Prevents scrolling to the right on small devices and constrains common overflow sources.
+   Keep this while you find/fix any root cause (wide element). */
+@media (max-width: 1024px) {
+    html, body {
+        max-width: 100%;
+        overflow-x: hidden !important; /* defensive: hide any horizontal overflow on mobile */
     }
 
-/* Page container fix */
-.home-page {
-    overflow-x: hidden;
-    position: relative;
+    /* Constrain layout/grid elements that can grow past viewport */
+    .container, .container-fluid, .row, .col, .col-*, .home-page {
+        max-width: 100%;
+        width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    /* Ensure media cannot create overflow */
+    img, picture, video, iframe, svg {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Break long words/URLs that can force overflow */
+    body, p, h1, h2, h3, h4, h5, h6, span {
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
 }
 
+/* Global defensive rule (optional): prevents elements set to 100vw from overflowing when vertical scroll exists */
+html, body {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 769px) {
+    .home-hero-section {
+        position: relative;
+        background: linear-gradient(135deg, #4a3e26 0%, #5c4e32 100%);
+        border-radius: 30px 30px 60px 60px;
+        overflow: hidden;
+        margin-bottom: 50px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+}

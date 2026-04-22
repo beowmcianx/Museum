@@ -3,312 +3,274 @@
     ViewData["Title"] = "Analytics";
 }
 
-<div class="ocean">
-    <div class="wave"></div>
-    <div class="wave"></div>
-</div>
+<div class="analytics-page">
+    <!-- Hero Section -->
+    <div class="analytics-hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-pattern"></div>
 
-<div class="container mt-5">
-
-    <div class="ocean">
-        <div class="wave"></div>
-        <div class="wave"></div>
+        <div class="container hero-container">
+            <div class="analytics-header" data-aos="fade-up">
+                <div class="analytics-icon-wrapper">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h1 class="analytics-title">Museum Analytics</h1>
+                <p class="analytics-subtitle">Overview of purchases and visits by date</p>
+            </div>
+        </div>
     </div>
 
-    <!-- HEADER -->
-    <div class="text-center mb-4">
-        <h1 class="display-5">
-            <i class="fa-solid fa-chart-simple me-2" style="color:#db4a2a"></i>
-            Museum Analytics
-        </h1>
-        <span class="text-secondary">Overview of purchases and visits by date</span>
-    </div>
-
-    <br />
-
-    <!-- BACK BUTTON -->
-    <form asp-controller="Dashboard"
-          asp-action="Dashboard"
-          method="post"
-          class="mb-3">
-        <button class="btn btn-outline-dark">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Back
-        </button>
-    </form>
-
-    <!-- SEARCH BAR -->
-    <div class="card mx-auto shadow-sm p-4 mb-4 rounded-5 page-catalogue-search-bar">
-        <form method="get" class="row g-2 align-items-center">
-
-            <!-- FROM -->
-            <div class="col-md-3 date-input">
-                <div class="input-group">
-                    <span class="input-group-text bg-white fw-semibold text-nowrap px-3">
-                         FROM
-                    </span>
-                    <input type="date"
-                           id="startDate"
-                           name="startDate"
-                           value="@ViewBag.StartDate"
-                           class="form-control" />
-                </div>
-            </div>
-
-            <!-- TO -->
-            <div class="col-md-3 date-input">
-                <div class="input-group ">
-                    <span class="input-group-text bg-white fw-semibold text-nowrap px-3">
-                        TO
-                    </span>
-                    <input type="date"
-                           id="endDate"
-                           name="endDate"
-                           value="@ViewBag.EndDate"
-                           class="form-control" />
-                </div>
-            </div>
-
-            <!-- FILTER -->
-            <div class="col-md-4 d-grid">
-                <button class="btn btn-red h-100">
-                    <i class="fas fa-filter me-2"></i> 
-                    <span>Filter</span>
-                </button>
-            </div>
-
-
-            <!-- ALL TIME -->
-            <div class="col-md-2 d-grid">
-                <a class="btn btn-dark h-100 d-flex align-items-center justify-content-center"
-                   href="@Url.Action("Analytics", "Dashboard")">
-                    <i class="fa-solid fa-calendar me-2" style="color: white;"></i>
-                    <span>All Time</span>
+    <!-- Content Section -->
+    <div class="analytics-content-section">
+        <div class="container">
+            <!-- Back Button -->
+            <div class="back-button-wrapper" data-aos="fade-right">
+                <a asp-controller="Dashboard" asp-action="Dashboard" class="btn-back-custom">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dashboard
                 </a>
             </div>
 
-        </form>
-    </div>
+            <!-- Filter Card -->
+            <div class="filter-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="filter-header">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Date Range Filter</h3>
+                </div>
 
-    <br />
+                <form method="get" class="filter-form">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <i class="fas fa-calendar-day"></i> From Date
+                            </label>
+                            <input type="date" id="startDate" name="startDate" value="@ViewBag.StartDate" class="filter-input" />
+                        </div>
 
-    @if (ViewBag.IsAllTime == true)
-    {
-        <p class="text-muted">
-            Showing Results of All Time
-        </p>
-    }
-    else
-    {
-        <p class="text-muted">
-            Showing Results 
-            From [@DateTime.Parse(ViewBag.StartDate).ToString("dd/MM/yy")]
-            To [@DateTime.Parse(ViewBag.EndDate).ToString("dd/MM/yy")]
-        </p>
-    }
+                        <div class="filter-group">
+                            <label class="filter-label">
+                                <i class="fas fa-calendar-day"></i> To Date
+                            </label>
+                            <input type="date" id="endDate" name="endDate" value="@ViewBag.EndDate" class="filter-input" />
+                        </div>
 
-    <!-- STATS -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="card shadow p-3 rounded-4">
-                <h5><i class="fa-solid fa-cart-shopping me-2"></i>Total Orders</h5>
-                <h2>@Model.TotalOrders</h2>
+                        <div class="filter-group filter-actions-group">
+                            <label class="filter-label">&nbsp;</label>
+                            <button type="submit" class="btn-filter">
+                                <i class="fas fa-filter"></i> Apply Filter
+                            </button>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-label">&nbsp;</label>
+                            <a class="btn-all-time" href="@Url.Action("Analytics", "Dashboard")">
+                                <i class="fas fa-calendar"></i> All Time
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Date Range Info -->
+            <div class="date-range-info" data-aos="fade-up" data-aos-delay="150">
+                @if (ViewBag.IsAllTime == true)
+                {
+                    <div class="info-badge">
+                        <i class="fas fa-infinity"></i>
+                        <span>Showing Results: All Time</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="info-badge">
+                        <i class="fas fa-calendar-week"></i>
+                        <span>@DateTime.Parse(ViewBag.StartDate).ToString("dd MMM yyyy") - @DateTime.Parse(ViewBag.EndDate).ToString("dd MMM yyyy")</span>
+                    </div>
+                }
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-row" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-card-custom">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Orders</h3>
+                        <p class="stat-value">@Model.TotalOrders</p>
+                    </div>
+                </div>
+                <div class="stat-card-custom">
+                    <div class="stat-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Tickets Sold</h3>
+                        <p class="stat-value">@Model.TotalTickets</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Museums Section -->
+            <div class="analytics-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="card-header-custom" data-bs-toggle="collapse" data-bs-target="#topMuseumsTable">
+                    <div class="header-left">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Top Museums by Tickets Sold</h3>
+                    </div>
+                    <i class="fas fa-chevron-down toggle-icon rotate"></i>
+                </div>
+                <div id="topMuseumsTable" class="collapse show">
+                    <div class="card-body-custom">
+                        <div class="table-responsive">
+                            <table class="analytics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Museum</th>
+                                        <th>Tickets Sold</th>
+                                        <th>Orders</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var m in Model.TopMuseums)
+                                    {
+                                        <tr>
+                                            <td class="museum-cell">
+                                                <i class="fas fa-landmark"></i>
+                                                @m.Museum.Name
+                                            </td>
+                                            <td class="tickets-cell">@m.TicketsSold</td>
+                                            <td class="orders-cell">@m.OrdersCount</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- City Stats Section -->
+            <div class="analytics-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-header-custom" data-bs-toggle="collapse" data-bs-target="#cityTable">
+                    <div class="header-left">
+                        <i class="fas fa-city"></i>
+                        <h3>Purchases by City</h3>
+                    </div>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+                <div id="cityTable" class="collapse">
+                    <div class="card-body-custom">
+                        <div class="table-responsive">
+                            <table class="analytics-table">
+                                <thead>
+                                    <tr>
+                                        <th>City</th>
+                                        <th>Tickets Sold</th>
+                                        <th>Orders</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var c in Model.CityStats)
+                                    {
+                                        <tr>
+                                            <td class="city-cell">
+                                                <i class="fas fa-location-dot"></i>
+                                                @c.City
+                                            </td>
+                                            <td class="tickets-cell">@c.TicketsSold</td>
+                                            <td class="orders-cell">@c.OrdersCount</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Country Stats Section -->
+            <div class="analytics-card" data-aos="fade-up" data-aos-delay="350">
+                <div class="card-header-custom" data-bs-toggle="collapse" data-bs-target="#countryTable">
+                    <div class="header-left">
+                        <i class="fas fa-globe-americas"></i>
+                        <h3>Purchases by Country</h3>
+                    </div>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+                <div id="countryTable" class="collapse">
+                    <div class="card-body-custom">
+                        <div class="table-responsive">
+                            <table class="analytics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Country</th>
+                                        <th>Tickets Sold</th>
+                                        <th>Orders</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var c in Model.CountryStats)
+                                    {
+                                        <tr>
+                                            <td class="country-cell">
+                                                <i class="fas fa-flag"></i>
+                                                @c.Country
+                                            </td>
+                                            <td class="tickets-cell">@c.TicketsSold</td>
+                                            <td class="orders-cell">@c.OrdersCount</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card shadow p-3 rounded-4">
-                <h5><i class="fa-solid fa-ticket me-2"></i>Total Tickets Sold</h5>
-                <h2>@Model.TotalTickets</h2>
-            </div>
-        </div>
     </div>
 
-    <!-- TOP MUSEUMS -->
-    <div class="card mb-4 shadow rounded-5">
-
-        <!-- HEADER (clickable) -->
-        <div class="card-header bg-red text-white rounded-top-5 d-flex justify-content-between align-items-center"
-             data-bs-toggle="collapse"
-             data-bs-target="#topMuseumsTable"
-             style="cursor:pointer">
-
-            <h5 class="mb-0">
-                <i class="fa-solid fa-landmark me-2"></i>
-                Top Museums by Tickets Sold
-            </h5>
-
-            <i class="fa-solid fa-chevron-down toggle-icon rotate"></i>
-        </div>
-
-        <!-- COLLAPSIBLE BODY -->
-        <div id="topMuseumsTable" class="collapse show">
-            <div class="card-body">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Museum</th>
-                            <th>Tickets Sold</th>
-                            <th>Orders</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var m in Model.TopMuseums)
-                        {
-                            <tr>
-                                <td>@m.Museum.Name</td>
-                                <td>@m.TicketsSold</td>
-                                <td>@m.OrdersCount</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- CITY -->
-    <div class="card mb-4 shadow rounded-5">
-
-        <div class="card-header bg-red text-white rounded-top-5 d-flex justify-content-between align-items-center"
-             data-bs-toggle="collapse"
-             data-bs-target="#cityTable"
-             style="cursor:pointer">
-
-            <h5 class="mb-0">
-                <i class="fa-solid fa-city me-2"></i>
-                Purchases by City
-            </h5>
-
-            <i class="fa-solid fa-chevron-down toggle-icon"></i>
-        </div>
-
-        <div id="cityTable" class="collapse">
-            <div class="card-body">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>City</th>
-                            <th>Tickets Sold</th>
-                            <th>Orders</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var c in Model.CityStats)
-                        {
-                            <tr>
-                                <td>@c.City</td>
-                                <td>@c.TicketsSold</td>
-                                <td>@c.OrdersCount</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- COUNTRY -->
-    <div class="card mb-4 shadow rounded-5">
-
-        <div class="card-header bg-red text-white rounded-top-5 d-flex justify-content-between align-items-center"
-             data-bs-toggle="collapse"
-             data-bs-target="#countryTable"
-             style="cursor:pointer">
-
-            <h5 class="mb-0">
-                <i class="fa-solid fa-flag me-2"></i>
-                Purchases by Country
-            </h5>
-
-            <i class="fa-solid fa-chevron-down toggle-icon"></i>
-        </div>
-
-        <div id="countryTable" class="collapse">
-            <div class="card-body">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Country</th>
-                            <th>Tickets Sold</th>
-                            <th>Orders</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var c in Model.CountryStats)
-                        {
-                            <tr>
-                                <td>@c.Country</td>
-                                <td>@c.TicketsSold</td>
-                                <td>@c.OrdersCount</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
+    <!-- Decorative Circles -->
+    <ul class="circles">
+        <li><i class="fa-solid fa-landmark"></i></li>
+        <li><i class="fa-solid fa-building-columns"></i></li>
+        <li><i class="fa-solid fa-monument"></i></li>
+        <li><i class="fa-solid fa-gem"></i></li>
+        <li><i class="fa-solid fa-scroll"></i></li>
+        <li><i class="fa-solid fa-paint-roller"></i></li>
+        <li><i class="fa-solid fa-palette"></i></li>
+        <li><i class="fa-solid fa-book"></i></li>
+        <li><i class="fa-solid fa-masks-theater"></i></li>
+    </ul>
 </div>
 
-<!-- BACKGROUND ICONS -->
-<ul class='circles'>
-    <li><i class="fa-solid fa-landmark fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-building-columns fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-monument fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-gem fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-scroll fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-paint-roller fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-palette fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-book fa-lg" style="color: #f2b5a7;"></i></li>
-    <li><i class="fa-solid fa-masks-theater fa-lg" style="color: #f2b5a7;"></i></li>
-</ul>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const startInput = document.getElementById("startDate");
+            const endInput = document.getElementById("endDate");
 
-<script src="~/js/site.js" asp-append-version="true"></script>
+            function updateLimits() {
+                if (startInput.value) endInput.min = startInput.value;
+                else endInput.min = "";
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const startInput = document.getElementById("startDate");
-        const endInput = document.getElementById("endDate");
+                if (endInput.value) startInput.max = endInput.value;
+                else startInput.max = "";
+            }
 
-        function updateLimits() {
-            if (startInput.value) endInput.min = startInput.value;
-            else endInput.min = "";
+            updateLimits();
+            if (startInput) startInput.addEventListener("change", updateLimits);
+            if (endInput) endInput.addEventListener("change", updateLimits);
 
-            if (endInput.value) startInput.max = endInput.value;
-            else startInput.max = "";
-        }
-
-        updateLimits();
-        startInput.addEventListener("change", updateLimits);
-        endInput.addEventListener("change", updateLimits);
-    });
-
-        document.querySelectorAll('.card-header[data-bs-toggle="collapse"]').forEach(header => {
-        header.addEventListener('click', function () {
-
-            const target = document.querySelector(this.dataset.bsTarget);
-            const icon = this.querySelector('.toggle-icon');
-
-            setTimeout(() => {
-                if (target.classList.contains('show')) {
-                    icon.classList.add('rotate');
-                } else {
-                    icon.classList.remove('rotate');
-                }
-            }, 200);
+            // Toggle icon rotation for collapsible sections
+            document.querySelectorAll('.card-header-custom').forEach(header => {
+                header.addEventListener('click', function () {
+                    const icon = this.querySelector('.toggle-icon');
+                    setTimeout(() => {
+                        icon.classList.toggle('rotate');
+                    }, 100);
+                });
+            });
         });
-    });
-</script>
-
-<style>
-    .toggle-icon {
-        transition: transform 0.3s ease;
-    }
-
-    .rotate {
-        transform: rotate(180deg);
-    }
-</style>
+    </script>
+}
