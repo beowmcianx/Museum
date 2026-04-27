@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="~/css/page-accounts.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/page-editadmin.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/page-cart.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/page-ticketdetails.css" asp-append-version="true" />
 
     @*Awesome Fonts (for icons)*@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" asp-append-version="true" />
@@ -117,6 +118,7 @@
 
     <div class="container">
         <main role="main" class="pb-3">
+            <partial name="_Breadcrumbs" />
             @RenderBody()
         </main>
     </div>

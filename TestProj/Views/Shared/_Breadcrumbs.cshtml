@@ -1,0 +1,128 @@
+@using System.Collections
+@using System.Linq
+@{
+    // Route values
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var action = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    var area = ViewContext.RouteData.Values["area"]?.ToString() ?? "";
+    var page = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+
+    // Controllers that should not show breadcrumbs (layout main buttons)
+    var excluded = new List<(string Controller, string Action)>
+    {
+        ("Home", "Index"),
+        ("Museum", "Catalogue"),
+        ("Client", "Cart"),
+        ("Worker", "MyMuseum"),
+        ("Dashboard", "Dashboard")
+    };
+
+    bool isExcluded = excluded.Any(e =>
+        string.Equals(e.Controller, controller, StringComparison.OrdinalIgnoreCase)
+        && string.Equals(e.Action, action, StringComparison.OrdinalIgnoreCase));
+
+    // Exclude Identity account pages (Register / Login) which are Razor Pages under the Identity area
+    if (!isExcluded && string.Equals(area, "Identity", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(page))
+    {
+        var p = page.Trim().TrimEnd('/').ToLowerInvariant();
+        if (p.EndsWith("/register") || p.EndsWith("/login") || p.Equals("/register") || p.Equals("/login"))
+        {
+            isExcluded = true;
+        }
+    }
+
+    // Also exclude if standard MVC Account controller actions named Register/Login exist
+    if (!isExcluded && string.Equals(controller, "Account", StringComparison.OrdinalIgnoreCase)
+        && (string.Equals(action, "Register", StringComparison.OrdinalIgnoreCase) || string.Equals(action, "Login", StringComparison.OrdinalIgnoreCase)))
+    {
+        isExcluded = true;
+    }
+
+    // New: Exclude any page that explicitly declares it has a visible hero/title in the view.
+    // Set this in your views with: ViewBag.HasHeroTitle = true;  (or ViewData["HasHeroTitle"] = true)
+    var hasHeroTitle = false;
+    try
+    {
+        hasHeroTitle = (ViewBag.HasHeroTitle as bool?) ?? (ViewData["HasHeroTitle"] as bool?) ?? false;
+    }
+    catch { }
+
+    if (hasHeroTitle)
+    {
+        isExcluded = true;
+    }
+
+    if (!isExcluded)
+    {
+        // Try custom breadcrumb from ViewBag first (expected shape: IEnumerable of objects with Title/Url/Active)
+        IEnumerable<dynamic>? custom = ViewBag.Breadcrumbs as IEnumerable<dynamic>;
+        var items = new List<(string Title, string? Url, bool Active)>();
+
+        if (custom != null)
+        {
+            foreach (var c in custom)
+            {
+                string title = c.Title ?? c.title ?? c.Text ?? "";
+                string url = c.Url ?? c.url ?? c.Href ?? "";
+                bool active = false;
+                try { active = c.Active ?? c.active ?? false; } catch { }
+                items.Add((title, string.IsNullOrWhiteSpace(url) ? null : url, active));
+            }
+        }
+        else
+        {
+            // Build sensible default: Home -> Controller (if not Home) -> Action
+            var homeUrl = Url.Action("Index", "Home");
+            items.Add(("Home", homeUrl, false));
+
+            // Map controllers to their actual landing actions so generated link points to an existing page
+            var controllerLanding = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "Home", "Index" },
+                { "Museum", "Catalogue" }, // Catalogue is the museum landing page in this app
+                { "Client", "Cart" },
+                { "Worker", "MyMuseum" },
+                { "Dashboard", "Dashboard" }
+            };
+
+            string ctrlAction = "Index";
+            if (!string.IsNullOrEmpty(controller) && controllerLanding.TryGetValue(controller, out var mapped))
+            {
+                ctrlAction = mapped;
+            }
+
+            if (!string.IsNullOrEmpty(controller) && !string.Equals(controller, "Home", StringComparison.OrdinalIgnoreCase))
+            {
+                var ctrlUrl = Url.Action(ctrlAction, controller);
+                // Only add a link if Url.Action returned a usable URL; otherwise render plain text
+                items.Add((controller, string.IsNullOrWhiteSpace(ctrlUrl) ? null : ctrlUrl, false));
+            }
+
+            var title = ViewData["Title"]?.ToString() ?? action ?? "";
+            items.Add((title, null, true));
+        }
+
+        if (items.Count > 1)
+        {
+            <nav aria-label="breadcrumb" class="mt-3 mb-3">
+                <ol class="breadcrumb">
+                    @foreach (var it in items)
+                    {
+                        if (it.Active)
+                        {
+                            <li class="breadcrumb-item active" aria-current="page">@it.Title</li>
+                        }
+                        else if (!string.IsNullOrEmpty(it.Url))
+                        {
+                            <li class="breadcrumb-item"><a href="@it.Url">@it.Title</a></li>
+                        }
+                        else
+                        {
+                            <li class="breadcrumb-item">@it.Title</li>
+                        }
+                    }
+                </ol>
+            </nav>
+        }
+    }
+}

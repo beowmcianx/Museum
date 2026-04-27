@@ -1,0 +1,178 @@
+@model TestProj.Models.OrderItemModel
+@using TestProj.Models
+
+@{
+    ViewData["Title"] = "Ticket Details";
+}
+
+@if (Model == null)
+{
+    <div class="ticket-details-page">
+        <div class="container">
+            <div class="empty-state" data-aos="fade-up">
+                <div class="empty-state-icon">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <h3>Ticket Not Found</h3>
+                <p>The ticket you're looking for doesn't exist or has been removed.</p>
+                <a asp-controller="Client" asp-action="Cart" class="btn-explore-tickets">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to My Tickets
+                </a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="ticket-details-page">
+
+        <!-- Content Section -->
+        <div class="ticket-content-section">
+            <div class="container">
+                <!-- Back Button -->
+                <div class="back-button-wrapper" data-aos="fade-right">
+                    <a asp-controller="Client" asp-action="Cart" class="btn-back-custom">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to My Tickets
+                    </a>
+                </div>
+
+                <!-- Ticket Card -->
+                <div class="ticket-card" data-aos="fade-up" data-aos-delay="100">
+                    <!-- Card Header -->
+                    <div class="ticket-card-header">
+                        <div class="header-info">
+                            <i class="fas fa-receipt"></i>
+                            <span>Order: <strong>@Model.Order?.OrderCode</strong></span>
+                        </div>
+                        <div class="header-date">
+                            <i class="fas fa-calendar-day"></i>
+                            <span>Visit: @Model.Order?.VisitDate.ToString("yyyy-MM-dd")</span>
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="ticket-card-body">
+                        <div class="row align-items-start">
+                            <!-- Left Column - Ticket Info -->
+                            <div class="col-lg-6">
+                                <div class="ticket-info-section">
+                                    <div class="info-header">
+                                        <i class="fas fa-info-circle"></i>
+                                        <h3>Ticket Information</h3>
+                                    </div>
+
+                                    <div class="info-grid">
+                                        <div class="info-row">
+                                            <div class="info-label">
+                                                <i class="fas fa-tag"></i>
+                                                Ticket Type
+                                            </div>
+                                            <div class="info-value">
+                                                <span class="ticket-type-badge">@(Model.TicketType?.Name ?? "Ticket")</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="info-row">
+                                            <div class="info-label">
+                                                <i class="fas fa-hashtag"></i>
+                                                Quantity
+                                            </div>
+                                            <div class="info-value">x @Model.Quantity</div>
+                                        </div>
+
+                                        <div class="info-row">
+                                            <div class="info-label">
+                                                <i class="fas fa-dollar-sign"></i>
+                                                Unit Price
+                                            </div>
+                                            <div class="info-value">@Model.PriceAtPurchase.ToString("C")</div>
+                                        </div>
+
+                                        <div class="info-row">
+                                            <div class="info-label">
+                                                <i class="fas fa-calculator"></i>
+                                                Subtotal
+                                            </div>
+                                            <div class="info-value highlight-price">@((Model.PriceAtPurchase * Model.Quantity).ToString("C"))</div>
+                                        </div>
+
+                                        <div class="info-row">
+                                            <div class="info-label">
+                                                <i class="fas fa-landmark"></i>
+                                                Museum
+                                            </div>
+                                            <div class="info-value">
+                                                <strong>@Model.Order?.Museum?.Name</strong>
+                                                <br />
+                                                <small class="museum-location">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    @Model.Order?.Museum?.City, @Model.Order?.Museum?.Country
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column - QR Code -->
+                            <div class="col-lg-6">
+                                <div class="qr-section">
+                                    <div class="qr-header">
+                                        <i class="fas fa-qrcode"></i>
+                                        <h3>Entry QR Code</h3>
+                                    </div>
+
+                                    <div class="qr-container">
+                                        <img src="@Url.Action("TicketQr", "Client", new { ticketId = Model.OrderItemId })"
+                                             alt="Ticket QR Code"
+                                             class="qr-image" />
+                                        <div class="qr-badge">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            Scan for entry
+                                        </div>
+                                    </div>
+
+                                    <div class="qr-tip">
+                                        <i class="fas fa-lightbulb"></i>
+                                        <span>Tip: Show this QR code at the museum entrance. You can also scan it with your phone camera to access ticket details.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer -->
+                    <div class="ticket-card-footer">
+                        <div class="footer-ids">
+                            <i class="fas fa-barcode"></i>
+                            <span>Order ID: @Model.OrderId</span>
+                            <span class="separator">•</span>
+                            <span>Ticket ID: @Model.OrderItemId</span>
+                        </div>
+                        <div class="footer-actions">
+                            <button type="button" class="btn-print-ticket" onclick="window.print()">
+                                <i class="fas fa-print"></i>
+                                Print Ticket
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decorative Circles -->
+        <ul class="circles">
+            <li><i class="fa-solid fa-landmark"></i></li>
+            <li><i class="fa-solid fa-building-columns"></i></li>
+            <li><i class="fa-solid fa-monument"></i></li>
+            <li><i class="fa-solid fa-gem"></i></li>
+            <li><i class="fa-solid fa-scroll"></i></li>
+            <li><i class="fa-solid fa-paint-roller"></i></li>
+            <li><i class="fa-solid fa-palette"></i></li>
+            <li><i class="fa-solid fa-book"></i></li>
+            <li><i class="fa-solid fa-masks-theater"></i></li>
+        </ul>
+    </div>
+}

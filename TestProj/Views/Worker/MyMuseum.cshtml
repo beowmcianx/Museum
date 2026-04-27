@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = $"My Museum - {Model.Name}";
+    ViewBag.HasHeroTitle = true;
 }
 
 @if (TempData["Success"] != null || TempData["Error"] != null)

@@ -13,6 +13,7 @@ using TestProj.Models;
 using TestProj.Models.NewFolder;
 using TestProj.Models.ViewModels;
 using TestProj.Data.Services;
+using System.Text.Json;
 
 namespace TestProj.Controllers
 {
@@ -101,6 +102,64 @@ namespace TestProj.Controllers
 
             TempData["Success"] = "Order cancelled successfully.";
             return RedirectToAction(nameof(Cart));
+        }
+
+        [HttpGet]
+        [Authorize(Roles = Roles.Client)]
+        public async Task<IActionResult> TicketQr(int ticketId)
+        {
+            // Ensure the requester is authenticated
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
+            // Load the order item and related data
+            var item = await _context.OrderItems
+                .Include(oi => oi.Order)
+                    .ThenInclude(o => o.Museum)
+                .Include(oi => oi.TicketType)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(oi => oi.OrderItemId == ticketId);
+
+            if (item == null || item.Order == null) return NotFound();
+
+            // Ensure the current user owns this order item
+            if (item.Order.UserId != currentUser.Id)
+                return Forbid();
+
+            // Build a compact payload containing all relevant ticket information
+            var readable = $@"Order: {item.Order?.OrderCode}
+                Ticket: {item.TicketType?.Name}
+                Quantity: {item.Quantity}
+                Price: {item.PriceAtPurchase:C}
+                Visit: {item.Order?.VisitDate:yyyy-MM-dd}
+                Museum: {item.Order?.Museum?.Name} ({item.Order?.Museum?.City})
+                Details: {Url.Action("TicketDetails", "Client", new { id = item.OrderItemId }, Request.Scheme, Request.Host.Value)}
+                ";
+            var qrBytes = QrHelper.Generate(readable);
+
+            return File(qrBytes, "image/png");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = Roles.Client)]
+        public async Task<IActionResult> TicketDetails(int id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
+            var item = await _context.OrderItems
+                .Include(oi => oi.Order)
+                    .ThenInclude(o => o.Museum)
+                .Include(oi => oi.TicketType)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(oi => oi.OrderItemId == id);
+
+            if (item == null || item.Order == null) return NotFound();
+
+            if (item.Order.UserId != currentUser.Id)
+                return Forbid();
+
+            return View(item);
         }
     }
 }

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = $"Edit {Model.Name}";
     var ticketTypes = Model.TicketTypes?.ToList() ?? new List<TestProj.Models.TicketTypeModel>();
+    ViewBag.HasHeroTitle = true;
 }
 
 <!-- Popup Alert -->

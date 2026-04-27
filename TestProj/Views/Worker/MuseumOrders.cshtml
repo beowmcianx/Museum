@@ -6,6 +6,7 @@
     var groupedOrders = Model.Orders
         ?.OrderBy(o => o.VisitDate)
         .GroupBy(o => o.VisitDate.Date);
+    ViewBag.HasHeroTitle = true;
 }
 
 <!-- Popup Alert -->

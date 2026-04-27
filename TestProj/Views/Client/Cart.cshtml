@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "My Cart";
+    ViewBag.HasHeroTitle = true;
 }
 
 <!-- Popup Alert -->
@@ -125,7 +126,8 @@
                                                     <th>Ticket</th>
                                                     <th>Unit Price</th>
                                                     <th>Quantity</th>
-                                                    <th class="text-end">Subtotal</th>
+                                                    <th>Subtotal</th>
+                                                    <th class="text-end">QR</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -136,7 +138,15 @@
                                                         <td>@ticketName</td>
                                                         <td>@item.PriceAtPurchase.ToString("C")</td>
                                                         <td>@item.Quantity</td>
-                                                        <td class="text-end">@((item.PriceAtPurchase * item.Quantity).ToString("C"))</td>
+                                                        <td>@((item.PriceAtPurchase * item.Quantity).ToString("C"))</td>
+                                                        <td class="text-end">
+                                                            <a asp-controller="Client" asp-action="TicketDetails" asp-route-id="@item.OrderItemId">
+                                                                <img src="@Url.Action("TicketQr", "Client", new { ticketId = item.OrderItemId })"
+                                                                     alt="Ticket QR"
+                                                                     width="120"
+                                                                     height="120" />
+                                                            </a>
+                                                        </td>
                                                     </tr>
                                                 }
                                             </tbody>

@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Manage Accounts";
+    ViewBag.HasHeroTitle = true;
 
     var availableRoles = ViewBag.Roles as List<string> ?? new List<string>();
     var museums = ViewBag.Museums as List<TestProj.Models.MuseumModel> ?? new List<TestProj.Models.MuseumModel>();

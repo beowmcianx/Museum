@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = $"Edit: {Model.Name}";
     var imageUrl = Model.Images?.FirstOrDefault()?.ImageUrl ?? "";
+    ViewBag.HasHeroTitle = true;
 }
 
 <!-- Popup Alert -->
