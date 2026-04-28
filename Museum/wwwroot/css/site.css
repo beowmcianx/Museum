@@ -1,0 +1,302 @@
+@font-face {
+    font-family: 'Aileron';
+    src: url('/fonts/Aileron/Aileron-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Alfran';
+    src: url('/fonts/Alfran/Alfarn-W05-Regular.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Rostov';
+    src: url('/fonts\Rostov\Rostov.ttf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+* {
+    font-family: Aileron, Helvetica, sans-serif;
+}
+
+html {
+    position: relative;
+    font-size: 14px;
+    max-width: auto;
+}
+
+body {
+    margin-bottom: 80px;
+    min-height: 1000px;
+
+    /*background: linear-gradient(to bottom, #e6d4d1, #e4e2dd, #e6d4d1);*/
+
+    background-color: #e4e2dd;
+}
+
+h1, h2, h3, h4, h5, h6, span {
+    font-family: Alfran, Rostov, sans-serif;
+}
+
+.btn {
+    border-radius: 10px;
+    border-width: 2px;
+}
+
+.date-input:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+input[type="date"]:hover {
+    cursor: pointer;
+}
+
+.layout-logo {
+    height: 50px;
+    width: 50px;
+    display: block;
+    object-fit: contain;
+    margin-left: 1rem;
+    transition: transform 150ms ease-in-out, opacity 150ms;
+    opacity: 0.98;
+    background-color: #e4e2dd;
+    border-radius: 100px;
+    margin-left: 10px;
+    padding: 1px;
+    padding-left: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .navbar-brand:hover .layout-logo {
+        opacity: 0.7;
+    }
+}
+
+.navbar-brand > div {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* Links */
+a {
+    color: #b08435;
+}
+
+    a:hover {
+        color: #db4a2b;
+    }
+
+/* This is for the login partial view */
+.login-partial-pfp {
+    height: 40px;
+    width: 40px;
+    border-radius: 100px;
+    border: 2px solid darkgray;
+}
+    .login-partial-pfp:hover {
+        opacity: 0.6;
+    }
+
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .form-inline {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+/*Red Components*/
+.container-back {
+    position: relative; 
+    text-align: right; 
+    margin: 10px 0; 
+}
+
+.btn-back {
+    border: none;
+    background-color: #db4a2b;
+    color: white;
+    font-size: 1rem;
+    padding: 10px 15px;
+    margin-right: -250px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+    .btn-back:hover {
+        background-color: #c93e20;
+        color: white;
+    }
+
+.bg-red {
+    background-color: #db4a2b;
+}
+
+.btn-red {
+    background-color: #db4a2b;
+    border-radius: 10px;
+    color: white;
+    transition: background-color 0.2s ease-in-out;
+}
+    .btn-red:hover {
+        background-color: #c93e20;
+        color: white;
+    }
+
+.text-red {
+    color: #db4a2b;
+}
+
+/* Accent colours */
+.form-check-input:checked {
+    background-color: #db4a2b;
+    border: #db4a2b;
+}
+
+    .form-control:focus,
+    .form-check-input:focus,
+    .form-check-input:checked:focus,
+    .btn:focus,
+    .btn:focus-visible {
+        border-color: #db4a2b !important;
+        box-shadow: 0 0 0 0.25rem rgba(219, 74, 43, 0.4) !important;
+    }
+
+/*Catalogue Page*/
+.page-catalogue {
+}
+
+.page-catalogue-card {
+    width: 50rem;
+    padding: 10rem;
+    padding-top: 1.5rem;
+    border-radius: 2rem;
+}
+
+.page-catalogue-search-bar {
+    border-radius: 20px;
+}
+
+/*Horizontal Lines*/
+.hr-light {
+    background-color: #e4e2dd;
+}
+
+.hr-dark {
+    background-color: #4a3e26;
+}
+
+.page-catalogue-museum-image {
+    max-height: 400px;
+    height: 200px;
+    object-fit: fill;
+}
+
+/*Dashboard Page*/
+
+.page-dashboard-button {
+    font-size: 20px;
+    padding: 12px 12px;
+    border-radius: 12px
+}
+
+/*Borders Catalogue*/
+
+/* Make input groups look consistent */
+.page-catalogue-search-bar .input-group-text,
+.page-catalogue-search-bar .form-control,
+.page-catalogue-search-bar .form-select {
+    border: 3px solid;
+}
+
+/* Remove double borders between icon and input */
+.page-catalogue-search-bar .input-group-text {
+    border-right: 0;
+    border-radius: 8px 0 0 8px;
+}
+
+.page-catalogue-search-bar .form-control,
+.page-catalogue-search-bar .form-select {
+    border-left: 0;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Match filter button */
+.page-catalogue-search-bar .btn-filter {
+    border: 3px solid;
+    border-radius: 8px;
+}
+
+/*Icons*/
+
+.fa-arrow-right-from-bracket, .fa-circle-user {
+    font-size: 25px;
+    padding: 8px 6px;
+}
+
+/*Popup*/
+.ticket-popup {
+    position: fixed;
+    top: 85px;
+    right: 20px;
+    min-width: 320px;
+    max-width: 400px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    color: white;
+    z-index: 9999;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+    .ticket-popup.success {
+        background: #db4a2b;
+    }
+
+    .ticket-popup.error {
+        background: #dc3545;
+    }
+
+.popup-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popup-close {
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+    .popup-close:hover {
+        opacity: 0.8;
+    }
+
+/* exit animation */
+.popup-hide {
+    transform: translateX(120%);
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+/* TEMP: hide any remaining horizontal overflow while debugging — remove when fixed */
+html, body {
+    overflow-x: hidden;
+}
+

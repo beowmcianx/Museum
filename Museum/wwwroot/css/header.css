@@ -1,0 +1,70 @@
+body:not(.page-index) header {
+    border: none;
+    margin-bottom: 50px;
+}
+
+/* Navbar background */
+header .navbar {
+    background-color: #000 !important;
+    border: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    height: 90px;
+    padding: 0 10px;
+}
+
+/* Navbar links */
+.navbar .nav-link {
+    color: #e4e2dd !important;
+    position: relative;
+    font-weight: 600;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Icons (Font Awesome) */
+.navbar .fa-solid,
+.navbar .fa-regular {
+    color: #e4e2dd !important;
+    transition: color 0.3s ease;
+}
+
+/* Underline animation from center with smooth ease and fade */
+.navbar .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px; /* slight spacing from text */
+    width: 100%;
+    height: 3px; /* slightly thicker underline */
+    background-color: currentColor; /* matches text color */
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+    opacity: 0;
+    border-radius: 2px; /* rounded ends for elegance */
+}
+
+.navbar .nav-link:hover::after {
+    transform: scaleX(1);
+    opacity: 1;
+}
+
+
+.navbar .nav-link:hover {
+    color: #db4a2b !important;
+    transform: translateY(-2px); /* subtle lift effect */
+}
+
+/* Navbar toggler */
+.navbar-toggler {
+    border-color: rgba(255,255,255,0.5);
+}
+
+.navbar-toggler-icon {
+    filter: invert(1); /* makes it white */
+}
+
+/* Active navbar link */
+.navbar .nav-link.active {
+    color: #db4a2b !important;
+}

@@ -1,0 +1,23 @@
+@page
+@model Museum.Areas.Identity.Pages.Account.AccessDeniedModel
+
+@{
+    ViewData["Title"] = "Access denied";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Access denied</h1>
+
+    <p>
+        You do not have permission to access this resource.
+        @if (!string.IsNullOrEmpty(Model.ReturnUrl))
+        {
+            <text> Return URL: <strong>@Model.ReturnUrl</strong></text>
+        }
+    </p>
+
+    <p>
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-primary">Return to home</a>
+        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-secondary">Sign in as a different user</a>
+    </p>
+</div>

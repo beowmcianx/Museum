@@ -1,0 +1,37 @@
+.pagination .page-link {
+    background-color: #db4a2b;
+    border-color: #db4a2b;
+    color: white;
+}
+
+    .pagination .page-link:hover {
+        background-color: #c93e20;
+        border-color: #c93e20;
+        color: white;
+    }
+
+.pagination .page-item.active .page-link {
+    background-color: #c93e20;
+    border-color: #c93e20;
+    color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: #db4a2b;
+    border-color: #db4a2b;
+    opacity: 0.6;
+    color: white;
+}
+
+.page-link:hover {
+    background-color: #db4a2b;
+    border-color: white;
+}
+
+[data-aos] {
+    pointer-events: none;
+}
+
+    [data-aos].aos-animate {
+        pointer-events: auto;
+    }

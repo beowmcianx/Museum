@@ -1,0 +1,62 @@
+footer {
+    position: relative; /* keep it in flow, avoid absolute overlaps */
+    bottom: 0;
+    width: 100%;
+    height: 90px; /* match header height */
+    background-color: #000; /* same as navbar */
+    border-top-left-radius: 20px; /* rounded like navbar corners */
+    border-top-right-radius: 20px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    color: #e4e2dd; /* match navbar link color */
+    font-weight: 600;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.2); /* subtle shadow */
+    z-index: 10;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+    /* Footer links */
+    footer a {
+        color: #e4e2dd;
+        text-decoration: none;
+        margin: 0 8px;
+        position: relative;
+        transition: color 0.3s ease, transform 0.3s ease;
+        font-weight: 600;
+    }
+
+    /* Footer flex layout */
+    footer .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    footer a{
+        color: #e4e2dd;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: Aileron, Helvetica, sans-serif;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 5px 0;
+    }
+
+    /* Separators between links */
+    footer .text-end span {
+        color: rgba(228, 226, 221, 0.3);
+        font-size: 14px;
+    }
+
+@media (min-width: 768px) {
+    footer {
+        white-space: nowrap;
+    }
+}
